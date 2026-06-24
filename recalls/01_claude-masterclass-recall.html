@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Claude MasterClass — Recall Cards</title>
+<style>
+/* synaptix-runtime v1.0 */
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@300;400;500;600&display=swap');
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg-base:#0e0e11;--bg-surface:#16161a;--bg-elevated:#1c1c21;--bg-section:#1a1a1f;
+  --border:rgba(255,255,255,0.07);--border-hi:rgba(255,255,255,0.12);
+  --orange:#f4762a;--salmon:#f08080;--cyan:#4ecdc4;--green:#4ade80;--yellow:#f4d03f;
+  --purple:#c084fc;--sky:#5db8f2;--amber:#f4b942;
+  --orange-dim:rgba(244,118,42,0.10);--cyan-dim:rgba(78,205,196,0.10);
+  --salmon-dim:rgba(240,128,128,0.10);--sky-dim:rgba(93,184,242,0.10);
+  --text-primary:#e8e8ee;--text-secondary:#8b8b9a;--text-muted:#4a4a5a;
+  --mono:'JetBrains Mono',monospace;--sans:'Inter',system-ui,sans-serif;
+}
+body{background:var(--bg-base);color:var(--text-primary);font-family:var(--sans);font-size:13px;line-height:1.8;}
+.doc-wrap{max-width:860px;margin:0 auto;display:flex;flex-direction:column;}
+
+/* Header */
+.doc-header{padding:22px 26px 16px;border-bottom:1px solid var(--border);background:var(--bg-surface);}
+.badges{display:flex;gap:8px;margin-bottom:11px;flex-wrap:wrap}
+.badge{font-family:var(--mono);font-size:10px;font-weight:500;letter-spacing:0.07em;text-transform:uppercase;padding:3px 8px;border-radius:4px;border:1px solid;}
+.badge-type{color:var(--orange);background:var(--orange-dim);border-color:rgba(244,118,42,0.25)}
+.badge-mod{color:var(--sky);background:var(--sky-dim);border-color:rgba(93,184,242,0.25)}
+.doc-title{font-size:20px;font-weight:600;letter-spacing:-0.02em}
+.doc-subtitle{font-size:11px;font-family:var(--mono);color:var(--text-muted);margin-top:4px}
+.stat-row{display:flex;gap:20px;flex-wrap:wrap;margin-top:13px;padding-top:13px;border-top:1px solid var(--border);}
+.stat-val{font-family:var(--mono);font-size:15px;font-weight:600;color:var(--text-primary)}
+.stat-lbl{font-size:10px;text-transform:uppercase;letter-spacing:0.06em;color:var(--text-muted);margin-top:1px}
+
+.doc-body{padding:22px 26px;display:flex;flex-direction:column;gap:14px}
+
+/* Flip card scene */
+.fc-wrap{display:flex;flex-direction:column;align-items:center;gap:16px;padding:10px 0}
+.fc-progress{font-family:var(--mono);font-size:11px;color:var(--text-muted);text-align:center;letter-spacing:0.05em;}
+.fc-scene{width:100%;max-width:600px;perspective:1200px;}
+.fc-card{
+  width:100%;min-height:220px;position:relative;
+  transform-style:preserve-3d;transition:transform 0.38s cubic-bezier(.4,0,.2,1);
+  cursor:pointer;
+}
+.fc-card.flipped{transform:rotateY(180deg)}
+.fc-face{
+  position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;
+  background:var(--bg-section);border:1px solid var(--border);border-radius:12px;
+  padding:28px 30px;display:flex;flex-direction:column;justify-content:center;
+  transition:border-color 0.15s;
+}
+.fc-face:hover{border-color:var(--border-hi)}
+.fc-back-face{transform:rotateY(180deg);border-top:2px solid var(--cyan);}
+.fc-face p{font-size:15px;color:var(--text-primary);line-height:1.75;text-align:center;}
+.fc-hint{font-family:var(--mono);font-size:11px;color:var(--text-muted);text-align:center;margin-top:12px;padding-top:10px;border-top:1px solid var(--border);}
+.fc-ref{font-family:var(--mono);font-size:10px;color:var(--text-muted);text-align:center;margin-top:14px;padding-top:10px;border-top:1px solid var(--border);letter-spacing:0.06em;text-transform:uppercase;}
+.fc-type-badge{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;padding:2px 7px;border-radius:3px;border:1px solid;display:inline-block;margin-bottom:14px;align-self:center;}
+.fc-type-term{color:var(--orange);background:var(--orange-dim);border-color:rgba(244,118,42,0.25)}
+.fc-type-question{color:var(--purple);background:rgba(192,132,252,0.10);border-color:rgba(192,132,252,0.25)}
+
+/* Flip button */
+.fc-flip-btn{
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  width:180px;height:46px;border-radius:10px;
+  background:var(--cyan-dim);border:1px solid rgba(78,205,196,0.3);
+  color:var(--cyan);font-family:var(--mono);font-size:12px;font-weight:600;
+  cursor:pointer;transition:background 0.15s;letter-spacing:0.04em;
+}
+.fc-flip-btn:hover{background:rgba(78,205,196,0.18)}
+
+/* Got it / Missed it */
+.fc-actions{display:none;flex-direction:row;gap:12px;}
+.fc-btn{
+  display:flex;align-items:center;justify-content:center;gap:7px;
+  width:152px;height:46px;border-radius:10px;
+  font-family:var(--mono);font-size:12px;font-weight:600;
+  cursor:pointer;transition:background 0.15s;letter-spacing:0.03em;
+  border:1px solid;
+}
+.fc-btn-got   {color:var(--green);background:rgba(74,222,128,0.10);border-color:rgba(74,222,128,0.3)}
+.fc-btn-missed{color:var(--salmon);background:var(--salmon-dim);border-color:rgba(240,128,128,0.3)}
+.fc-btn-got:hover   {background:rgba(74,222,128,0.18)}
+.fc-btn-missed:hover{background:rgba(240,128,128,0.15)}
+
+/* Nav */
+.fc-nav{display:flex;gap:10px;}
+.fc-nav-btn{
+  display:flex;align-items:center;justify-content:center;
+  width:100px;height:36px;border-radius:8px;
+  background:transparent;border:1px solid var(--border);
+  color:var(--text-muted);font-family:var(--mono);font-size:11px;
+  cursor:pointer;transition:all 0.15s;
+}
+.fc-nav-btn:hover{border-color:var(--border-hi);color:var(--text-secondary)}
+
+/* Progress bar */
+.fc-bar-wrap{width:100%;max-width:600px;height:3px;background:var(--border);border-radius:2px;}
+.fc-bar{height:100%;background:var(--cyan);border-radius:2px;transition:width 0.3s ease;}
+
+/* Summary */
+.fc-summary{
+  width:100%;max-width:600px;
+  background:var(--bg-section);border:1px solid var(--border);
+  border-top:2px solid var(--cyan);border-radius:0 0 10px 10px;
+  padding:28px 30px;text-align:center;
+}
+.fc-sum-title{font-family:var(--mono);font-size:13px;font-weight:600;color:var(--cyan);letter-spacing:0.05em;margin-bottom:14px;}
+.fc-sum-row{font-size:13px;color:var(--text-secondary);line-height:2;}
+.fc-sum-review{font-family:var(--mono);font-size:11px;color:var(--text-muted);margin-top:12px;padding-top:10px;border-top:1px solid var(--border);}
+
+@media(max-width:600px){
+  .doc-header,.doc-body{padding-left:16px;padding-right:16px}
+  .doc-footer{padding:12px 16px}
+  .footer-btn{width:100px;height:52px;font-size:10px}
+  .fc-actions{flex-direction:column;align-items:center}
+  .fc-face{padding:20px 18px}
+  .fc-face p{font-size:14px}
+}
+
+/* ========================================
+   FOOTER NAVIGATION CSS
+   Synaptix Runtime — shared component
+   Copy into any artifact <style> block
+======================================== */
+
+.snx-footer{
+  background:var(--bg-surface);
+  border-top:1px solid var(--border);
+  padding:16px 26px 18px;
+}
+
+/* ── Meta bar ── */
+.snx-footer-meta{
+  display:flex;align-items:baseline;gap:10px;
+  padding-bottom:13px;
+  border-bottom:1px solid var(--border);
+  margin-bottom:13px;
+}
+.snx-footer-course{
+  font-family:var(--mono);font-size:10px;font-weight:600;
+  letter-spacing:0.14em;text-transform:uppercase;color:var(--text-muted);
+}
+.snx-footer-divider{
+  font-family:var(--mono);font-size:10px;color:var(--text-muted);opacity:0.4;
+}
+.snx-footer-module{
+  font-family:var(--mono);font-size:11px;font-weight:500;
+  color:var(--text-secondary);letter-spacing:0.04em;
+}
+
+/* ── Nav row ── */
+.snx-footer-nav{
+  display:flex;align-items:center;
+  gap:10px;
+}
+
+/* prev / next */
+.snx-nav-prev,
+.snx-nav-next{
+  font-family:var(--mono);font-size:11px;font-weight:500;
+  color:var(--text-secondary);
+  background:transparent;
+  border:1px solid var(--border);
+  border-radius:6px;
+  padding:6px 13px;
+  display:flex;align-items:center;gap:6px;
+  white-space:nowrap;
+  transition:border-color 0.13s,color 0.13s;
+  flex-shrink:0;
+  text-decoration:none;
+}
+.snx-nav-prev:hover,
+.snx-nav-next:hover{
+  border-color:var(--border-hi);
+  color:var(--text-primary);
+}
+.snx-nav-chevron{
+  font-size:13px;line-height:1;
+  color:var(--text-muted);
+  transition:color 0.13s;
+}
+.snx-nav-prev:hover .snx-nav-chevron,
+.snx-nav-next:hover .snx-nav-chevron{color:var(--text-secondary)}
+
+/* center hub */
+.snx-nav-hub{
+  flex:1;display:flex;align-items:center;
+  justify-content:center;gap:6px;flex-wrap:wrap;
+}
+
+/* hub buttons */
+.snx-hub-btn{
+  font-family:var(--mono);font-size:10px;font-weight:500;
+  letter-spacing:0.04em;
+  padding:6px 13px;border-radius:6px;border:1px solid;
+  display:inline-flex;align-items:center;gap:5px;
+  transition:background 0.13s;
+  text-decoration:none;white-space:nowrap;
+}
+.snx-hub-btn-recall{
+  color:var(--cyan);background:var(--cyan-dim);
+  border-color:rgba(78,205,196,0.22);
+}
+.snx-hub-btn-recall:hover{background:rgba(78,205,196,0.18)}
+
+.snx-hub-btn-tree{
+  color:var(--green);background:var(--green-dim);
+  border-color:rgba(74,222,128,0.22);
+}
+.snx-hub-btn-tree:hover{background:rgba(74,222,128,0.18)}
+
+.snx-hub-btn-compact{
+  color:var(--yellow);background:var(--yellow-dim);
+  border-color:rgba(244,208,63,0.22);
+}
+.snx-hub-btn-compact:hover{background:rgba(244,208,63,0.18)}
+
+.snx-hub-btn-quiz{
+  color:var(--orange);background:var(--orange-dim);
+  border-color:rgba(244,118,42,0.22);
+}
+.snx-hub-btn-quiz:hover{background:rgba(244,118,42,0.18)}
+
+.snx-hub-btn-module{
+  color:var(--purple);background:var(--purple-dim);
+  border-color:rgba(192,132,252,0.22);
+}
+.snx-hub-btn-module:hover{background:rgba(192,132,252,0.18)}
+
+/* active state — current artifact type */
+.snx-hub-btn[aria-current="page"]{
+  opacity:1;cursor:default;
+  box-shadow:0 0 0 1px currentColor;
+}
+
+/* mobile */
+@media(max-width:640px){
+  .snx-footer{padding:14px 16px 16px}
+  .snx-footer-nav{flex-wrap:wrap}
+  .snx-nav-hub{order:3;flex-basis:100%;justify-content:flex-start}
+}
+
+
+</style>
+</head>
+<body>
+<div class="doc-wrap">
+
+<div class="doc-header">
+  <div class="badges">
+    <span class="badge badge-type">Recall · Mixed · Hard</span>
+    <span class="badge badge-mod">15 Cards · Module 1</span>
+  </div>
+  <div class="doc-title">Claude MasterClass — Recall Cards</div>
+  <div class="doc-subtitle">source: Knowledge Map — Claude MasterClass · generated 2026-06-24</div>
+  <div class="stat-row">
+    <div class="stat-item"><div class="stat-val">8</div><div class="stat-lbl">Term Cards</div></div>
+    <div class="stat-item"><div class="stat-val">7</div><div class="stat-lbl">Question Cards</div></div>
+    <div class="stat-item"><div class="stat-val">Hard</div><div class="stat-lbl">Difficulty</div></div>
+    <div class="stat-item"><div class="stat-val">A–F</div><div class="stat-lbl">Coverage</div></div>
+  </div>
+</div>
+
+<div class="doc-body">
+  <div class="fc-wrap" id="fc-wrap">
+    <div class="fc-progress" id="fc-progress">Card 1 of 15</div>
+    <div class="fc-bar-wrap"><div class="fc-bar" id="fc-bar" style="width:6.67%"></div></div>
+    <div class="fc-scene">
+      <div class="fc-card" id="fc-card" onclick="_fc.flipOnCard()">
+        <div class="fc-face">
+          <span class="fc-type-badge fc-type-term" id="fc-type-badge">Term</span>
+          <p id="fc-front"></p>
+          <div class="fc-hint" id="fc-hint" style="display:none"></div>
+        </div>
+        <div class="fc-face fc-back-face">
+          <p id="fc-back"></p>
+          <div class="fc-ref" id="fc-ref"></div>
+        </div>
+      </div>
+    </div>
+    <button class="fc-flip-btn" id="fc-flip-btn" onclick="_fc.flip()">Flip Card</button>
+    <div class="fc-actions" id="fc-actions">
+      <button class="fc-btn fc-btn-got"    onclick="_fc.mark(true)">&#10003; Got it</button>
+      <button class="fc-btn fc-btn-missed" onclick="_fc.mark(false)">&#10007; Missed it</button>
+    </div>
+    <div class="fc-nav">
+      <button class="fc-nav-btn" onclick="_fc.prev()">&#8592; Prev</button>
+      <button class="fc-nav-btn" onclick="_fc.next()">Next &#8594;</button>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<footer class="snx-footer">
+
+  <!-- Meta bar -->
+  <div class="snx-footer-meta">
+    <span class="snx-footer-course">Claude MasterClass</span>
+    <span class="snx-footer-divider">·</span>
+    <span class="snx-footer-module">Module 01 · Complete Practical Guide: Interface, Features, Claude Code &amp; Cowork</span>
+  </div>
+
+  <!-- Nav row -->
+  <nav class="snx-footer-nav" aria-label="Artifact navigation">
+
+    <!-- Left: Previous -->
+    <a class="snx-nav-prev" href="#">
+      <span class="snx-nav-chevron">‹</span>
+      Previous
+    </a>
+
+    <!-- Center: Hub -->
+    <div class="snx-nav-hub">
+      <a class="snx-hub-btn snx-hub-btn-recall"  href="#" aria-current="page">Recall</a>
+      <a class="snx-hub-btn snx-hub-btn-tree"    href="../trees/01_claude-masterclass-tree.html">Tree</a>
+      <a class="snx-hub-btn snx-hub-btn-compact" href="../compact/01_claude-masterclass-compact.html">Compact</a>
+      <a class="snx-hub-btn snx-hub-btn-quiz"    href="../quizzes/01_claude-masterclass-quiz.html">Quiz</a>
+      <a class="snx-hub-btn snx-hub-btn-module"  href="../modules/01_claude-masterclass-reviewer.html">Module</a>
+    </div>
+
+    <!-- Right: Next -->
+    <a class="snx-nav-next" href="./02_claude-masterclass-recall.html">
+      Next
+      <span class="snx-nav-chevron">›</span>
+    </a>
+
+  </nav>
+
+</footer>
+
+<script>
+function sendPrompt(t){if(window.parent&&window.parent.postMessage){window.parent.postMessage({type:'user_message',message:t},'*');}}
+function quizQuick(){sendPrompt('/quiz mc(10) hard');}
+function exportMd(){sendPrompt('/export -md');}
+
+var _fc = {
+  cards: [
+    /* ── TERM CARDS (8) ── */
+    {
+      type:'term',
+      front:'Free-tier included · no sign-up cost · $20/mo upgrade path',
+      back:'Claude Free vs Pro plan<br><small>Free: Sonnet 4.6 + web search + memory + file creation<br>Pro: 5× usage + Opus 4.6 + Cowork</small>',
+      section:'A1 · Account Setup'
+    },
+    {
+      type:'term',
+      front:'5× cheaper than Opus · handles 90% of tasks · default model',
+      back:'Sonnet 4.6<br><small>The workhorse model — coding, writing, analysis, research. Always start here.</small>',
+      section:'A2 · The Three Models'
+    },
+    {
+      type:'term',
+      front:'Ghost icon, top-right of claude.ai · no history · no memory fed',
+      back:'Incognito Mode<br><small>No chat saved, no memory updated, no search indexing. Use for sensitive work or prompt experiments.</small>',
+      section:'B5 · Incognito Mode'
+    },
+    {
+      type:'term',
+      front:'skill.md · plain-text instruction file · auto-activates on matching tasks',
+      back:'Skills<br><small>Built-ins: Excel · PowerPoint · Word · PDF · front-end design. Custom: upload .zip to Settings → Capabilities → Skills.</small>',
+      section:'C5 · Skills'
+    },
+    {
+      type:'term',
+      front:'window.claude.complete · no viewer API key needed · publish-gated',
+      back:'Artifacts calling Claude API publicly<br><small>Published artifacts can embed AI responses accessible to anyone — no credential required from the viewer.</small>',
+      section:'C2 · Artifacts'
+    },
+    {
+      type:'term',
+      front:'Plain-text file in project root · read at every session start · negative constraints',
+      back:'claude.md<br><small>Claude Code\'s session memory. Highest value: 3–5 "don\'t do X" rules. Global: ~/.claude/claude.md</small>',
+      section:'E2 · claude.md'
+    },
+    {
+      type:'term',
+      front:'/plan or Shift+Tab · lists all intended file changes before touching anything',
+      back:'Plan Mode (Claude Code)<br><small>The responsible default for any task touching 3+ files. Prevents mid-session restructuring.</small>',
+      section:'E5 · Plan Mode'
+    },
+    {
+      type:'term',
+      front:'aboutme.md · brandvoice.md · workingpreferences.md · read at session start',
+      back:'Cowork context files<br><small>Three markdown files inside context/ subfolder. Claude reads these automatically — you never re-explain yourself.</small>',
+      section:'F2 · Folder Setup'
+    },
+
+    /* ── QUESTION CARDS (7) ── */
+    {
+      type:'question',
+      front:'What is the Recall Pressure Model — what changes between easy, mid, hard, and pro?',
+      back:'Only the cue side changes, never the content.<br><small>Easy: full definition + hint · Mid: standard phrasing, no hint · Hard: compressed phrase only · Pro: bare term or fragment; term cards flip direction (term on front, properties on back)</small>',
+      section:'B1 · Extended Thinking'
+    },
+    {
+      type:'question',
+      front:'What are the five parts of the structured prompt framework, and what does each control?',
+      back:'Role (specific expert) · Task (exactly what\'s needed) · Context (background/audience) · Constraints (guardrails) · Format (output structure)<br><small>Use for high-stakes prompts. Casual tasks don\'t need this overhead.</small>',
+      section:'D1 · Five-Part Framework'
+    },
+    {
+      type:'question',
+      front:'What is the Opus→Sonnet handoff pattern in Claude Code, and when should you switch?',
+      back:'Use Opus to plan (/model opus) — deeper reasoning, catches edge cases. Switch to Sonnet to build (/model sonnet) — faster, cheaper, accurate execution.<br><small>Switch trigger: after Opus produces a complete plan. Say "Follow the plan exactly and build it."</small>',
+      section:'E3 · Opus→Sonnet Pattern'
+    },
+    {
+      type:'question',
+      front:'What are the five common Claude Code mistakes — and their fixes?',
+      back:'1. No claude.md → /init<br>2. Vague prompts → specify exact element + outcome<br>3. Skipping Plan Mode → /plan or Shift+Tab<br>4. Ignoring /compact → run /compact mid-session<br>5. Three failed corrections → fresh session + clean description',
+      section:'E6 · Five Mistakes'
+    },
+    {
+      type:'question',
+      front:'What is Deep Research mode — how does it differ from basic web search, and what plans support it?',
+      back:'Deep Research: extended multi-query session following threads across dozens of sources → returns a full multi-page report with citations.<br><small>Basic search: all plans, single-query synthesis. Deep Research: Pro/Max/Team/Enterprise only. Can combine web + Google Drive/Gmail in one session.</small>',
+      section:'C3 · Deep Research'
+    },
+    {
+      type:'question',
+      front:'What is the three-document knowledge base every Project should have?',
+      back:'1. Project brief — goal and audience (~1 page)<br>2. 3–4 examples of good work — tone and quality calibration<br>3. Constraints list — always/never rules for this project<br><small>Plus rule: one project per workflow type. Mixed projects produce noisy context.</small>',
+      section:'C1 · Projects'
+    },
+    {
+      type:'question',
+      front:'What is the key architectural difference between Chat, Cowork, and Claude Code?',
+      back:'Chat: answers questions in conversation.<br>Cowork: completes full workflows autonomously — reads/writes/deletes local files, parallel sub-agents, unsupervised hours.<br>Claude Code: agentic coding with direct file system access — reads, edits, and runs real files in a chosen folder.',
+      section:'F1 · Cowork'
+    }
+  ],
+  idx: 0,
+  got: 0,
+  missed: 0,
+  results: [],
+
+  render: function(){
+    var c = this.cards[this.idx];
+    if(!c){ this.summary(); return; }
+
+    // Progress
+    document.getElementById('fc-progress').textContent = 'Card '+(this.idx+1)+' of '+this.cards.length;
+    var pct = ((this.idx+1)/this.cards.length*100).toFixed(2);
+    document.getElementById('fc-bar').style.width = pct+'%';
+
+    // Type badge
+    var badge = document.getElementById('fc-type-badge');
+    if(c.type === 'term'){
+      badge.textContent = 'Term';
+      badge.className = 'fc-type-badge fc-type-term';
+    } else {
+      badge.textContent = 'Question';
+      badge.className = 'fc-type-badge fc-type-question';
+    }
+
+    // Front
+    document.getElementById('fc-front').innerHTML = c.front;
+
+    // Hint (hard difficulty — none)
+    var hintEl = document.getElementById('fc-hint');
+    hintEl.style.display = 'none';
+
+    // Back
+    document.getElementById('fc-back').innerHTML = c.back;
+    document.getElementById('fc-ref').textContent = c.section;
+
+    // Reset flip state
+    var card = document.getElementById('fc-card');
+    card.classList.remove('flipped');
+    document.getElementById('fc-flip-btn').style.display = 'flex';
+    document.getElementById('fc-actions').style.display = 'none';
+  },
+
+  flip: function(){
+    document.getElementById('fc-card').classList.add('flipped');
+    document.getElementById('fc-flip-btn').style.display = 'none';
+    document.getElementById('fc-actions').style.display = 'flex';
+  },
+
+  flipOnCard: function(){
+    var card = document.getElementById('fc-card');
+    if(!card.classList.contains('flipped')){
+      this.flip();
+    }
+  },
+
+  mark: function(correct){
+    this.results[this.idx] = correct;
+    if(correct) this.got++; else this.missed++;
+    this.idx++;
+    this.render();
+  },
+
+  prev: function(){
+    if(this.idx > 0){ this.idx--; this.render(); }
+  },
+
+  next: function(){
+    if(this.idx < this.cards.length - 1){ this.idx++; this.render(); }
+  },
+
+  summary: function(){
+    var total = this.cards.length;
+    var pct = Math.round(this.got/total*100);
+    var missedSections = this.cards
+      .filter(function(c,i){ return !_fc.results[i]; })
+      .map(function(c){ return c.section.split(' · ')[0]; })
+      .filter(function(v,i,a){ return a.indexOf(v)===i; });
+
+    document.getElementById('fc-bar').style.width = '100%';
+    document.getElementById('fc-wrap').innerHTML =
+      '<div class="fc-summary">'+
+      '<div class="fc-sum-title">Session complete — '+total+' cards</div>'+
+      '<div class="fc-sum-row">Got it: <strong>'+_fc.got+' ('+pct+'%)</strong></div>'+
+      '<div class="fc-sum-row">Missed it: <strong>'+_fc.missed+' ('+(100-pct)+'%)</strong></div>'+
+      (missedSections.length ? '<div class="fc-sum-review">Review: '+missedSections.join(' · ')+'</div>' : '')+
+      '<div style="margin-top:18px"><button class="fc-flip-btn" onclick="_fc.restart()" style="margin:0 auto">Restart</button></div>'+
+      '</div>';
+  },
+
+  restart: function(){
+    this.idx=0; this.got=0; this.missed=0; this.results=[];
+    document.getElementById('fc-wrap').innerHTML =
+      '<div class="fc-progress" id="fc-progress"></div>'+
+      '<div class="fc-bar-wrap"><div class="fc-bar" id="fc-bar" style="width:6.67%"></div></div>'+
+      '<div class="fc-scene"><div class="fc-card" id="fc-card" onclick="_fc.flipOnCard()">'+
+      '<div class="fc-face"><span class="fc-type-badge fc-type-term" id="fc-type-badge">Term</span><p id="fc-front"></p><div class="fc-hint" id="fc-hint" style="display:none"></div></div>'+
+      '<div class="fc-face fc-back-face"><p id="fc-back"></p><div class="fc-ref" id="fc-ref"></div></div>'+
+      '</div></div>'+
+      '<button class="fc-flip-btn" id="fc-flip-btn" onclick="_fc.flip()">Flip Card</button>'+
+      '<div class="fc-actions" id="fc-actions">'+
+      '<button class="fc-btn fc-btn-got" onclick="_fc.mark(true)">&#10003; Got it</button>'+
+      '<button class="fc-btn fc-btn-missed" onclick="_fc.mark(false)">&#10007; Missed it</button>'+
+      '</div>'+
+      '<div class="fc-nav">'+
+      '<button class="fc-nav-btn" onclick="_fc.prev()">&#8592; Prev</button>'+
+      '<button class="fc-nav-btn" onclick="_fc.next()">Next &#8594;</button>'+
+      '</div>';
+    this.render();
+  }
+};
+
+// Init on load
+_fc.render();
+</script>
+</body>
+</html>

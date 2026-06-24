@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Claude MasterClass — Tree Reviewer</title>
+<style>
+/* synaptix-runtime v1.0 */
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@300;400;500;600&display=swap');
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg-base:#0e0e11;--bg-surface:#16161a;--bg-elevated:#1c1c21;--bg-section:#1a1a1f;--code-bg:#0c0c0f;
+  --border:rgba(255,255,255,0.07);--border-hi:rgba(255,255,255,0.12);
+  --orange:#f4762a;--salmon:#f08080;--cyan:#4ecdc4;--green:#4ade80;--yellow:#f4d03f;
+  --purple:#c084fc;--sky:#5db8f2;--amber:#f4b942;--red:#f87171;
+  --orange-dim:rgba(244,118,42,0.10);--cyan-dim:rgba(78,205,196,0.10);
+  --salmon-dim:rgba(240,128,128,0.10);--sky-dim:rgba(93,184,242,0.10);
+  --text-primary:#e8e8ee;--text-secondary:#8b8b9a;--text-muted:#4a4a5a;
+  --mono:'JetBrains Mono',monospace;--sans:'Inter',system-ui,sans-serif;
+}
+body{background:var(--bg-base);color:var(--text-primary);font-family:var(--sans);font-size:13px;line-height:1.8;}
+.doc-wrap{max-width:860px;margin:0 auto;display:flex;flex-direction:column;}
+.doc-header{padding:22px 26px 16px;border-bottom:1px solid var(--border);background:var(--bg-surface);}
+.badges{display:flex;gap:8px;margin-bottom:11px;flex-wrap:wrap}
+.badge{font-family:var(--mono);font-size:10px;font-weight:500;letter-spacing:0.07em;text-transform:uppercase;padding:3px 8px;border-radius:4px;border:1px solid;}
+.badge-type{color:var(--orange);background:var(--orange-dim);border-color:rgba(244,118,42,0.25)}
+.badge-mod{color:var(--sky);background:var(--sky-dim);border-color:rgba(93,184,242,0.25)}
+.doc-title{font-size:20px;font-weight:600;letter-spacing:-0.02em}
+.doc-subtitle{font-size:11px;font-family:var(--mono);color:var(--text-muted);margin-top:4px}
+.stat-row{display:flex;gap:20px;flex-wrap:wrap;margin-top:13px;padding-top:13px;border-top:1px solid var(--border);}
+.stat-val{font-family:var(--mono);font-size:15px;font-weight:600;color:var(--text-primary)}
+.stat-lbl{font-size:10px;text-transform:uppercase;letter-spacing:0.06em;color:var(--text-muted);margin-top:1px}
+.doc-body{padding:22px 26px;display:flex;flex-direction:column;gap:10px}
+.module-label{display:flex;align-items:center;gap:10px}
+.module-num{font-family:var(--mono);font-size:10px;font-weight:600;color:var(--orange);letter-spacing:0.1em;text-transform:uppercase;}
+.module-rule{flex:1;height:1px;background:linear-gradient(to right,rgba(244,118,42,0.25),transparent);}
+.module-title{font-size:17px;font-weight:600;margin-bottom:10px}
+/* Tree block */
+.tree-block{background:var(--code-bg);border:1px solid rgba(255,255,255,0.06);border-radius:8px;padding:18px 22px;font-family:var(--mono);font-size:12px;line-height:1.85;overflow-x:auto;white-space:pre;}
+.tm{color:var(--orange);font-weight:600}
+.ts{color:var(--sky);font-weight:500}
+.tb{color:var(--text-secondary)}
+.tl{color:var(--cyan)}
+.tc{color:var(--text-muted)}
+/* summary */
+.summary-block{background:var(--bg-surface);border:1px solid var(--border);border-bottom:2px solid var(--orange);border-radius:8px 8px 0 0;padding:14px 18px;}
+.summary-label{font-family:var(--mono);font-size:10px;font-weight:600;color:var(--orange);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:8px;}
+.summary-list{list-style:none;display:flex;flex-direction:column;gap:5px}
+.summary-list li{font-size:13px;color:var(--text-secondary);line-height:1.7;display:flex;gap:7px;}
+.summary-list li::before{content:'›';color:var(--orange);font-weight:700;font-size:14px;flex-shrink:0}
+
+@media(max-width:600px){
+  .doc-header,.doc-body{padding-left:16px;padding-right:16px}
+  .doc-footer{padding:12px 16px}
+  .footer-btn{width:100px;height:52px;font-size:10px}
+  .tree-block{font-size:11px;padding:14px 14px;}
+}
+
+/* ========================================
+   FOOTER NAVIGATION CSS
+   Synaptix Runtime — shared component
+   Copy into any artifact <style> block
+======================================== */
+
+.snx-footer{
+  background:var(--bg-surface);
+  border-top:1px solid var(--border);
+  padding:16px 26px 18px;
+}
+
+/* ── Meta bar ── */
+.snx-footer-meta{
+  display:flex;align-items:baseline;gap:10px;
+  padding-bottom:13px;
+  border-bottom:1px solid var(--border);
+  margin-bottom:13px;
+}
+.snx-footer-course{
+  font-family:var(--mono);font-size:10px;font-weight:600;
+  letter-spacing:0.14em;text-transform:uppercase;color:var(--text-muted);
+}
+.snx-footer-divider{
+  font-family:var(--mono);font-size:10px;color:var(--text-muted);opacity:0.4;
+}
+.snx-footer-module{
+  font-family:var(--mono);font-size:11px;font-weight:500;
+  color:var(--text-secondary);letter-spacing:0.04em;
+}
+
+/* ── Nav row ── */
+.snx-footer-nav{
+  display:flex;align-items:center;
+  gap:10px;
+}
+
+/* prev / next */
+.snx-nav-prev,
+.snx-nav-next{
+  font-family:var(--mono);font-size:11px;font-weight:500;
+  color:var(--text-secondary);
+  background:transparent;
+  border:1px solid var(--border);
+  border-radius:6px;
+  padding:6px 13px;
+  display:flex;align-items:center;gap:6px;
+  white-space:nowrap;
+  transition:border-color 0.13s,color 0.13s;
+  flex-shrink:0;
+  text-decoration:none;
+}
+.snx-nav-prev:hover,
+.snx-nav-next:hover{
+  border-color:var(--border-hi);
+  color:var(--text-primary);
+}
+.snx-nav-chevron{
+  font-size:13px;line-height:1;
+  color:var(--text-muted);
+  transition:color 0.13s;
+}
+.snx-nav-prev:hover .snx-nav-chevron,
+.snx-nav-next:hover .snx-nav-chevron{color:var(--text-secondary)}
+
+/* center hub */
+.snx-nav-hub{
+  flex:1;display:flex;align-items:center;
+  justify-content:center;gap:6px;flex-wrap:wrap;
+}
+
+/* hub buttons */
+.snx-hub-btn{
+  font-family:var(--mono);font-size:10px;font-weight:500;
+  letter-spacing:0.04em;
+  padding:6px 13px;border-radius:6px;border:1px solid;
+  display:inline-flex;align-items:center;gap:5px;
+  transition:background 0.13s;
+  text-decoration:none;white-space:nowrap;
+}
+.snx-hub-btn-recall{
+  color:var(--cyan);background:var(--cyan-dim);
+  border-color:rgba(78,205,196,0.22);
+}
+.snx-hub-btn-recall:hover{background:rgba(78,205,196,0.18)}
+
+.snx-hub-btn-tree{
+  color:var(--green);background:var(--green-dim);
+  border-color:rgba(74,222,128,0.22);
+}
+.snx-hub-btn-tree:hover{background:rgba(74,222,128,0.18)}
+
+.snx-hub-btn-compact{
+  color:var(--yellow);background:var(--yellow-dim);
+  border-color:rgba(244,208,63,0.22);
+}
+.snx-hub-btn-compact:hover{background:rgba(244,208,63,0.18)}
+
+.snx-hub-btn-quiz{
+  color:var(--orange);background:var(--orange-dim);
+  border-color:rgba(244,118,42,0.22);
+}
+.snx-hub-btn-quiz:hover{background:rgba(244,118,42,0.18)}
+
+.snx-hub-btn-module{
+  color:var(--purple);background:var(--purple-dim);
+  border-color:rgba(192,132,252,0.22);
+}
+.snx-hub-btn-module:hover{background:rgba(192,132,252,0.18)}
+
+/* active state — current artifact type */
+.snx-hub-btn[aria-current="page"]{
+  opacity:1;cursor:default;
+  box-shadow:0 0 0 1px currentColor;
+}
+
+/* mobile */
+@media(max-width:640px){
+  .snx-footer{padding:14px 16px 16px}
+  .snx-footer-nav{flex-wrap:wrap}
+  .snx-nav-hub{order:3;flex-basis:100%;justify-content:flex-start}
+}
+
+</style>
+</head>
+<body>
+<div class="doc-wrap">
+
+<div class="doc-header">
+  <div class="badges">
+    <span class="badge badge-type">Tree · Structure Only</span>
+    <span class="badge badge-mod">Module 1 of 1 · Merged · 4 Lessons</span>
+  </div>
+  <div class="doc-title">Claude MasterClass — Complete Practical Guide: Interface, Features, Claude Code &amp; Cowork</div>
+  <div class="doc-subtitle">source: Claude_MasterClass_-_Volume_1.html · generated 2026-06-24 · subject: Claude MasterClass</div>
+  <div class="stat-row">
+    <div class="stat-item"><div class="stat-val">6</div><div class="stat-lbl">Sections</div></div>
+    <div class="stat-item"><div class="stat-val">34</div><div class="stat-lbl">Subsections</div></div>
+    <div class="stat-item"><div class="stat-val">120+</div><div class="stat-lbl">Leaf Items</div></div>
+  </div>
+</div>
+
+<div class="doc-body">
+
+  <div class="module-label">
+    <span class="module-num">Module 1</span>
+    <div class="module-rule"></div>
+  </div>
+  <div class="module-title">Claude MasterClass — Complete Practical Guide</div>
+
+  <div class="tree-block"><span class="tm">Module 1</span>  <span class="tb">Claude MasterClass — Complete Practical Guide</span>
+<span class="tc">│</span>
+<span class="ts">├── A.  Getting Started with Claude</span>
+<span class="tc">│   │</span>
+<span class="tb">│   ├── A1.  Account Setup &amp; Interface Orientation</span>
+<span class="tl">│   │   ├── claude.ai — account creation entry point</span>
+<span class="tl">│   │   ├── Free tier: Sonnet 4.6 · web search · memory · file creation</span>
+<span class="tl">│   │   ├── Pro plan: $20/mo · 5× usage · Opus 4.6 · Cowork</span>
+<span class="tl">│   │   ├── Interface: model selector (top) · extended thinking toggle · left sidebar</span>
+<span class="tl">│   │   └── Multi-tab tip: middle-click "New Chat" → parallel sessions, no context loss</span>
+<span class="tc">│   │</span>
+<span class="tb">│   ├── A2.  The Three Models</span>
+<span class="tl">│   │   ├── Haiku 4.5 — fastest, cheapest; bulk/simple/high-volume tasks</span>
+<span class="tl">│   │   ├── Sonnet 4.6 — workhorse; 90% of tasks; 5× cheaper per token than Opus</span>
+<span class="tl">│   │   ├── Opus 4.6 — expert tier; complex debugging, architecture, multi-agent</span>
+<span class="tl">│   │   └── Common mistake: defaulting to Opus on everything; depletes limits on tasks Sonnet handles fine</span>
+<span class="tc">│   │</span>
+<span class="tb">│   ├── A3.  Model Decision Framework</span>
+<span class="tl">│   │   ├── Default: Sonnet 4.6 for every task</span>
+<span class="tl">│   │   ├── Escalate: Opus only when Sonnet's depth is insufficient</span>
+<span class="tl">│   │   ├── Downgrade: Haiku for bulk/trivial (reformatting, basic summaries)</span>
+<span class="tl">│   │   └── Claude Code mapping: Opus plans → Sonnet builds (/model opus / /model sonnet)</span>
+<span class="tc">│   │</span>
+<span class="tb">│   └── A4.  Custom Instructions</span>
+<span class="tl">│       ├── Location: avatar → Settings → Profile → Custom Instructions</span>
+<span class="tl">│       ├── Persists across all chats — write once, never re-brief</span>
+<span class="tl">│       ├── Include: professional context · format preferences · tech stack · working style</span>
+<span class="tl">│       ├── Format preferences: no emoji, no buzzwords, no headers unless asked</span>
+<span class="tl">│       └── Instructions ≠ Memory: instructions = user-authored; memory = auto-synthesized</span>
+<span class="tc">│</span>
+<span class="ts">├── B.  Core Power Features</span>
+<span class="tc">│   │</span>
+<span class="tb">│   ├── B1.  Extended Thinking</span>
+<span class="tl">│   │   ├── UI toggle → Claude reasons step-by-step before answering</span>
+<span class="tl">│   │   ├── Output: collapsible thinking section showing deliberation</span>
+<span class="tl">│   │   ├── When ON: decisions with real consequences · multi-variable analysis · complex debugging</span>
+<span class="tl">│   │   ├── When OFF: reformatting · summaries · brainstorming sprints</span>
+<span class="tl">│   │   ├── Target: ~20% of queries — costs more tokens and time</span>
+<span class="tl">│   │   ├── Opus 4.7 equivalent: Adaptive Thinking (triggered by phrase, not toggle)</span>
+<span class="tl">│   │   └── Triggers: "think carefully" · "think harder" · "ultra think" · "think this through deeply"</span>
+<span class="tc">│   │</span>
+<span class="tb">│   ├── B2.  Memory</span>
+<span class="tl">│   │   ├── Enable: Settings → Capabilities → Generate memory from chat history</span>
+<span class="tl">│   │   ├── Auto-synthesizes key facts from conversations; updates every 24h</span>
+<span class="tl">│   │   ├── View/edit: Settings → Memory</span>
+<span class="tl">│   │   ├── Three-conversation foundation: work context · comm. preferences · current projects</span>
+<span class="tl">│   │   ├── Memory hygiene: audit regularly · delete stale entries</span>
+<span class="tl">│   │   ├── Write directly: "remember that I always want X"</span>
+<span class="tl">│   │   ├── Past Chats Search: turns history into a queryable knowledge base (same settings area)</span>
+<span class="tl">│   │   └── Import memory from ChatGPT/Gemini: Settings → Capabilities → Memory → Import</span>
+<span class="tc">│   │</span>
+<span class="tb">│   ├── B3.  1 Million Token Context Window</span>
+<span class="tl">│   │   ├── Supported by: Opus and Sonnet</span>
+<span class="tl">│   │   ├── 1M tokens ≈ 750,000 words (full codebases, book series, year of email)</span>
+<span class="tl">│   │   ├── Edge accuracy: 76% (vs 18% on prior models)</span>
+<span class="tl">│   │   ├── Context compaction: auto-summarizes old turns as sessions grow</span>
+<span class="tl">│   │   └── Pro workflow: upload all reference materials to a Project once → perfect context every chat</span>
+<span class="tc">│   │</span>
+<span class="tb">│   ├── B4.  Custom Styles</span>
+<span class="tl">│   │   ├── Access: chat + button → New Style</span>
+<span class="tl">│   │   ├── Built-in presets: Normal · Concise · Explanatory · Formal</span>
+<span class="tl">│   │   ├── Custom: upload your own writing samples (PDF, doc, text) → Claude extracts voice</span>
+<span class="tl">│   │   ├── One-click switching: email style · social style · technical docs style</span>
+<span class="tl">│   │   └── Styles control how Claude writes; Custom Instructions control what Claude knows</span>
+<span class="tc">│   │</span>
+<span class="tb">│   └── B5.  Incognito Mode</span>
+<span class="tl">│       ├── Activation: ghost icon (top-right of claude.ai)</span>
+<span class="tl">│       ├── No history saved · no memory fed · no search indexing</span>
+<span class="tl">│       └── Use for: prompt testing · sensitive material · experiments to keep off permanent context</span>
+<span class="tc">│</span>
+<span class="ts">├── C.  Advanced Workflows</span>
+<span class="tc">│   │</span>
+<span class="tb">│   ├── C1.  Projects</span>
+<span class="tl">│   │   ├── Persistent workspaces: own instructions + file library + conversation history</span>
+<span class="tl">│   │   ├── Rule: one project per workflow type (keep them separate)</span>
+<span class="tl">│   │   ├── Three-document knowledge base per project:</span>
+<span class="tl">│   │   │   ├── Project brief (goal + audience, ~1 page)</span>
+<span class="tl">│   │   │   ├── 3–4 examples of good work (tone/quality calibration)</span>
+<span class="tl">│   │   │   └── Constraints list (always/never rules)</span>
+<span class="tl">│   │   ├── Free plan limits: 20 files/chat · 30 MB total</span>
+<span class="tl">│   │   ├── Chat naming convention: date + topic (e.g., 2026-0624 Q2 plan)</span>
+<span class="tl">│   │   ├── Start each project with a "project brief" chat</span>
+<span class="tl">│   │   └── Team plans: shared projects with shared context + history</span>
+<span class="tc">│   │</span>
+<span class="tb">│   ├── C2.  Artifacts</span>
+<span class="tl">│   │   ├── Real downloadable files: Word · Excel (with formulas) · PowerPoint · HTML</span>
+<span class="tl">│   │   ├── Render in side panel alongside chat</span>
+<span class="tl">│   │   ├── Iterative revision: click section → tell Claude what to change → only that section updates</span>
+<span class="tl">│   │   ├── Workflow: outline → expand section by section → polish final</span>
+<span class="tl">│   │   ├── Persistent storage: 20 MB per artifact (publish-gated; dev mode excluded)</span>
+<span class="tl">│   │   ├── Live artifacts: dashboards connected to Google Sheets (auto-updating)</span>
+<span class="tl">│   │   ├── Public sharing with remix: anyone can fork your published artifact</span>
+<span class="tl">│   │   ├── window.claude.complete: published artifacts call Claude API — no viewer key needed</span>
+<span class="tl">│   │   ├── MCP server support: Google Calendar · Gmail · Slack integration</span>
+<span class="tl">│   │   └── Gallery: made-with-claude.com</span>
+<span class="tc">│   │</span>
+<span class="tb">│   ├── C3.  Web Search &amp; Deep Research</span>
+<span class="tl">│   │   ├── Basic web search: all plans · single-query synthesis · clickable citations</span>
+<span class="tl">│   │   ├── Shows sources explicitly (unlike most AI search tools)</span>
+<span class="tl">│   │   ├── Deep Research: Pro/Max/Team/Enterprise only</span>
+<span class="tl">│   │   │   ├── Extended multi-query session; follows threads across dozens of sources</span>
+<span class="tl">│   │   │   ├── Returns multi-page report with citations</span>
+<span class="tl">│   │   │   └── Can combine web + connected service data (Drive, Gmail) in one session</span>
+<span class="tl">│   │   └── Prompt specificity rule: domain + focus + output structure → usable deliverable</span>
+<span class="tc">│   │</span>
+<span class="tb">│   ├── C4.  Connectors (MCP Integrations)</span>
+<span class="tl">│   │   ├── Access: Settings → Connectors</span>
+<span class="tl">│   │   ├── Supported services: Gmail · Drive · Calendar · Slack · Notion · Linear · Asana</span>
+<span class="tl">│   │   │             GitHub · GitLab · Stripe · HubSpot · Salesforce · DocuSign</span>
+<span class="tl">│   │   │             SharePoint · Microsoft 365 (Excel · Word · PowerPoint · Outlook)</span>
+<span class="tl">│   │   ├── Safety: Claude never acts without explicit confirmation — always previews first</span>
+<span class="tl">│   │   ├── Office Add-in: Microsoft Marketplace · included with paid plans</span>
+<span class="tl">│   │   │   └── Shared context across Excel · Word · PowerPoint · Outlook</span>
+<span class="tl">│   │   ├── Excel capabilities: formula explanation · cell dependency tracing · pivot tables · error debug</span>
+<span class="tl">│   │   └── Ground rules: connect only what's needed · audit periodically · isolate sensitive systems</span>
+<span class="tc">│   │</span>
+<span class="tb">│   ├── C5.  Skills</span>
+<span class="tl">│   │   ├── skill.md: plain-text instruction file Claude auto-activates on matching tasks</span>
+<span class="tl">│   │   ├── Built-in skills: Excel · PowerPoint · Word · PDF · front-end design</span>
+<span class="tl">│   │   ├── Upload custom skills: .zip to Settings → Capabilities → Skills</span>
+<span class="tl">│   │   └── Pre-built skill sources:</span>
+<span class="tl">│   │       ├── github.com/anthropic/skills (official)</span>
+<span class="tl">│   │       ├── skillsmp.com (marketplace)</span>
+<span class="tl">│   │       ├── Skill Hub Club (7,000+ skills)</span>
+<span class="tl">│   │       └── ClaudeSkills.info (~140 curated)</span>
+<span class="tc">│   │</span>
+<span class="tb">│   └── C6.  Vision &amp; Image Analysis</span>
+<span class="tl">│       ├── Opus 4.7 resolution: 2,576px / ≈3.75 megapixels</span>
+<span class="tl">│       ├── Use cases: fine text · architectural drawings · medical results · dense spreadsheets</span>
+<span class="tl">│       ├── PDF prompt pattern:</span>
+<span class="tl">│       │   ├── Level 1: one-sentence summary</span>
+<span class="tl">│       │   ├── Level 2: five key points with quotes + page numbers</span>
+<span class="tl">│       │   ├── Level 3: full-page detailed breakdown</span>
+<span class="tl">│       │   └── Gap questions: "List questions this document doesn't answer but should"</span>
+<span class="tl">│       └── Claude cannot generate images or video — use dedicated image model for creation</span>
+<span class="tc">│</span>
+<span class="ts">├── D.  Prompt Engineering</span>
+<span class="tc">│   │</span>
+<span class="tb">│   ├── D1.  Five-Part Prompt Framework</span>
+<span class="tl">│   │   ├── Role — specific expert for a specific purpose (not just "an expert")</span>
+<span class="tl">│   │   ├── Task — exactly what's needed, clearly and completely stated</span>
+<span class="tl">│   │   ├── Context — audience, product, background, prior work</span>
+<span class="tl">│   │   ├── Constraints — length, tone, what to avoid</span>
+<span class="tl">│   │   ├── Format — how the output should be structured (bullets, table, numbered steps)</span>
+<span class="tl">│   │   ├── Use for: high-stakes prompts where output quality matters</span>
+<span class="tl">│   │   └── Skip for: casual back-and-forth, simple/quick tasks</span>
+<span class="tc">│   │</span>
+<span class="tb">│   ├── D2.  XML Tags</span>
+<span class="tl">│   │   ├── Anthropic-recommended for complex multi-section prompts</span>
+<span class="tl">│   │   ├── Supported tags: &lt;task&gt; · &lt;context&gt; · &lt;instructions&gt; · &lt;examples&gt;</span>
+<span class="tl">│   │   │                   &lt;input&gt; · &lt;output_format&gt; · &lt;constraints&gt;</span>
+<span class="tl">│   │   ├── Purpose: separates instructions from data — prevents Claude treating context as a request</span>
+<span class="tl">│   │   └── Claimed quality improvement: 30–50% on complex prompts</span>
+<span class="tc">│   │</span>
+<span class="tb">│   ├── D3.  Meta-Prompting</span>
+<span class="tl">│   │   ├── Technique: give Claude a rough prompt draft → ask it to optimize it</span>
+<span class="tl">│   │   ├── Template: role + success criteria + XML structure + output format + thinking trigger</span>
+<span class="tl">│   │   ├── Ask for 3-point explanation of what changed (teaches you prompt structure)</span>
+<span class="tl">│   │   └── High value for recurring task templates: invest once, reuse indefinitely</span>
+<span class="tc">│   │</span>
+<span class="tb">│   └── D4.  Interview-First Method</span>
+<span class="tl">│       ├── Trigger: "Ask me 5–7 clarifying questions before starting."</span>
+<span class="tl">│       ├── Rules: "Don't write anything until I've answered. List all questions at once."</span>
+<span class="tl">│       ├── Best for: strategy · creative briefs · complex technical problems · research tasks</span>
+<span class="tl">│       └── Trade-off: slower start → eliminates 2–3 correction rounds</span>
+<span class="tc">│</span>
+<span class="ts">├── E.  Claude Code</span>
+<span class="tc">│   │</span>
+<span class="tb">│   ├── E1.  Setup</span>
+<span class="tl">│   │   ├── Location: Claude desktop app → Code tab (claude.com/load · Mac &amp; Windows)</span>
+<span class="tl">│   │   ├── Direct file system access to a chosen folder — Claude reads, edits, runs real files</span>
+<span class="tl">│   │   ├── Companion editor: Cursor (free) — chat panel right + live file view left</span>
+<span class="tl">│   │   ├── Three installs: Node.js · Claude Code (npm) · Cursor</span>
+<span class="tl">│   │   ├── Init: run /init once per project → auto-generates claude.md</span>
+<span class="tl">│   │   └── Cost options: Claude Pro ($20/mo, included) or API (pay-per-token)</span>
+<span class="tc">│   │</span>
+<span class="tb">│   ├── E2.  claude.md Memory File</span>
+<span class="tl">│   │   ├── Plain-text file in project root — read at every session start</span>
+<span class="tl">│   │   ├── Highest value: negative constraints (what Claude must NOT do)</span>
+<span class="tl">│   │   ├── Example constraints: "don't use default exports" · "don't touch schema.prisma"</span>
+<span class="tl">│   │   │                        "don't edit anything in /generated"</span>
+<span class="tl">│   │   ├── 3–5 negative constraints significantly improve first-attempt accuracy</span>
+<span class="tl">│   │   ├── Keep under 200 lines</span>
+<span class="tl">│   │   └── Global rules: ~/.claude/claude.md (applies across all projects)</span>
+<span class="tc">│   │</span>
+<span class="tb">│   ├── E3.  Opus→Sonnet Handoff Pattern</span>
+<span class="tl">│   │   ├── Switch commands: /model opus and /model sonnet</span>
+<span class="tl">│   │   ├── Opus phase: plan — deeper reasoning, catches edge cases, more expensive</span>
+<span class="tl">│   │   ├── Sonnet phase: build — fast, accurate, cheaper</span>
+<span class="tl">│   │   ├── Handoff trigger: after Opus produces plan → "Follow the plan exactly and build it"</span>
+<span class="tl">│   │   └── Skipping Opus on complex projects → mid-session restructuring + wasted tokens</span>
+<span class="tc">│   │</span>
+<span class="tb">│   ├── E4.  Screenshot Debugging</span>
+<span class="tl">│   │   ├── Workflow: screenshot broken UI → paste into Claude Code + short description → Claude fixes</span>
+<span class="tl">│   │   ├── Claude uses both the screenshot and the live codebase simultaneously</span>
+<span class="tl">│   │   ├── No need to identify which element or file — Claude finds it autonomously</span>
+<span class="tl">│   │   ├── Proactive behavior: may fix related elements beyond what was pointed at</span>
+<span class="tl">│   │   └── Design-to-code: Figma export + "Build me this page" = fastest visual workflow</span>
+<span class="tc">│   │</span>
+<span class="tb">│   ├── E5.  Plan Mode &amp; Routines</span>
+<span class="tl">│   │   ├── Plan Mode</span>
+<span class="tl">│   │   │   ├── Trigger: /plan or Shift+Tab or "show me the plan first, don't change anything yet"</span>
+<span class="tl">│   │   │   ├── Output: list of all intended file changes before anything is touched</span>
+<span class="tl">│   │   │   └── Use for: any task touching 3+ files or significant structural changes</span>
+<span class="tl">│   │   └── Routines</span>
+<span class="tl">│   │       ├── Location: desktop app Routines tab</span>
+<span class="tl">│   │       ├── Config per routine: name · description · instructions · permissions · folder · schedule</span>
+<span class="tl">│   │       ├── Schedules: manual · hourly · daily · weekdays · weekly</span>
+<span class="tl">│   │       ├── High-value patterns: daily commit review · weekly doc drift · PR digest · dep audit</span>
+<span class="tl">│   │       └── Constraint: local only — machine must be awake and Claude desktop open</span>
+<span class="tc">│   │</span>
+<span class="tb">│   └── E6.  Five Common Mistakes</span>
+<span class="tl">│       ├── Mistake 1: No claude.md → stateless sessions. Fix: /init</span>
+<span class="tl">│       ├── Mistake 2: Vague prompts ("make it look better"). Fix: specify exact element + outcome</span>
+<span class="tl">│       ├── Mistake 3: Skipping Plan Mode on multi-file tasks. Fix: /plan or Shift+Tab first</span>
+<span class="tl">│       ├── Mistake 4: Never using /compact → context fills → Claude loops. Fix: /compact mid-session</span>
+<span class="tl">│       └── Mistake 5: Three failed corrections in same session → poisoned context.</span>
+<span class="tl">│                   Fix: fresh session + clean problem description + minimal relevant code</span>
+<span class="tc">│</span>
+<span class="ts">└── F.  Cowork</span>
+<span class="tc">    │</span>
+<span class="tb">    ├── F1.  What Cowork Is</span>
+<span class="tl">    │   ├── Location: desktop app Cowork tab (Chat · Cowork · Code)</span>
+<span class="tl">    │   ├── Available to: all paid subscribers</span>
+<span class="tl">    │   ├── Capabilities: read/write/delete local files · coordinate parallel sub-agents · work unsupervised</span>
+<span class="tl">    │   ├── Output: real native files — Excel with formulas · Word · PowerPoint</span>
+<span class="tl">    │   ├── Key distinction: Chat answers questions; Cowork completes tasks (start to finish)</span>
+<span class="tl">    │   ├── Best for: multi-step tasks · local file work · repetitive weekly workflows · file + research combos</span>
+<span class="tl">    │   └── Caveat: high token cost — reserve for tasks that justify it</span>
+<span class="tc">    │</span>
+<span class="tb">    ├── F2.  Folder Structure &amp; Context Files</span>
+<span class="tl">    │   ├── Dedicated folder (e.g., "Cowork Station") — never point at entire Documents folder</span>
+<span class="tl">    │   ├── Three subfolders: context/ · projects/ · output/</span>
+<span class="tl">    │   ├── Three context markdown files (Claude reads at every session start):</span>
+<span class="tl">    │   │   ├── aboutme.md — role, business, audience (2 paragraphs)</span>
+<span class="tl">    │   │   ├── brandvoice.md — tone, style, words to use/avoid, writing examples</span>
+<span class="tl">    │   │   └── workingpreferences.md — document structure, ambiguity handling preference</span>
+<span class="tl">    │   └── Global Instructions: Settings → Cowork → Global Instructions</span>
+<span class="tc">    │</span>
+<span class="tb">    ├── F3.  Projects in Cowork</span>
+<span class="tl">    │   ├── Projects = workspaces where instructions + context + history accumulate</span>
+<span class="tl">    │   ├── One project per recurring workflow type:</span>
+<span class="tl">    │   │   ├── Client deliverables</span>
+<span class="tl">    │   │   ├── Content production</span>
+<span class="tl">    │   │   ├── Admin &amp; finance</span>
+<span class="tl">    │   │   └── Weekly reporting</span>
+<span class="tl">    │   ├── Task-specific project instructions override global defaults</span>
+<span class="tl">    │   └── Over time: Claude builds on previous outputs rather than restarting from scratch</span>
+<span class="tc">    │</span>
+<span class="tb">    ├── F4.  Parallel Processing &amp; Real Output</span>
+<span class="tl">    │   ├── Sub-task decomposition: Claude runs parallel file operations simultaneously</span>
+<span class="tl">    │   ├── Example benchmark: 6 transcripts → Excel trackers + follow-up emails → 3 min (vs 2–3 hrs manual)</span>
+<span class="tl">    │   ├── Excel output: conditional formatting · deadline inference · summary rows</span>
+<span class="tl">    │   ├── Email output: under 150 words · references specific discussion points</span>
+<span class="tl">    │   ├── Prompts are plain English — no special syntax required</span>
+<span class="tl">    │   └── Mindset: "What work can AI complete?" not "What text can AI generate?"</span>
+<span class="tc">    │</span>
+<span class="tb">    ├── F5.  Scheduled Tasks</span>
+<span class="tl">    │   ├── Access: Cowork sidebar → Schedule → New Task</span>
+<span class="tl">    │   ├── Config: prompt + frequency (manual · hourly · daily · weekdays · weekly)</span>
+<span class="tl">    │   ├── Critical constraint: local only — machine awake + Claude desktop open required</span>
+<span class="tl">    │   ├── Always test manually before scheduling</span>
+<span class="tl">    │   ├── Keep prompts tight (every run consumes tokens)</span>
+<span class="tl">    │   └── Example tasks:</span>
+<span class="tl">    │       ├── Daily 9AM: Gmail + Calendar + Notion → morningbrief.md</span>
+<span class="tl">    │       └── Monday 12PM: trending AI topics → 3 opportunities → Slack post</span>
+<span class="tc">    │</span>
+<span class="tb">    └── F6.  Dispatch &amp; Claude for Chrome</span>
+<span class="tl">        ├── Dispatch</span>
+<span class="tl">        │   ├── Enable: Cowork mobile → Enable Dispatch</span>
+<span class="tl">        │   ├── Workflow: send task from phone → Claude runs on desktop → push notification on done</span>
+<span class="tl">        │   └── Phone = remote control · Desktop = execution engine</span>
+<span class="tl">        └── Claude for Chrome</span>
+<span class="tl">            ├── Browser extension: Chrome and Edge only (not Brave, Arc, mobile)</span>
+<span class="tl">            ├── Beta: available to all paid plans</span>
+<span class="tl">            ├── Unlike a Claude tab: has access to real authenticated browser sessions</span>
+<span class="tl">            ├── Can navigate sites · click elements · fill forms on live authenticated pages</span>
+<span class="tl">            ├── Use cases: competitive research · form automation · content harvesting</span>
+<span class="tl">            └── Security: never enable for banking, medical, or sensitive portals</span></div>
+
+  <div class="summary-block">
+    <div class="summary-label">Module Summary</div>
+    <ul class="summary-list">
+      <li>Model cascade — Sonnet by default, Opus when depth falls short, Haiku for bulk. In Claude Code: Opus plans, Sonnet builds.</li>
+      <li>The highest-leverage features by effort: Extended Thinking (on for ~20% of queries), Memory (3-conversation foundation + hygiene), 1M token context window (76% edge accuracy).</li>
+      <li>Projects + Artifacts shift the paradigm from text generation to persistent workspace and real file delivery.</li>
+      <li>Prompt craft stack: five-part framework → XML tags → meta-prompting → interview-first. Each layer adds precision.</li>
+      <li>Claude Code core: /init → claude.md (negative constraints first) → Opus plan → Sonnet build → /plan before complex tasks → /compact mid-session → fresh session after three failed corrections.</li>
+      <li>Cowork is infrastructure: context files + per-workflow Projects + scheduled tasks turn one-time work into permanent, self-running automation.</li>
+    </ul>
+  </div>
+
+</div>
+
+
+</div>
+
+<footer class="snx-footer">
+
+  <!-- Meta bar -->
+  <div class="snx-footer-meta">
+    <span class="snx-footer-course">Claude MasterClass</span>
+    <span class="snx-footer-divider">·</span>
+    <span class="snx-footer-module">Module 01 · Complete Practical Guide: Interface, Features, Claude Code &amp; Cowork</span>
+  </div>
+
+  <!-- Nav row -->
+  <nav class="snx-footer-nav" aria-label="Artifact navigation">
+
+    <!-- Left: Previous -->
+    <a class="snx-nav-prev" href="#">
+      <span class="snx-nav-chevron">‹</span>
+      Previous
+    </a>
+
+    <!-- Center: Hub -->
+    <div class="snx-nav-hub">
+      <a class="snx-hub-btn snx-hub-btn-recall"  href="../recalls/01_claude-masterclass-recall.html">Recall</a>
+      <a class="snx-hub-btn snx-hub-btn-tree"    href="#" aria-current="page">Tree</a>
+      <a class="snx-hub-btn snx-hub-btn-compact" href="../compact/01_claude-masterclass-compact.html">Compact</a>
+      <a class="snx-hub-btn snx-hub-btn-quiz"    href="../quizzes/01_claude-masterclass-quiz.html">Quiz</a>
+      <a class="snx-hub-btn snx-hub-btn-module"  href="../modules/01_claude-masterclass-reviewer.html">Module</a>
+    </div>
+
+    <!-- Right: Next -->
+    <a class="snx-nav-next" href="./02_claude-masterclass-tree.html">
+      Next
+      <span class="snx-nav-chevron">›</span>
+    </a>
+
+  </nav>
+
+</footer>
+
+<script>
+function sendPrompt(t){if(window.parent&&window.parent.postMessage){window.parent.postMessage({type:'user_message',message:t},'*');}}
+function quizQuick()  { sendPrompt('/quiz mc(10) hard'); }
+function recallQuick(){ sendPrompt('/recall term(10) hard'); }
+function exportMd()   { sendPrompt('/export -md'); }
+</script>
+</body>
+</html>

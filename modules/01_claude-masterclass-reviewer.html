@@ -1,0 +1,1120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Claude MasterClass — Complete Practical Guide</title>
+<style>
+/* synaptix-runtime v1.0 — do not edit inline — update via runtime-asset.md */
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@300;400;500;600&display=swap');
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --bg-base:    #0e0e11;
+  --bg-surface: #16161a;
+  --bg-elevated:#1c1c21;
+  --bg-section: #1a1a1f;
+  --code-bg:    #0c0c0f;
+  --border:    rgba(255,255,255,0.07);
+  --border-hi: rgba(255,255,255,0.12);
+  --orange: #f4762a;
+  --salmon: #f08080;
+  --cyan:   #4ecdc4;
+  --green:  #4ade80;
+  --yellow: #f4d03f;
+  --purple: #c084fc;
+  --sky:    #5db8f2;
+  --amber:  #f4b942;
+  --red:    #f87171;
+  --orange-dim:  rgba(244,118,42,0.10);
+  --orange-glow: rgba(244,118,42,0.05);
+  --cyan-dim:    rgba(78,205,196,0.10);
+  --salmon-dim:  rgba(240,128,128,0.10);
+  --yellow-dim:  rgba(244,208,63,0.10);
+  --green-dim:   rgba(74,222,128,0.10);
+  --purple-dim:  rgba(192,132,252,0.10);
+  --sky-dim:     rgba(93,184,242,0.10);
+  --text-primary:   #e8e8ee;
+  --text-secondary: #8b8b9a;
+  --text-muted:     #4a4a5a;
+  --mono:'JetBrains Mono',monospace;
+  --sans:'Inter',system-ui,sans-serif;
+}
+
+body{background:var(--bg-base);color:var(--text-primary);font-family:var(--sans);font-size:13px;line-height:1.8;}
+
+.b-orange{color:var(--orange);font-weight:600}
+.b-salmon{color:var(--salmon);font-weight:600}
+.b-cyan  {color:var(--cyan);  font-weight:600}
+.b-green {color:var(--green); font-weight:600}
+.b-yellow{color:var(--yellow);font-weight:600}
+
+.kw-orange{font-family:var(--mono);font-size:12px;color:var(--orange);background:var(--orange-dim);border:1px solid rgba(244,118,42,0.2);border-radius:3px;padding:1px 5px;}
+.kw-cyan{font-family:var(--mono);font-size:12px;color:var(--cyan);background:var(--cyan-dim);border:1px solid rgba(78,205,196,0.2);border-radius:3px;padding:1px 5px;}
+.box-salmon{font-size:13px;color:var(--salmon);background:var(--salmon-dim);border:1px solid rgba(240,128,128,0.2);border-radius:3px;padding:1px 6px;}
+.box-yellow{font-size:13px;color:var(--yellow);background:var(--yellow-dim);border:1px solid rgba(244,208,63,0.2);border-radius:3px;padding:1px 6px;}
+.box-green{font-size:13px;color:var(--green);background:var(--green-dim);border:1px solid rgba(74,222,128,0.2);border-radius:3px;padding:1px 6px;}
+.def{font-style:italic;color:var(--text-secondary)}
+
+.doc-wrap{max-width:860px;margin:0 auto;display:flex;flex-direction:column;}
+
+.doc-header{padding:22px 26px 16px;border-bottom:1px solid var(--border);background:var(--bg-surface);}
+.badges{display:flex;gap:8px;margin-bottom:11px;flex-wrap:wrap}
+.badge{font-family:var(--mono);font-size:10px;font-weight:500;letter-spacing:0.07em;text-transform:uppercase;padding:3px 8px;border-radius:4px;border:1px solid;}
+.badge-type{color:var(--orange);background:var(--orange-dim);border-color:rgba(244,118,42,0.25)}
+.badge-mod {color:var(--sky);   background:var(--sky-dim);   border-color:rgba(93,184,242,0.25)}
+.doc-title{font-size:20px;font-weight:600;letter-spacing:-0.02em}
+.doc-subtitle{font-size:11px;font-family:var(--mono);color:var(--text-muted);margin-top:4px}
+.stat-row{display:flex;gap:20px;flex-wrap:wrap;margin-top:13px;padding-top:13px;border-top:1px solid var(--border);}
+.stat-val{font-family:var(--mono);font-size:15px;font-weight:600;color:var(--text-primary)}
+.stat-lbl{font-size:10px;text-transform:uppercase;letter-spacing:0.06em;color:var(--text-muted);margin-top:1px}
+
+.doc-body{padding:22px 26px;display:flex;flex-direction:column;gap:10px}
+
+.module-label{display:flex;align-items:center;gap:10px}
+.module-num{font-family:var(--mono);font-size:10px;font-weight:600;color:var(--orange);letter-spacing:0.1em;text-transform:uppercase;}
+.module-rule{flex:1;height:1px;background:linear-gradient(to right,rgba(244,118,42,0.25),transparent);}
+.module-title{font-size:17px;font-weight:600;margin-bottom:10px}
+
+.overview{background:var(--bg-surface);border-top:2px solid var(--sky);border-radius:0 0 8px 8px;padding:14px 18px;}
+.overview-label{font-family:var(--mono);font-size:10px;font-weight:600;color:var(--sky);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:10px;}
+.overview-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
+.overview-item{background:var(--bg-elevated);border:1px solid var(--border);border-radius:6px;padding:8px 10px;display:flex;align-items:flex-start;gap:8px;}
+.ov-letter{font-family:var(--mono);font-size:10px;font-weight:600;color:var(--sky);background:var(--sky-dim);border:1px solid rgba(93,184,242,0.2);border-radius:3px;padding:2px 5px;flex-shrink:0;}
+.ov-title{font-size:12px;font-weight:500;color:var(--text-primary)}
+.ov-desc{font-size:11px;color:var(--text-secondary);margin-top:2px}
+.overview-divider{height:1px;background:var(--border);margin:10px 0}
+.meta-row{display:flex;gap:20px;flex-wrap:wrap}
+.meta-lbl{font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:0.07em;color:var(--text-muted)}
+.meta-val{font-size:12px;color:var(--text-secondary);margin-top:2px}
+
+.intro{background:var(--bg-surface);border-left:3px solid var(--purple);border-radius:0 8px 8px 0;padding:14px 18px;}
+.intro-label{font-family:var(--mono);font-size:10px;font-weight:600;color:var(--purple);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:8px;}
+.intro p{font-size:13px;color:var(--text-secondary);line-height:1.8}
+.intro p+p{margin-top:8px}
+
+.section-card{background:var(--bg-section);border:1px solid var(--border);border-radius:10px;overflow:hidden;transition:border-color 0.15s;}
+.section-card:hover{border-color:var(--border-hi)}
+.section-hdr{padding:12px 17px 10px;border-bottom:1px solid var(--border);position:relative;overflow:hidden;display:flex;align-items:center;gap:10px;}
+.section-letter{font-family:var(--mono);font-size:12px;font-weight:600;width:25px;height:25px;border-radius:5px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.section-title{font-size:13px;font-weight:500;flex:1}
+.ghost-glyph{position:absolute;right:13px;top:50%;transform:translateY(-50%);font-family:var(--mono);font-size:58px;font-weight:700;color:rgba(255,255,255,0.025);pointer-events:none;user-select:none;line-height:1;}
+.section-body{padding:15px 17px;display:flex;flex-direction:column;gap:13px}
+
+.subsection{display:flex;flex-direction:column;gap:8px}
+.subsection+.subsection{padding-top:13px;border-top:1px solid var(--border)}
+.sub-hdr{display:flex;align-items:center;gap:8px}
+.sub-num{font-family:var(--mono);font-size:10px;font-weight:500;color:var(--cyan);background:var(--cyan-dim);border:1px solid rgba(78,205,196,0.2);padding:2px 6px;border-radius:4px;}
+.sub-title{font-size:13px;font-weight:500}
+.sub-body{display:flex;flex-direction:column;gap:8px}
+.sub-body p{font-size:13px;color:var(--text-secondary);line-height:1.8}
+
+.enrich-plus{font-family:var(--mono);font-size:9px;font-weight:600;color:var(--green);background:var(--green-dim);border:1px solid rgba(74,222,128,0.2);padding:1px 4px;border-radius:3px;margin-left:4px;vertical-align:middle;}
+.enrich-tilde{font-family:var(--mono);font-size:9px;font-weight:600;color:var(--amber);background:rgba(244,185,66,0.08);border:1px solid rgba(244,185,66,0.2);padding:1px 4px;border-radius:3px;margin-left:4px;vertical-align:middle;}
+
+.keypoints{background:var(--orange-glow);border:1px solid rgba(244,118,42,0.12);border-left:3px solid var(--orange);border-radius:0 6px 6px 0;padding:10px 14px;}
+.kp-label{font-family:var(--mono);font-size:10px;font-weight:600;color:var(--orange);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:7px;}
+.kp-list{list-style:none;display:flex;flex-direction:column;gap:5px}
+.kp-list li{font-size:12px;color:var(--text-secondary);line-height:1.6;display:flex;gap:7px}
+.kp-list li::before{content:'›';color:var(--orange);font-weight:700;font-size:14px;flex-shrink:0}
+
+.code-block{background:var(--code-bg);border:1px solid rgba(255,255,255,0.06);border-radius:8px;overflow:hidden;}
+.code-topbar{display:flex;justify-content:space-between;align-items:center;padding:7px 12px;background:rgba(255,255,255,0.025);border-bottom:1px solid rgba(255,255,255,0.05);}
+.code-lang{font-family:var(--mono);font-size:10px;color:var(--text-muted);letter-spacing:0.06em;text-transform:uppercase;}
+.code-dots{display:flex;gap:5px}
+.code-dot{width:7px;height:7px;border-radius:50%}
+.code-pre{padding:13px 16px;font-family:var(--mono);font-size:12px;line-height:1.85;color:#c9d1d9;overflow-x:auto;white-space:pre;}
+.ck{color:#ff79c6}.cf{color:#50fa7b}.cs{color:#f1fa8c}.cn{color:#bd93f9}.cc{color:#6272a4;font-style:italic}.ct{color:#8be9fd}
+
+.summary-block{background:var(--bg-surface);border:1px solid var(--border);border-bottom:2px solid var(--orange);border-radius:8px 8px 0 0;padding:14px 18px;}
+.summary-label{font-family:var(--mono);font-size:10px;font-weight:600;color:var(--orange);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:8px;}
+.summary-list{list-style:none;display:flex;flex-direction:column;gap:5px}
+.summary-list li{font-size:13px;color:var(--text-secondary);line-height:1.7;display:flex;gap:7px;}
+.summary-list li::before{content:'›';color:var(--orange);font-weight:700;font-size:14px;flex-shrink:0}
+
+
+@media(max-width:600px){
+  .doc-header,.doc-body{padding-left:16px;padding-right:16px}
+  .doc-footer{padding:12px 16px}
+  .overview-grid{grid-template-columns:1fr}
+  .footer-btn{width:100px;height:52px;font-size:10px}
+}
+
+/* ========================================
+   FOOTER NAVIGATION CSS
+   Synaptix Runtime — shared component
+   Copy into any artifact <style> block
+======================================== */
+
+.snx-footer{
+  background:var(--bg-surface);
+  border-top:1px solid var(--border);
+  padding:16px 26px 18px;
+}
+
+/* ── Meta bar ── */
+.snx-footer-meta{
+  display:flex;align-items:baseline;gap:10px;
+  padding-bottom:13px;
+  border-bottom:1px solid var(--border);
+  margin-bottom:13px;
+}
+.snx-footer-course{
+  font-family:var(--mono);font-size:10px;font-weight:600;
+  letter-spacing:0.14em;text-transform:uppercase;color:var(--text-muted);
+}
+.snx-footer-divider{
+  font-family:var(--mono);font-size:10px;color:var(--text-muted);opacity:0.4;
+}
+.snx-footer-module{
+  font-family:var(--mono);font-size:11px;font-weight:500;
+  color:var(--text-secondary);letter-spacing:0.04em;
+}
+
+/* ── Nav row ── */
+.snx-footer-nav{
+  display:flex;align-items:center;
+  gap:10px;
+}
+
+/* prev / next */
+.snx-nav-prev,
+.snx-nav-next{
+  font-family:var(--mono);font-size:11px;font-weight:500;
+  color:var(--text-secondary);
+  background:transparent;
+  border:1px solid var(--border);
+  border-radius:6px;
+  padding:6px 13px;
+  display:flex;align-items:center;gap:6px;
+  white-space:nowrap;
+  transition:border-color 0.13s,color 0.13s;
+  flex-shrink:0;
+  text-decoration:none;
+}
+.snx-nav-prev:hover,
+.snx-nav-next:hover{
+  border-color:var(--border-hi);
+  color:var(--text-primary);
+}
+.snx-nav-chevron{
+  font-size:13px;line-height:1;
+  color:var(--text-muted);
+  transition:color 0.13s;
+}
+.snx-nav-prev:hover .snx-nav-chevron,
+.snx-nav-next:hover .snx-nav-chevron{color:var(--text-secondary)}
+
+/* center hub */
+.snx-nav-hub{
+  flex:1;display:flex;align-items:center;
+  justify-content:center;gap:6px;flex-wrap:wrap;
+}
+
+/* hub buttons */
+.snx-hub-btn{
+  font-family:var(--mono);font-size:10px;font-weight:500;
+  letter-spacing:0.04em;
+  padding:6px 13px;border-radius:6px;border:1px solid;
+  display:inline-flex;align-items:center;gap:5px;
+  transition:background 0.13s;
+  text-decoration:none;white-space:nowrap;
+}
+.snx-hub-btn-recall{
+  color:var(--cyan);background:var(--cyan-dim);
+  border-color:rgba(78,205,196,0.22);
+}
+.snx-hub-btn-recall:hover{background:rgba(78,205,196,0.18)}
+
+.snx-hub-btn-tree{
+  color:var(--green);background:var(--green-dim);
+  border-color:rgba(74,222,128,0.22);
+}
+.snx-hub-btn-tree:hover{background:rgba(74,222,128,0.18)}
+
+.snx-hub-btn-compact{
+  color:var(--yellow);background:var(--yellow-dim);
+  border-color:rgba(244,208,63,0.22);
+}
+.snx-hub-btn-compact:hover{background:rgba(244,208,63,0.18)}
+
+.snx-hub-btn-quiz{
+  color:var(--orange);background:var(--orange-dim);
+  border-color:rgba(244,118,42,0.22);
+}
+.snx-hub-btn-quiz:hover{background:rgba(244,118,42,0.18)}
+
+.snx-hub-btn-module{
+  color:var(--purple);background:var(--purple-dim);
+  border-color:rgba(192,132,252,0.22);
+}
+.snx-hub-btn-module:hover{background:rgba(192,132,252,0.18)}
+
+/* active state — current artifact type */
+.snx-hub-btn[aria-current="page"]{
+  opacity:1;cursor:default;
+  box-shadow:0 0 0 1px currentColor;
+}
+
+/* mobile */
+@media(max-width:640px){
+  .snx-footer{padding:14px 16px 16px}
+  .snx-footer-nav{flex-wrap:wrap}
+  .snx-nav-hub{order:3;flex-basis:100%;justify-content:flex-start}
+}
+
+</style>
+</head>
+<body>
+<div class="doc-wrap">
+
+<!-- HEADER -->
+<div class="doc-header">
+  <div class="badges">
+    <span class="badge badge-type">Comprehensive · High</span>
+    <span class="badge badge-mod">Module 1 of 1 · Merged · 4 Lessons</span>
+  </div>
+  <div class="doc-title">Claude MasterClass — Complete Practical Guide: Interface, Features, Claude Code &amp; Cowork</div>
+  <div class="doc-subtitle">source: Claude_MasterClass_-_Volume_1.html · generated 2026-06-24 · subject: Claude MasterClass</div>
+  <div class="stat-row">
+    <div class="stat-item"><div class="stat-val">6</div><div class="stat-lbl">Sections</div></div>
+    <div class="stat-item"><div class="stat-val">34</div><div class="stat-lbl">Subsections</div></div>
+    <div class="stat-item"><div class="stat-val">4</div><div class="stat-lbl">Code Blocks</div></div>
+    <div class="stat-item"><div class="stat-val">6</div><div class="stat-lbl">Enriched</div></div>
+  </div>
+</div>
+
+<!-- BODY -->
+<div class="doc-body">
+
+  <div class="module-label">
+    <span class="module-num">Module 1</span>
+    <div class="module-rule"></div>
+  </div>
+  <div class="module-title">Claude MasterClass — Complete Practical Guide: Interface, Features, Claude Code &amp; Cowork</div>
+
+  <!-- OVERVIEW -->
+  <div class="overview">
+    <div class="overview-label">Module Overview</div>
+    <div class="overview-grid">
+      <div class="overview-item">
+        <span class="ov-letter">A</span>
+        <div><div class="ov-title">Getting Started with Claude</div><div class="ov-desc">Account setup, interface orientation, the three-model lineup, and a decision framework for choosing the right model.</div></div>
+      </div>
+      <div class="overview-item">
+        <span class="ov-letter">B</span>
+        <div><div class="ov-title">Core Power Features</div><div class="ov-desc">Extended Thinking, Memory, and the 1M-token context window — the features that separate casual from expert use.</div></div>
+      </div>
+      <div class="overview-item">
+        <span class="ov-letter">C</span>
+        <div><div class="ov-title">Advanced Workflows</div><div class="ov-desc">Projects, Artifacts, Web Search &amp; Deep Research, Connectors, and Skills — Claude's ecosystem for serious work.</div></div>
+      </div>
+      <div class="overview-item">
+        <span class="ov-letter">D</span>
+        <div><div class="ov-title">Prompt Engineering</div><div class="ov-desc">Five-part prompt framework, XML structure, adaptive thinking triggers, and the interview-first method.</div></div>
+      </div>
+      <div class="overview-item">
+        <span class="ov-letter">E</span>
+        <div><div class="ov-title">Claude Code</div><div class="ov-desc">Agentic coding in the desktop app — setup, the Opus→Sonnet workflow, four real projects, plan mode, and common mistakes.</div></div>
+      </div>
+      <div class="overview-item">
+        <span class="ov-letter">F</span>
+        <div><div class="ov-title">Cowork</div><div class="ov-desc">Autonomous file and workflow automation — setup, context files, Projects, Skills, scheduling, and Dispatch.</div></div>
+      </div>
+    </div>
+    <div class="overview-divider"></div>
+    <div class="meta-row">
+      <div class="meta-item"><div class="meta-lbl">Prerequisites</div><div class="meta-val">Basic familiarity with AI chat interfaces; no coding background required for most sections</div></div>
+      <div class="meta-item"><div class="meta-lbl">Leads to</div><div class="meta-val">Claude API usage, advanced agent workflows, Claude Code for production codebases</div></div>
+    </div>
+  </div>
+
+  <!-- INTRODUCTION -->
+  <div class="intro">
+    <div class="intro-label">Module Introduction</div>
+    <p>Claude is not a single tool — it is a layered platform. At the surface sits a familiar chat interface; beneath it are model tiers, persistent memory, an agentic coding environment, and an autonomous automation layer called Cowork. Most users never leave the chat surface, which means they are leaving the majority of the platform's value untouched. This module maps the entire stack, from first login to scheduled multi-step workflows, and explains precisely when and why to use each capability.</p>
+    <p>The material consolidates four lessons covering beginner orientation through advanced automation. The progression is intentional: Section A establishes the interface and model fundamentals that everything else builds on; Sections B and C cover the features with the highest leverage-to-effort ratio; Section D gives you the prompting craft that makes every Claude interaction more effective; and Sections E and F cover Claude Code and Cowork — the two modes where Claude stops being an assistant and starts acting as a co-worker that executes real work on your machine.</p>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════ -->
+  <!-- SECTION A: Getting Started -->
+  <!-- ═══════════════════════════════════════════════ -->
+  <div class="section-card">
+    <div class="section-hdr">
+      <span class="section-letter" style="color:var(--sky);background:var(--sky-dim);border:1px solid rgba(93,184,242,0.2)">A</span>
+      <span class="section-title">A. Getting Started with Claude</span>
+      <span class="ghost-glyph">A</span>
+    </div>
+    <div class="section-body">
+
+      <!-- A1 -->
+      <div class="subsection">
+        <div class="sub-hdr"><span class="sub-num">A1</span><span class="sub-title">Account Setup &amp; Interface Orientation</span></div>
+        <div class="sub-body">
+          <p>Head to <span class="kw-cyan">claude.ai</span> and create an account. The <span class="b-green">free tier</span> provides access to Sonnet 4.6, web search, memory, and file creation — enough to evaluate every core feature before upgrading. The paid <span class="b-orange">Pro plan ($20/month)</span> unlocks 5× more usage, access to Opus 4.6, and new features like Cowork. The interface has three key areas: the <span class="kw-cyan">model selector</span> at the top (defaults to Sonnet 4.6), the <span class="kw-cyan">extended thinking toggle</span> below it (leave off by default), and the left sidebar housing chat history and Projects. A practical tip most users miss: middle-click "New Chat" to open conversations in separate tabs, letting you run parallel sessions without losing context in any of them.</p>
+          <div class="keypoints">
+            <div class="kp-label">Key Points</div>
+            <ul class="kp-list">
+              <li>Free tier includes Sonnet 4.6 access, web search, memory, and file creation — sufficient for full feature evaluation.</li>
+              <li>Pro plan ($20/mo) is the primary upgrade path: 5× usage, Opus access, Cowork.</li>
+              <li>Multi-tab workflow (middle-click New Chat) enables parallel sessions without context loss.</li>
+              <li>Extended thinking toggle is off by default; leave it there until you understand when depth is warranted.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- A2 -->
+      <div class="subsection">
+        <div class="sub-hdr"><span class="sub-num">A2</span><span class="sub-title">The Three Models: Haiku, Sonnet, Opus</span></div>
+        <div class="sub-body">
+          <p>Claude ships three distinct models optimized for different trade-offs between <span class="b-orange">speed</span>, <span class="b-cyan">quality</span>, and <span class="b-salmon">cost</span>. <span class="kw-orange">Haiku 4.5</span> is the fastest and cheapest — best for reformatting, basic summaries, and high-volume tasks where depth is unnecessary. <span class="kw-orange">Sonnet 4.6</span> is the workhorse model, handling writing, coding, analysis, and research with quality that makes it the default for 90% of tasks; it costs 5× less per token than Opus. <span class="kw-orange">Opus 4.6</span> is the expert-tier model reserved for the hardest reasoning tasks: complex architectural decisions, gnarly debugging, multi-layered analysis requiring massive context, and multi-agent coordination. The source makes it explicit: Sonnet handles most daily programming brilliantly, but Opus remains the "senior architect" for the tough calls that other models cannot crack.</p>
+          <div class="keypoints">
+            <div class="kp-label">Key Points</div>
+            <ul class="kp-list">
+              <li><span class="kw-orange">Haiku</span> — speed and cost efficiency; bulk/simple tasks.</li>
+              <li><span class="kw-orange">Sonnet 4.6</span> — default for nearly everything; 5× cheaper than Opus.</li>
+              <li><span class="kw-orange">Opus 4.6</span> — deepest reasoning, agent teams, architectural decisions; expensive; don't waste on basic emails.</li>
+              <li>Common mistake: burning Opus limits on simple tasks. Start with Sonnet; escalate only when Sonnet's answer isn't sufficient.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- A3 -->
+      <div class="subsection">
+        <div class="sub-hdr"><span class="sub-num">A3</span><span class="sub-title">Model Decision Framework</span></div>
+        <div class="sub-body">
+          <p>The recommended decision rule is a three-level cascade: <span class="b-orange">start every task with Sonnet 4.6</span>. If the answer is not deep enough, escalate to <span class="b-cyan">Opus</span>. For bulk processing or trivial reformatting, drop down to <span class="b-green">Haiku</span>. This framework prevents the most common misuse pattern — defaulting to Opus for everything and depleting the monthly allocation on tasks that Sonnet handles perfectly. In Claude Code (Section E), this cascade maps to an explicit Opus→Sonnet handoff: Opus plans, Sonnet builds.</p>
+          <div class="keypoints">
+            <div class="kp-label">Key Points</div>
+            <ul class="kp-list">
+              <li>Default: Sonnet 4.6 for every task. Escalate to Opus only when Sonnet's output is insufficient.</li>
+              <li>Drop to Haiku for high-volume, low-complexity tasks (reformatting, basic summaries).</li>
+              <li>In Claude Code: Opus plans, Sonnet executes — explicit handoff with /model commands.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- A4 -->
+      <div class="subsection">
+        <div class="sub-hdr"><span class="sub-num">A4</span><span class="sub-title">Custom Instructions</span></div>
+        <div class="sub-body">
+          <p><span class="kw-cyan">Custom Instructions</span> are a persistent context layer written once and applied to every chat. Access them via avatar → Settings → Custom Instructions (also called "Instructions for Claude" in the profile). They accept: your professional context (who you are, who your audience is), format preferences (no emoji, no buzzwords, no headers unless asked), technical preferences (e.g., TypeScript over JavaScript), and working style (e.g., ask clarifying questions when a task is ambiguous). Setting these correctly means Claude never needs to be re-briefed on your context — every conversation starts calibrated.</p>
+          <div class="keypoints">
+            <div class="kp-label">Key Points</div>
+            <ul class="kp-list">
+              <li>Location: Settings → Profile → Custom Instructions (or "Instructions for Claude").</li>
+              <li>Write once; applies across all chats. Include: professional context, format preferences, technical stack, working style.</li>
+              <li>Distinct from Memory — instructions are user-authored; memory is auto-synthesized from conversation history.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════ -->
+  <!-- SECTION B: Core Power Features -->
+  <!-- ═══════════════════════════════════════════════ -->
+  <div class="section-card">
+    <div class="section-hdr">
+      <span class="section-letter" style="color:var(--cyan);background:var(--cyan-dim);border:1px solid rgba(78,205,196,0.2)">B</span>
+      <span class="section-title">B. Core Power Features</span>
+      <span class="ghost-glyph">B</span>
+    </div>
+    <div class="section-body">
+
+      <!-- B1 -->
+      <div class="subsection">
+        <div class="sub-hdr"><span class="sub-num">B1</span><span class="sub-title">Extended Thinking</span></div>
+        <div class="sub-body">
+          <p><span class="kw-orange">Extended Thinking</span> is a toggle that instructs Claude to reason step-by-step through a problem before producing its final answer. The visible result is a collapsible "thinking section" that shows Claude's internal deliberation — considering angles, questioning assumptions, and exploring edge cases — before committing to a response. The quality difference is significant for the right tasks: the same pricing question yielded generic pros/cons with thinking off, but a contextually specific, nuanced recommendation when thinking was on. In Opus 4.7 (the source's newest reference), this is called <span class="b-cyan">Adaptive Thinking</span> and is triggered by phrases like <span class="kw-cyan">think carefully</span>, <span class="kw-cyan">think harder</span>, <span class="kw-cyan">ultra think</span>, or <span class="kw-cyan">think this through deeply</span>.</p>
+          <div class="keypoints">
+            <div class="kp-label">Key Points</div>
+            <ul class="kp-list">
+              <li>Toggle on for: decisions with real consequences, multi-variable analysis, complex debugging, strategic planning.</li>
+              <li>Toggle off for: quick reformatting, simple summaries, back-and-forth brainstorming where momentum matters.</li>
+              <li>Uses more message limits and takes longer — use it for ~20% of queries, not everything.</li>
+              <li>Opus 4.7 equivalent: Adaptive Thinking, triggered by explicit phrases rather than a UI toggle.</li>
+              <li>Expanding the thinking section is educational — it shows how Claude structures problems, improving your own prompt writing.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- B2 -->
+      <div class="subsection">
+        <div class="sub-hdr"><span class="sub-num">B2</span><span class="sub-title">Memory</span></div>
+        <div class="sub-body">
+          <p><span class="kw-orange">Memory</span> transforms Claude from a stateless tool into a persistent assistant. Enabled in Settings → Capabilities → "Generate memory from chat history," it automatically synthesizes key facts about you from across your conversations and updates that summary every 24 hours. You can view and edit the memory file under Settings → Memory. The practical workflow for activating memory correctly is three intentional conversations in the first week: one explaining your work context, one establishing communication preferences, and one describing current projects and goals. After that foundation, every subsequent conversation builds on top of it.</p>
+          <p><span class="b-cyan">Memory hygiene</span> matters: regularly audit and delete outdated information. You can also write directly to memory with explicit statements like "remember that I always want X." A separate feature, <span class="b-orange">Past Chats Search</span> (Settings → Capabilities), lets Claude find and pull context from specific previous conversations on demand — effectively turning chat history into a searchable knowledge base rather than a graveyard of old threads. An experimental feature also allows importing memory from ChatGPT or Gemini (Settings → Capabilities → Memory → Import).</p>
+          <div class="keypoints">
+            <div class="kp-label">Key Points</div>
+            <ul class="kp-list">
+              <li>Enable: Settings → Capabilities → "Generate memory from chat history." Available on free tier.</li>
+              <li>Three-conversation foundation: work context · communication preferences · current projects.</li>
+              <li>Memory hygiene: audit regularly; use explicit statements to write directly ("remember that I always want X").</li>
+              <li>Past Chats Search turns history into a queryable knowledge base.</li>
+              <li>Memory ≠ Custom Instructions: memory is auto-synthesized from chats; instructions are user-authored.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- B3 -->
+      <div class="subsection">
+        <div class="sub-hdr"><span class="sub-num">B3</span><span class="sub-title">1 Million Token Context Window</span></div>
+        <div class="sub-body">
+          <p>Both Opus and Sonnet support a <span class="b-orange">1 million token context window</span> — approximately 750,000 words. This enables ingesting an entire book series, a full year of emails, or a complete codebase in a single session. The critical improvement over previous models is <span class="b-green">accuracy at the edges</span>: the source cites 76% accuracy for retrieving specific information at the far end of the million-token context, compared to 18% on older models. In practice this means Claude no longer "forgets" what was at the start of a long document — context degradation at the middle is largely solved. <span class="kw-cyan">Context compaction</span> handles the opposite problem: as conversations grow long, Claude intelligently summarizes older turns while preserving the thread, so sessions can run for hours without output quality degrading.</p>
+          <div class="keypoints">
+            <div class="kp-label">Key Points</div>
+            <ul class="kp-list">
+              <li>1M tokens ≈ 750,000 words. Can hold entire codebases, book series, or year-long email archives.</li>
+              <li>76% accuracy at context edges (vs 18% on prior models) — critical for large document analysis.</li>
+              <li>Context compaction automatically summarizes old turns to prevent session degradation.</li>
+              <li>Pro workflow: upload all reference materials to a Project so every conversation in that project has perfect context.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- B4 -->
+      <div class="subsection">
+        <div class="sub-hdr"><span class="sub-num">B4</span><span class="sub-title">Custom Styles</span></div>
+        <div class="sub-body">
+          <p>Beyond Custom Instructions (which control what Claude knows), <span class="kw-orange">Custom Styles</span> control how Claude writes. Access via the plus (+) button in the chat window → "New Style." Built-in presets include Normal, Concise, Explanatory, and Formal. The high-value feature is creating a custom style by uploading examples of your own writing (PDFs, docs, text files, or pasted text). Claude analyzes those examples and generates a reusable writing style that matches your voice. Created styles appear in the style menu and can be switched with one click — one for email, one for social media, one for technical documentation. The style is an output-shaping layer; it does not replace Custom Instructions or Memory.</p>
+          <div class="keypoints">
+            <div class="kp-label">Key Points</div>
+            <ul class="kp-list">
+              <li>Access: chat window + button → New Style. Upload writing samples; Claude extracts and saves the style.</li>
+              <li>One-click switching between styles: email · social · technical documentation.</li>
+              <li>Controls how Claude writes; Custom Instructions control what Claude knows. Both can be active simultaneously.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- B5 -->
+      <div class="subsection">
+        <div class="sub-hdr"><span class="sub-num">B5</span><span class="sub-title">Incognito Mode</span></div>
+        <div class="sub-body">
+          <p>The <span class="kw-cyan">ghost icon</span> in the top-right corner of claude.ai activates Incognito Mode. In this mode, conversations do not appear in chat history, do not feed memory generation, and are not indexed for past-chats search. Use it when testing prompts, working with sensitive material, or running experiments you do not want to pollute your permanent context. <span class="enrich-plus">[+]</span> This is the functional equivalent of a private browsing session — the interaction is real but leaves no persistent trace in your Claude workspace.</p>
+          <div class="keypoints">
+            <div class="kp-label">Key Points</div>
+            <ul class="kp-list">
+              <li>Activation: ghost icon (top-right of claude.ai).</li>
+              <li>No history saved, no memory fed, no search indexing. Ideal for sensitive topics or prompt experimentation.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════ -->
+  <!-- SECTION C: Advanced Workflows -->
+  <!-- ═══════════════════════════════════════════════ -->
+  <div class="section-card">
+    <div class="section-hdr">
+      <span class="section-letter" style="color:var(--purple);background:var(--purple-dim);border:1px solid rgba(192,132,252,0.2)">C</span>
+      <span class="section-title">C. Advanced Workflows</span>
+      <span class="ghost-glyph">C</span>
+    </div>
+    <div class="section-body">
+
+      <!-- C1 -->
+      <div class="subsection">
+        <div class="sub-hdr"><span class="sub-num">C1</span><span class="sub-title">Projects</span></div>
+        <div class="sub-body">
+          <p><span class="kw-orange">Projects</span> are persistent workspaces where context accumulates over time. Each project maintains its own instruction set, uploaded knowledge base, and conversation history. The key differentiator from a regular chat is <span class="b-cyan">project knowledge</span>: documents uploaded to a project are referenced in every conversation within it automatically — brand guidelines, product documentation, past work samples, and knowledge bases. Free plan users can use Projects with up to 20 files per chat and 30 MB total. The rule is <span class="b-orange">one project per type of task</span>: keep a YouTube scripts project separate from a code reviews project and separate from a client deliverables project — mixing workflows pollutes the context.</p>
+          <p>Three documents to keep in every project's knowledge base: (1) a one-page brief describing the project's goal and audience, (2) three or four examples of work you are proud of (for tone and quality calibration), and (3) a constraints list (what Claude should always or never do for this project). The recommended naming convention for chats within a project is date + topic: <span class="kw-cyan">2026-0624 Q2 marketing plan</span>. Start each project with a "project brief" chat that lays out all context; refer back to this chat when starting new work streams.</p>
+          <div class="keypoints">
+            <div class="kp-label">Key Points</div>
+            <ul class="kp-list">
+              <li>Projects = persistent workspaces with their own instructions, file library, and conversation history.</li>
+              <li>One project per type of task — mixed projects produce noisy, unfocused context.</li>
+              <li>Three-document knowledge base: project brief · examples of good work · constraints/rules.</li>
+              <li>Chat naming convention: date + topic for instant retrieval.</li>
+              <li>Team plans allow shared projects where all members see the same context and conversation history.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- C2 -->
+      <div class="subsection">
+        <div class="sub-hdr"><span class="sub-num">C2</span><span class="sub-title">Artifacts</span></div>
+        <div class="sub-body">
+          <p><span class="kw-orange">Artifacts</span> are interactive, downloadable outputs that render in a side panel alongside the chat. Instead of producing text the user must manually copy and reformat, Claude creates an actual file: a formatted Word document, an Excel spreadsheet with working formulas, a PowerPoint deck, or an HTML page ready to deploy. The revision workflow is iterative — click any part of the artifact, tell Claude what to change, and it updates only that section rather than regenerating the whole document. The recommended artifact workflow: start with an outline, expand sections one by one, polish the final result.</p>
+          <p>Beyond static documents, artifacts support <span class="b-cyan">persistent storage</span> (up to 20 MB per artifact, stores data across sessions once published — note: storage does not work in development mode, only after publishing), <span class="b-green">live artifacts</span> (dashboards connected to external data sources like Google Sheets that update automatically), and <span class="b-orange">public sharing with remix capability</span> (anyone can fork your published artifact). A published artifact can call the Claude API directly via <span class="kw-cyan">window.claude.complete</span> without requiring the viewer to have an API key — enabling fully functional AI-powered apps distributed publicly. Artifacts also support MCP (Model Context Protocol) servers for connecting to Google Calendar, Gmail, Slack, and similar services. A gallery of community-built examples lives at <span class="kw-cyan">made-with-claude.com</span>.</p>
+          <div class="keypoints">
+            <div class="kp-label">Key Points</div>
+            <ul class="kp-list">
+              <li>Artifacts render in a side panel: documents, spreadsheets, presentations, HTML, code — actual downloadable files.</li>
+              <li>Iterative revision: edit specific sections without regenerating everything.</li>
+              <li>Persistent storage (20 MB, publish-gated), live data connections, public sharing with remix, and MCP integrations.</li>
+              <li><span class="kw-cyan">window.claude.complete</span> lets published artifacts call Claude API without viewer credentials — distribute AI-powered apps publicly.</li>
+              <li>Mindset shift: stop using Claude to get text to copy; start using it to build finished files.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- C3 -->
+      <div class="subsection">
+        <div class="sub-hdr"><span class="sub-num">C3</span><span class="sub-title">Web Search &amp; Deep Research Mode</span></div>
+        <div class="sub-body">
+          <p>Claude's <span class="kw-orange">web search</span> is an intelligent research assistant, not a raw Google integration. Unlike ChatGPT, it shows exactly which sources it is using, with clickable citations for verification. Basic web search is available on all plans: ask a current-events question and Claude searches, synthesizes multiple sources, and returns a response with citations. <span class="b-orange">Deep Research mode</span> (Pro, Max, Team, and Enterprise plans) is a different capability class: Claude runs an extended multi-query research session — following threads, synthesizing dozens of sources — and returns a multi-page report with citations that would take hours to compile manually.</p>
+          <p>The prompt structure that gets the best results from Deep Research is specific about both the topic and the output format: specify the exact domain (e.g., "retail businesses under 50 employees"), the focus (cost savings and implementation challenges), and the desired output structure (market overview · key players · technologies · regulatory challenges · forecast). Vague prompts return generic overviews; specific prompts return usable documents. Deep Research also works with connected services simultaneously — combining web sources with files from Google Drive or email threads from Gmail in a single research session.</p>
+          <div class="keypoints">
+            <div class="kp-label">Key Points</div>
+            <ul class="kp-list">
+              <li>Basic web search: all plans, single-query synthesis with citations.</li>
+              <li>Deep Research: Pro+ only; multi-query, multi-source, extended session; returns a full report.</li>
+              <li>Specificity is the key variable: vague prompt → generic overview; specific prompt → usable deliverable.</li>
+              <li>Deep Research can combine web sources and connected service data (Drive, Gmail) in one session.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- C4 -->
+      <div class="subsection">
+        <div class="sub-hdr"><span class="sub-num">C4</span><span class="sub-title">Connectors (MCP Integrations)</span></div>
+        <div class="sub-body">
+          <p><span class="kw-orange">Connectors</span> link Claude to external services via the Model Context Protocol (MCP), giving it direct read access to your data. The connector list includes: Gmail, Google Drive, Google Calendar, Slack, Notion, Linear, Asana, GitHub, GitLab, Stripe, HubSpot, Salesforce, DocuSign, SharePoint, and the full Microsoft 365 suite. A critical safety rule: <span class="b-salmon">Claude never takes an action (sending an email, deleting a file, creating a record) without explicit user confirmation</span> — it always shows a preview of the intended action first. The Microsoft 365 Office Add-in (installed from Microsoft Marketplace, included with any paid plan) embeds Claude directly in Excel, PowerPoint, Word, and Outlook with shared context across all four apps.</p>
+          <p>Ground rules before connecting services: only add a service when you actually need it for a task (not all at once), audit connected services periodically in Settings → Connectors, and for sensitive systems (banking, primary email, production code) use a separate workspace. In Excel specifically, the connector can explain formula logic pointing to specific cells, trace cell dependencies, adjust assumptions, build pivot tables from plain-language descriptions, and debug errors — a significant productivity multiplier for financial modeling work.</p>
+          <div class="keypoints">
+            <div class="kp-label">Key Points</div>
+            <ul class="kp-list">
+              <li>Connectors: Settings → Connectors. Covers Gmail, Drive, Calendar, Slack, Notion, GitHub, Salesforce, Microsoft 365, and more.</li>
+              <li>Claude never acts without confirmation — it previews every intended action first.</li>
+              <li>Office Add-in: embeds Claude in Excel/PowerPoint/Word/Outlook with shared cross-app context.</li>
+              <li>Only connect services you actively need; audit periodically; isolate sensitive systems.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- C5 -->
+      <div class="subsection">
+        <div class="sub-hdr"><span class="sub-num">C5</span><span class="sub-title">Skills</span></div>
+        <div class="sub-body">
+          <p><span class="kw-orange">Skills</span> are reusable workflow instruction files stored as <span class="kw-cyan">skill.md</span> — a plain-text playbook describing what the skill does, when to trigger it, and what steps to follow. Claude reads the file and automatically activates the matching skill when a task fits its description. <span class="b-green">Built-in skills</span> already cover Excel, PowerPoint, Word, PDF, and front-end design work; saying "make me a presentation" loads the PowerPoint skill automatically. Custom skills are the high-value layer: after building one for your content brief format, the difference between a generic AI output and a brand-specific, audience-calibrated deliverable is immediate and consistent.</p>
+          <p>Custom skills are uploaded to Settings → Capabilities → Skills (as a .zip file containing skill.md). Four primary sources for pre-built skills: <span class="kw-cyan">github.com/anthropic/skills</span> (official), <span class="kw-cyan">skillsmp.com</span> (marketplace), Skill Hub Club (7,000+ skills), and <span class="kw-cyan">ClaudeSkills.info</span> (~140 curated high-quality options). For non-technical users, the front-end design skill is the recommended starting point — it produces UI-quality output without design background.</p>
+          <div class="keypoints">
+            <div class="kp-label">Key Points</div>
+            <ul class="kp-list">
+              <li>Skills = skill.md instruction files that Claude auto-activates when a task matches the skill's description.</li>
+              <li>Built-ins: Excel, PowerPoint, Word, PDF, front-end design. Loaded automatically on matching requests.</li>
+              <li>Custom skills: upload as .zip to Settings → Capabilities → Skills. Build once; applied every time.</li>
+              <li>Best pre-built sources: Anthropic GitHub · skillsmp.com · Skill Hub Club · ClaudeSkills.info.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- C6 -->
+      <div class="subsection">
+        <div class="sub-hdr"><span class="sub-num">C6</span><span class="sub-title">Vision &amp; Image Analysis</span></div>
+        <div class="sub-body">
+          <p>Opus 4.7 bumped image resolution support to <span class="b-orange">2,576 pixels (≈3.75 megapixels)</span>. This resolution increase unlocks practical use cases that were previously unreliable: reading fine text on document screenshots, analyzing architectural drawings, parsing medical results, and reading financial spreadsheets with dense data. For PDF analysis, a structured prompt delivers significantly richer output: ask Claude to generate three levels of summary (one sentence · five key points with quotes and page numbers · a full-page detailed breakdown), then ask it to list the questions the document doesn't answer but should — the last element surfaces gaps that would otherwise go unnoticed.</p>
+          <div class="keypoints">
+            <div class="kp-label">Key Points</div>
+            <ul class="kp-list">
+              <li>Opus 4.7 image resolution: 2,576px / 3.75 megapixels — sufficient for fine text, architectural drawings, dense spreadsheets.</li>
+              <li>PDF prompt structure: 3-level summary (1 sentence · 5 key points with citations · full-page breakdown) + gap questions.</li>
+              <li>Claude cannot generate images or video — for visual creation, use a dedicated image model (e.g., write the prompt in Claude, generate elsewhere).</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════ -->
+  <!-- SECTION D: Prompt Engineering -->
+  <!-- ═══════════════════════════════════════════════ -->
+  <div class="section-card">
+    <div class="section-hdr">
+      <span class="section-letter" style="color:var(--orange);background:var(--orange-dim);border:1px solid rgba(244,118,42,0.2)">D</span>
+      <span class="section-title">D. Prompt Engineering</span>
+      <span class="ghost-glyph">D</span>
+    </div>
+    <div class="section-body">
+
+      <!-- D1 -->
+      <div class="subsection">
+        <div class="sub-hdr"><span class="sub-num">D1</span><span class="sub-title">The Five-Part Prompt Framework</span></div>
+        <div class="sub-body">
+          <p>The framework that reliably produces high-quality output on important tasks has five components: <span class="b-orange">Role</span> (who Claude is being — not just "an expert" but a specific expert for a specific purpose), <span class="b-cyan">Task</span> (exactly what you need done, clearly and completely), <span class="b-green">Context</span> (background information — audience, product, prior work), <span class="b-yellow">Constraints</span> (guardrails — length, tone, what to avoid), and <span class="b-salmon">Format</span> (how the answer should be structured — bullet list, table, numbered steps). Casual prompts like texting a friend work for simple tasks; the five-part structure is for when output quality matters.</p>
+          <div class="code-block">
+            <div class="code-topbar">
+              <span class="code-lang">prompt · five-part structure</span>
+              <div class="code-dots"><div class="code-dot" style="background:#ff5f57"></div><div class="code-dot" style="background:#febc2e"></div><div class="code-dot" style="background:#28c840"></div></div>
+            </div>
+            <pre class="code-pre"><span class="cc">// Example: Five-part prompt for a pricing strategy question</span>
+
+<span class="ct">Role:</span>        <span class="cs">"You are a pricing strategist specializing in digital education products for solo creators."</span>
+<span class="ct">Task:</span>        <span class="cs">"Recommend whether I should use a one-time payment or subscription model."</span>
+<span class="ct">Context:</span>     <span class="cs">"I'm launching a prompt engineering course. Target audience: freelancers, non-technical."</span>
+<span class="ct">Constraints:</span> <span class="cs">"Keep recommendation under 300 words. No jargon. Focus on my audience's buying psychology."</span>
+<span class="ct">Format:</span>      <span class="cs">"Recommendation + 3 supporting reasons + one risk to watch for."</span></pre>
+          </div>
+          <div class="keypoints">
+            <div class="kp-label">Key Points</div>
+            <ul class="kp-list">
+              <li>Five parts: Role · Task · Context · Constraints · Format.</li>
+              <li>Role specificity matters — "pricing strategist for solo creators" outperforms "a marketing expert."</li>
+              <li>Use for high-stakes prompts. For casual back-and-forth, the framework is overkill.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- D2 -->
+      <div class="subsection">
+        <div class="sub-hdr"><span class="sub-num">D2</span><span class="sub-title">XML Tags for Complex Prompts</span></div>
+        <div class="sub-body">
+          <p>For longer prompts, Anthropic officially recommends wrapping each section in <span class="kw-cyan">XML tags</span>. Tags like <span class="kw-cyan">&lt;task&gt;</span>, <span class="kw-cyan">&lt;context&gt;</span>, <span class="kw-cyan">&lt;instructions&gt;</span>, <span class="kw-cyan">&lt;examples&gt;</span>, <span class="kw-cyan">&lt;input&gt;</span>, <span class="kw-cyan">&lt;output_format&gt;</span>, and <span class="kw-cyan">&lt;constraints&gt;</span> work natively. The purpose is to help Claude separate instructions from data: without tags, a long prompt can cause Claude to treat background context as something to respond to rather than something to use. The source claims a 30–50% quality improvement on complex prompts when XML structure is applied.</p>
+          <div class="code-block">
+            <div class="code-topbar">
+              <span class="code-lang">xml · structured prompt</span>
+              <div class="code-dots"><div class="code-dot" style="background:#ff5f57"></div><div class="code-dot" style="background:#febc2e"></div><div class="code-dot" style="background:#28c840"></div></div>
+            </div>
+            <pre class="code-pre"><span class="cc">&lt;!-- Natively supported XML tags in Claude prompts --&gt;</span>
+
+<span class="ck">&lt;task&gt;</span>
+  Analyze these marketing channels and recommend two to prioritize.
+<span class="ck">&lt;/task&gt;</span>
+
+<span class="ck">&lt;context&gt;</span>
+  Budget: $2,000/month. Audience: freelancers aged 25–40. Goal: course enrollments.
+<span class="ck">&lt;/context&gt;</span>
+
+<span class="ck">&lt;constraints&gt;</span>
+  No brand awareness campaigns. Prioritize channels with measurable ROI.
+<span class="ck">&lt;/constraints&gt;</span>
+
+<span class="ck">&lt;output_format&gt;</span>
+  Two recommended channels + rationale + one risk per channel.
+<span class="ck">&lt;/output_format&gt;</span></pre>
+          </div>
+          <div class="keypoints">
+            <div class="kp-label">Key Points</div>
+            <ul class="kp-list">
+              <li>XML tags are Anthropic-recommended for complex, multi-section prompts.</li>
+              <li>Purpose: separates instructions from data so Claude doesn't confuse background context with a request to respond.</li>
+              <li>Source claims 30–50% quality improvement on complex prompts with XML structure.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- D3 -->
+      <div class="subsection">
+        <div class="sub-hdr"><span class="sub-num">D3</span><span class="sub-title">Meta-Prompting: Have Claude Rewrite Your Prompt</span></div>
+        <div class="sub-body">
+          <p><span class="kw-orange">Meta-prompting</span> is the technique of using Claude to improve your own prompt before running it. Give Claude a rough draft of your prompt and ask it to optimize it. The recommended meta-prompting template: <em>"You're a prompt engineering expert for [model]. Take my prompt below and rewrite it to get maximum quality. Add a clear role, success criteria, XML structure, and output format. If the task requires reasoning, add an adaptive thinking trigger after the rewritten prompt. Explain in three points what you changed. Then paste your original prompt."</em> The output is almost always better than the starting version. This technique is especially useful for recurring task templates — improve once, reuse forever.</p>
+          <div class="keypoints">
+            <div class="kp-label">Key Points</div>
+            <ul class="kp-list">
+              <li>Meta-prompting: give Claude a rough prompt draft → ask it to restructure, add role, XML, success criteria, and thinking trigger.</li>
+              <li>Ask for a three-point explanation of what changed — this teaches you what matters in prompt structure.</li>
+              <li>High-value for recurring task templates; invest once, reuse indefinitely.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- D4 -->
+      <div class="subsection">
+        <div class="sub-hdr"><span class="sub-num">D4</span><span class="sub-title">The Interview-First Method</span></div>
+        <div class="sub-body">
+          <p>The <span class="b-orange">interview-first method</span> flips the default interaction dynamic: instead of Claude guessing context from your task description, you ask Claude to interview you before starting. The trigger prompt: <em>"Ask me five to seven clarifying questions before starting on this task. Don't write anything until I've answered. List all questions at once."</em> This method works especially well for strategy work, creative briefs, complex technical problems, and research tasks where the output quality is highly sensitive to context. It is slower to start but eliminates two or three rounds of "that's not quite what I meant."</p>
+          <div class="keypoints">
+            <div class="kp-label">Key Points</div>
+            <ul class="kp-list">
+              <li>Trigger: "Ask me 5–7 clarifying questions before starting. Don't write anything until I've answered. List all questions at once."</li>
+              <li>Best for: strategy, creative briefs, complex technical problems, research tasks.</li>
+              <li>Trades startup speed for output precision — eliminates iterative correction rounds.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════ -->
+  <!-- SECTION E: Claude Code -->
+  <!-- ═══════════════════════════════════════════════ -->
+  <div class="section-card">
+    <div class="section-hdr">
+      <span class="section-letter" style="color:var(--sky);background:var(--sky-dim);border:1px solid rgba(93,184,242,0.2)">E</span>
+      <span class="section-title">E. Claude Code</span>
+      <span class="ghost-glyph">E</span>
+    </div>
+    <div class="section-body">
+
+      <!-- E1 -->
+      <div class="subsection">
+        <div class="sub-hdr"><span class="sub-num">E1</span><span class="sub-title">What Claude Code Is &amp; Setup</span></div>
+        <div class="sub-body">
+          <p><span class="kw-orange">Claude Code</span> is a mode in the Claude desktop application (download at <span class="kw-cyan">claude.com/load</span>, available on Mac and Windows) accessed via the Code tab in the top bar. In this mode, Claude gets direct access to a folder you select on your local machine — it reads files, modifies code, and runs commands. You are not chatting about code; Claude is operating on your actual codebase. The recommended editor companion is <span class="kw-cyan">Cursor</span> (free), which displays a Claude Code chat panel on the right and a live file view on the left, so you see every file Claude touches in real time.</p>
+          <p>Setup is three installs: <span class="b-orange">Node.js</span> (the runtime engine), <span class="b-cyan">Claude Code itself</span> (npm install), and <span class="b-green">Cursor</span> (editor). After installation, run <span class="kw-cyan">/init</span> in your project folder — Claude reads the project, auto-generates a <span class="kw-cyan">claude.md</span> memory file, and is ready for every subsequent session. The claude.md file is the most important setup step for maintaining project context across sessions.</p>
+          <div class="keypoints">
+            <div class="kp-label">Key Points</div>
+            <ul class="kp-list">
+              <li>Claude Code = desktop app Code tab. Direct file system access to a folder you choose. Not a chat about code — Claude edits real files.</li>
+              <li>Three installs: Node.js · Claude Code · Cursor (companion editor).</li>
+              <li>Run <span class="kw-cyan">/init</span> once per project to generate claude.md. Without it, Claude has no memory between sessions.</li>
+              <li>Cost options: Claude Pro ($20/mo, included) or API (pay-per-token; more economical once you understand your usage patterns).</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- E2 -->
+      <div class="subsection">
+        <div class="sub-hdr"><span class="sub-num">E2</span><span class="sub-title">The claude.md Memory File</span></div>
+        <div class="sub-body">
+          <p><span class="kw-orange">claude.md</span> is a plain-text file placed in the root of your project folder. Claude reads it at the start of every session, making it the primary mechanism for persistent project context in Claude Code. The file's highest value is in defining what Claude should <span class="b-salmon">not</span> do — negative constraints improve first-attempt accuracy dramatically. Example rules: <em>"don't use default exports," "don't touch schema.prisma," "don't edit anything in the /generated folder."</em> Three to five clear constraints prevent the majority of incorrect edits. Keep the file under 200 lines. For rules that should apply across every project (not just one), create a global claude.md in your home directory at <span class="kw-cyan">~/.claude/claude.md</span>.</p>
+          <div class="keypoints">
+            <div class="kp-label">Key Points</div>
+            <ul class="kp-list">
+              <li>claude.md is Claude Code's session memory — read at the start of every session.</li>
+              <li>Highest value: negative constraints ("don't touch X") — 3–5 constraints significantly improve first-attempt accuracy.</li>
+              <li>Keep under 200 lines. Global rules: <span class="kw-cyan">~/.claude/claude.md</span>.</li>
+              <li>Generate automatically with <span class="kw-cyan">/init</span>; edit manually to add constraints.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- E3 -->
+      <div class="subsection">
+        <div class="sub-hdr"><span class="sub-num">E3</span><span class="sub-title">The Opus→Sonnet Handoff Pattern</span></div>
+        <div class="sub-body">
+          <p>The core productivity pattern in Claude Code is the <span class="b-orange">Opus→Sonnet handoff</span>: use Opus to architect the plan, then switch to Sonnet to build it. Switch models with <span class="kw-cyan">/model opus</span> and <span class="kw-cyan">/model sonnet</span>. Opus spends more time reasoning and costs more per token, but at the planning stage it catches edge cases and architectural issues that Sonnet misses. Sonnet writes code fast and accurately — for execution, it is the better fit. The analogy from the source: Opus is the senior consultant designing the blueprint; Sonnet is the contractor building it. After Opus produces a plan, switch to Sonnet and say "Follow the plan exactly and build it."</p>
+          <div class="keypoints">
+            <div class="kp-label">Key Points</div>
+            <ul class="kp-list">
+              <li>Pattern: <span class="kw-cyan">/model opus</span> → plan → <span class="kw-cyan">/model sonnet</span> → build.</li>
+              <li>Opus: deeper reasoning, catches edge cases, more expensive per token. Best for planning only.</li>
+              <li>Sonnet: faster, cheaper, accurate execution. Best for building.</li>
+              <li>Skipping the Opus planning step on complex projects leads to mid-session restructuring and wasted tokens.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- E4 -->
+      <div class="subsection">
+        <div class="sub-hdr"><span class="sub-num">E4</span><span class="sub-title">Screenshot Debugging</span></div>
+        <div class="sub-body">
+          <p>One of the most practical Claude Code workflows: <span class="b-orange">screenshot-based visual debugging</span>. When something looks wrong in your UI, take a screenshot, drop it into Claude Code with a brief description ("fix this"), and Claude reads the image, identifies the problem, finds the relevant file, and edits it — without requiring you to specify which element or which file is responsible. This works because Claude has both the screenshot and the full project on disk simultaneously. The source's specific example: Claude fixed one button's style from a screenshot and proactively updated all other buttons to match, preventing visual inconsistency the user had not noticed. This workflow effectively eliminates manual CSS debugging.</p>
+          <div class="keypoints">
+            <div class="kp-label">Key Points</div>
+            <ul class="kp-list">
+              <li>Paste a screenshot into Claude Code + brief description → Claude identifies the file, finds the element, makes the edit.</li>
+              <li>Claude uses both the screenshot and the live codebase — no need to specify which element or file.</li>
+              <li>Proactive behavior: Claude may update related elements beyond what was explicitly pointed at.</li>
+              <li>A Figma export + "Build me this page" is one of the fastest design-to-code workflows available.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- E5 -->
+      <div class="subsection">
+        <div class="sub-hdr"><span class="sub-num">E5</span><span class="sub-title">Plan Mode &amp; Routines</span></div>
+        <div class="sub-body">
+          <p><span class="kw-orange">Plan Mode</span> is triggered with <span class="kw-cyan">/plan</span> or by saying "show me the plan first, don't make any changes until I confirm." In Plan Mode, Claude generates a complete plan of all intended changes — which files will be modified, which dependencies will change, which tests need to run — and waits for approval before touching anything. For any significant code change, this is the responsible default. Without a plan, Claude may begin writing and then need to restructure code it already built, resulting in doubled work.</p>
+          <p><span class="kw-cyan">Routines</span> are saved Claude Code workflows in the desktop app's dedicated Routines section. Each routine has a name, description, instructions, permissions, a target folder or repository, and a schedule (manual / hourly / daily / weekdays / weekly). Routines can run locally (while your machine is awake) or remotely. High-value routine patterns: daily commit reviews, weekly documentation drift checks, PR digests, flaky test tracking, and monthly dependency audits. Routines let Claude Code run on schedule without manual prompting.</p>
+          <div class="keypoints">
+            <div class="kp-label">Key Points</div>
+            <ul class="kp-list">
+              <li>Plan Mode: <span class="kw-cyan">/plan</span> or "show me the plan first." Shows all intended changes before any file is touched.</li>
+              <li>Use Plan Mode for any change touching more than 2–3 files.</li>
+              <li>Routines: saved scheduled workflows. Configured in the desktop app's Routines tab.</li>
+              <li>Local routines only run while the machine is awake and Claude desktop is open — not a cloud scheduler.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- E6 -->
+      <div class="subsection">
+        <div class="sub-hdr"><span class="sub-num">E6</span><span class="sub-title">Five Common Claude Code Mistakes</span></div>
+        <div class="sub-body">
+          <p>The source explicitly identifies five beginner mistakes and their fixes:</p>
+          <p><span class="b-salmon">Mistake 1 — No claude.md:</span> Launching sessions without a memory file means Claude forgets your project between every session. Fix: run <span class="kw-cyan">/init</span> once and maintain the generated file.</p>
+          <p><span class="b-salmon">Mistake 2 — Vague prompts:</span> "Make it look better" gives Claude nothing. Fix: specify exactly what to change ("the hero section font feels too heavy — switch to something lighter and increase line spacing").</p>
+          <p><span class="b-salmon">Mistake 3 — Skipping Plan Mode:</span> Without a plan on multi-file tasks, Claude starts writing and may restructure mid-session. Fix: trigger <span class="kw-cyan">/plan</span> (or Shift+Tab) before any complex task.</p>
+          <p><span class="b-salmon">Mistake 4 — Never using /compact:</span> When the context window fills, Claude loops or gives inconsistent answers. Fix: run <span class="kw-cyan">/compact</span> mid-session to summarize key decisions while dropping noise.</p>
+          <p><span class="b-salmon">Mistake 5 — Repeated failed corrections in the same session:</span> If Claude makes an error and two correction attempts fail, the session context is working against you. Fix: start a fresh session, describe the problem cleanly, paste only the relevant code.</p>
+          <div class="keypoints">
+            <div class="kp-label">Key Points</div>
+            <ul class="kp-list">
+              <li>No claude.md → stateless sessions. Fix: <span class="kw-cyan">/init</span>.</li>
+              <li>Vague prompts → vague edits. Fix: specify the exact element and the desired outcome.</li>
+              <li>No plan on complex tasks → mid-session restructuring. Fix: <span class="kw-cyan">/plan</span> or Shift+Tab first.</li>
+              <li>Ignored /compact → context overflow → looping. Fix: <span class="kw-cyan">/compact</span> mid-session.</li>
+              <li>Three failed corrections → poisoned context. Fix: fresh session + clean problem description + minimal relevant code.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════ -->
+  <!-- SECTION F: Cowork -->
+  <!-- ═══════════════════════════════════════════════ -->
+  <div class="section-card">
+    <div class="section-hdr">
+      <span class="section-letter" style="color:var(--cyan);background:var(--cyan-dim);border:1px solid rgba(78,205,196,0.2)">F</span>
+      <span class="section-title">F. Cowork</span>
+      <span class="ghost-glyph">F</span>
+    </div>
+    <div class="section-body">
+
+      <!-- F1 -->
+      <div class="subsection">
+        <div class="sub-hdr"><span class="sub-num">F1</span><span class="sub-title">What Cowork Is</span></div>
+        <div class="sub-body">
+          <p><span class="kw-orange">Cowork</span> is the third tab in the Claude desktop app (Chat · Cowork · Code), available to all paid subscribers. While Chat answers questions and Code writes/edits code files, <span class="b-cyan">Cowork completes entire workflows autonomously</span>: it reads and writes local files (creating, deleting, renaming), coordinates parallel sub-agents, can work for hours unsupervised, and produces real native files — Excel spreadsheets with actual formulas, Word documents with proper formatting, PowerPoint decks with real design. The key conceptual distinction from the source: Chat is an assistant who answers questions; Cowork is an employee who completes tasks. The trigger for choosing Cowork over Chat: complex multi-step tasks you want handled start-to-finish, anything touching local files, repetitive weekly work, and tasks that combine file operations with online research.</p>
+          <div class="keypoints">
+            <div class="kp-label">Key Points</div>
+            <ul class="kp-list">
+              <li>Cowork = desktop app third tab. Available to all paid subscribers.</li>
+              <li>Key distinction: Chat answers questions; Cowork <em>completes tasks</em> — start to finish, unsupervised.</li>
+              <li>Outputs are real native files (Excel with formulas, Word, PowerPoint) — not text to copy and format.</li>
+              <li>Use Cowork for: multi-step tasks, local file work, repetitive weekly workflows, combined file + web research tasks.</li>
+              <li>Caveat: Cowork consumes significantly more tokens than Chat. Reserve it for tasks that justify the cost.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- F2 -->
+      <div class="subsection">
+        <div class="sub-hdr"><span class="sub-num">F2</span><span class="sub-title">Folder Structure &amp; Context Files Setup</span></div>
+        <div class="sub-body">
+          <p>The most important section in the Cowork workflow is the initial setup — skipping it means generic AI output on every run. The recommended setup has three steps. <span class="b-orange">Step 1 — Dedicated folder:</span> create a folder called something like "Cowork Station" with three subfolders: <span class="kw-cyan">context</span> (what Claude needs to know about you), <span class="kw-cyan">projects</span> (active work files), and <span class="kw-cyan">output</span> (where finished deliverables land). Never point Claude at your entire Documents folder.</p>
+          <p><span class="b-orange">Step 2 — Context files:</span> inside the context folder, create three markdown files: <span class="kw-cyan">aboutme.md</span> (your role, business, audience — two paragraphs is enough), <span class="kw-cyan">brandvoice.md</span> (tone, style, words you use, words you never use, writing examples), and <span class="kw-cyan">workingpreferences.md</span> (document structure preferences, how Claude should handle ambiguity — ask or decide?). Claude reads these automatically at the start of every session. <span class="b-orange">Step 3 — Global instructions:</span> Settings → Cowork → Global Instructions sets your defaults (tone, role, output format) as a standing brief that applies to all Cowork tasks.</p>
+          <div class="keypoints">
+            <div class="kp-label">Key Points</div>
+            <ul class="kp-list">
+              <li>Folder structure: CoworkStation/ → context/ · projects/ · output/. Never use your entire Documents folder.</li>
+              <li>Three context files: aboutme.md · brandvoice.md · workingpreferences.md. Claude reads these at session start.</li>
+              <li>Global Instructions (Settings → Cowork): standing brief for tone, role, output format across all tasks.</li>
+              <li>This setup is the highest-leverage investment in Cowork — 5 minutes up front, hours saved on every subsequent run.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- F3 -->
+      <div class="subsection">
+        <div class="sub-hdr"><span class="sub-num">F3</span><span class="sub-title">Projects in Cowork</span></div>
+        <div class="sub-body">
+          <p>In Cowork, <span class="kw-orange">Projects</span> are not just file containers — they are where instructions, context files, and work history accumulate together. The mistake most users make is treating Projects as a simple input/output folder, which keeps every run isolated. The correct use: create a dedicated project per recurring workflow (client deliverables · content production · admin and finance · weekly reporting), add task-specific instructions within each project (column order for Excel trackers, email length and tone rules, formatting standards), and point Claude at the project when running that workflow type. Over time, the project accumulates outputs and adjustments, and Claude builds on previous work rather than restarting from scratch each time.</p>
+          <div class="keypoints">
+            <div class="kp-label">Key Points</div>
+            <ul class="kp-list">
+              <li>One project per recurring workflow type. Instructions + context + history compound over time.</li>
+              <li>Project ≠ file container. It is a workspace where context accumulates and output quality improves with each run.</li>
+              <li>Task-specific project instructions override global defaults — use them to enforce column order, tone, formatting standards.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- F4 -->
+      <div class="subsection">
+        <div class="sub-hdr"><span class="sub-num">F4</span><span class="sub-title">Parallel Processing &amp; Real Output Examples</span></div>
+        <div class="sub-body">
+          <p>Cowork does not process tasks sequentially — it decomposes complex tasks into <span class="b-green">parallel workflows</span> and executes multiple file operations simultaneously. The source's documented example: six messy client meeting transcripts → Cowork reads multiple files in parallel, extracts structured data across all transcripts simultaneously, and produces Excel project trackers (with conditional formatting, deadline calculation from vague language like "end of next week," and summary rows) plus client follow-up emails (under 150 words, referencing specific discussion points). Total time: three minutes. Equivalent manual work: two to three hours. The prompt was plain English — no special syntax, no structured format required.</p>
+          <div class="keypoints">
+            <div class="kp-label">Key Points</div>
+            <ul class="kp-list">
+              <li>Cowork parallelizes sub-tasks — multiple files read and written simultaneously.</li>
+              <li>Outputs are real native files: Excel with conditional formatting, Word docs ready to send.</li>
+              <li>Prompts are plain English — describe the output like briefing a person, not like programming a machine.</li>
+              <li>Mindset shift: stop asking "what can AI generate?" Start asking "what work can AI complete?"</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- F5 -->
+      <div class="subsection">
+        <div class="sub-hdr"><span class="sub-num">F5</span><span class="sub-title">Scheduled Tasks</span></div>
+        <div class="sub-body">
+          <p><span class="kw-orange">Scheduled Tasks</span> are the highest-leverage Cowork feature: write a prompt once, assign a frequency, and Claude runs it automatically without manual prompting. Access via the "schedule" button in the sidebar → New Task → write prompt → pick frequency (manual / hourly / daily / weekdays / weekly). Three critical constraints: tasks only run while <span class="b-salmon">your computer is awake and Claude desktop is open</span> (it is a local scheduler, not cloud-based); each task consumes tokens (keep prompts tight to control cost); always test manually before scheduling. Example scheduled tasks from the source: daily morning briefing at 9 AM (Gmail + Calendar + Notion summary saved to daily-briefings folder), weekly content research on Mondays (trending AI topics → three opportunities → Slack summary).</p>
+          <div class="keypoints">
+            <div class="kp-label">Key Points</div>
+            <ul class="kp-list">
+              <li>Access: Cowork sidebar → Schedule → New Task. Set prompt + frequency.</li>
+              <li>Frequencies: manual · hourly · daily · weekdays · weekly.</li>
+              <li>Critical constraint: tasks only run while machine is awake and Claude desktop is open. Not a cloud scheduler.</li>
+              <li>Always test manually before scheduling. Keep scheduled prompts tight to minimize token usage.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- F6 -->
+      <div class="subsection">
+        <div class="sub-hdr"><span class="sub-num">F6</span><span class="sub-title">Dispatch &amp; Claude for Chrome</span></div>
+        <div class="sub-body">
+          <p><span class="kw-orange">Dispatch</span> is a Cowork feature that lets you send tasks to Claude from your phone. Enable it in the Cowork mobile interface → Enable Dispatch. The workflow: send a task from your phone → Claude runs the full workflow on your desktop → push notification when done, with the output saved in the project's output folder. This makes your phone a remote control and your desktop the execution engine.</p>
+          <p><span class="kw-cyan">Claude for Chrome</span> is a browser extension for Chrome and Edge (not Brave, Arc, or mobile) currently in beta for all paid plans. Unlike using Claude in a tab, the extension has access to your real browser with your actual logged-in sessions — it can navigate sites, click elements, and fill forms in pages you are already authenticated to. Use cases: competitive research across multiple sites, form automation, content harvesting. <span class="b-salmon">Security note:</span> if you are logged into your bank in Chrome, Claude for Chrome can reach it. Only enable for sites you are comfortable granting access to. Do not use for banking or medical portals.</p>
+          <div class="keypoints">
+            <div class="kp-label">Key Points</div>
+            <ul class="kp-list">
+              <li>Dispatch: mobile-to-desktop task dispatch. Enable in Cowork mobile → Enable Dispatch. Push notification on completion.</li>
+              <li>Claude for Chrome: browser extension for Chrome/Edge only. Real browser access with live authenticated sessions.</li>
+              <li>Security: Claude for Chrome can access any site you are logged into. Restrict to trusted, non-sensitive sites only.</li>
+              <li>Cowork also supports the same connector set as regular Claude: Slack, Notion, Google Drive, GitHub, and more — with the ability to run multi-service workflows simultaneously.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- MODULE SUMMARY -->
+  <div class="summary-block">
+    <div class="summary-label">Module Summary</div>
+    <ul class="summary-list">
+      <li>The three-model cascade (Haiku → Sonnet → Opus) is the single most impactful habit to establish: start with Sonnet, escalate to Opus only when depth is insufficient, and drop to Haiku for bulk/trivial tasks.</li>
+      <li>Extended Thinking and Memory are the highest leverage-to-effort features: Extended Thinking should be on for ~20% of queries (decisions with real consequences, multi-variable analysis); Memory requires a three-conversation foundation and regular hygiene but then runs passively.</li>
+      <li>Projects are persistent workspaces, not chat folders — their value compounds with a three-document knowledge base (brief · examples · constraints) and one project per workflow type.</li>
+      <li>The five-part prompt framework (Role · Task · Context · Constraints · Format) with XML tags is the foundation of high-quality output on important tasks; meta-prompting and the interview-first method are extensions that further reduce iteration.</li>
+      <li>Claude Code's core pattern is Opus→Sonnet handoff + claude.md constraints; the five common mistakes (no memory file, vague prompts, no plan mode, no /compact, repeated failed fixes) cover the majority of beginner friction.</li>
+      <li>Cowork is an autonomous employee, not a smarter chat: its value comes from setup quality (context files + global instructions + per-workflow projects) and scheduled tasks, which turn one-time work into permanent infrastructure.</li>
+    </ul>
+  </div>
+
+</div><!-- /doc-body -->
+
+
+</div><!-- /doc-wrap -->
+
+<footer class="snx-footer">
+
+  <!-- Meta bar -->
+  <div class="snx-footer-meta">
+    <span class="snx-footer-course">Claude MasterClass</span>
+    <span class="snx-footer-divider">·</span>
+    <span class="snx-footer-module">Module 01 · Complete Practical Guide: Interface, Features, Claude Code &amp; Cowork</span>
+  </div>
+
+  <!-- Nav row -->
+  <nav class="snx-footer-nav" aria-label="Artifact navigation">
+
+    <!-- Left: Previous -->
+    <a class="snx-nav-prev" href="#">
+      <span class="snx-nav-chevron">‹</span>
+      Previous
+    </a>
+
+    <!-- Center: Hub -->
+    <div class="snx-nav-hub">
+      <a class="snx-hub-btn snx-hub-btn-recall"  href="../recalls/01_claude-masterclass-recall.html">Recall</a>
+      <a class="snx-hub-btn snx-hub-btn-tree"    href="../trees/01_claude-masterclass-tree.html">Tree</a>
+      <a class="snx-hub-btn snx-hub-btn-compact" href="../compact/01_claude-masterclass-compact.html">Compact</a>
+      <a class="snx-hub-btn snx-hub-btn-quiz"    href="../quizzes/01_claude-masterclass-quiz.html">Quiz</a>
+      <a class="snx-hub-btn snx-hub-btn-module"  href="#" aria-current="page">Module</a>
+    </div>
+
+    <!-- Right: Next -->
+    <a class="snx-nav-next" href="./02_claude-masterclass-reviewer.html">
+      Next
+      <span class="snx-nav-chevron">›</span>
+    </a>
+
+  </nav>
+
+</footer>
+
+<script>
+/* synaptix-runtime v1.0 — shared interaction layer */
+function sendPrompt(text){
+  if(window.parent && window.parent.postMessage){
+    window.parent.postMessage({type:'user_message',message:text},'*');
+  }
+}
+function quizQuick()  { sendPrompt('/quiz mc(10) hard'); }
+function recallQuick(){ sendPrompt('/recall term(10) hard'); }
+function exportMd()   { sendPrompt('/export -md'); }
+
+var _fc = {
+  cards:[], idx:0, got:0, missed:0,
+  init: function(cards){ this.cards=cards; this.idx=0; this.got=0; this.missed=0; this.render(); },
+  render: function(){
+    var c = this.cards[this.idx];
+    if(!c){ this.summary(); return; }
+    document.getElementById('fc-progress').textContent = 'Card '+(this.idx+1)+' of '+this.cards.length;
+    document.getElementById('fc-front').innerHTML = c.front + (c.hint ? '<div class="fc-hint">'+c.hint+'</div>' : '');
+    document.getElementById('fc-back').innerHTML  = c.back + '<div class="fc-ref">'+c.section+'</div>';
+    document.getElementById('fc-card').classList.remove('flipped');
+    document.getElementById('fc-actions').style.display='none';
+    document.getElementById('fc-flip-btn').style.display='flex';
+  },
+  flip: function(){
+    document.getElementById('fc-card').classList.add('flipped');
+    document.getElementById('fc-flip-btn').style.display='none';
+    document.getElementById('fc-actions').style.display='flex';
+  },
+  mark: function(correct){
+    if(correct) this.got++; else this.missed++;
+    this.idx++;
+    this.render();
+  },
+  summary: function(){
+    var total=this.cards.length;
+    var pct=Math.round(this.got/total*100);
+    document.getElementById('fc-wrap').innerHTML = '<div class="fc-summary"><div class="fc-sum-title">Session complete — '+total+' cards</div><div class="fc-sum-row">Got it: <strong>'+this.got+' ('+pct+'%)</strong></div><div class="fc-sum-row">Missed it: <strong>'+this.missed+' ('+(100-pct)+'%)</strong></div></div>';
+  }
+};
+
+var _qz = {
+  current:1, total:0, answers:{},
+  init: function(n){ this.total=n; this.current=1; this.showQ(1); this.updateProgress(); },
+  showQ: function(n){
+    document.querySelectorAll('.q-card').forEach(function(c){ c.style.display='none'; });
+    var el=document.getElementById('q-'+n);
+    if(el) el.style.display='block';
+    this.current=n;
+    this.updateProgress();
+  },
+  go: function(n){ if(n>=1 && n<=this.total) this.showQ(n); },
+  answer: function(q,a){ this.answers[q]=a; },
+  updateProgress: function(){
+    var p=document.getElementById('qz-progress');
+    if(p) p.textContent='Question '+this.current+' of '+this.total;
+  },
+  submit: function(){
+    var key=window._ANSWER_KEY||{};
+    var correct=0;
+    for(var k in key){ if(this.answers[k]===key[k]) correct++; }
+    var pct=Math.round(correct/this.total*100);
+    var r=document.getElementById('qz-results');
+    if(r){ r.style.display='block'; r.innerHTML='<div class="qz-score">'+pct+'%</div><p style="color:var(--text-secondary);margin-top:8px">'+correct+' / '+this.total+' correct</p>'; }
+  }
+};
+</script>
+</body>
+</html>

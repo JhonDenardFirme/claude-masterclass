@@ -1,0 +1,973 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Claude MasterClass Volume 2 — Comprehensive Reviewer</title>
+<style>
+/* synaptix-runtime v1.0 */
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@300;400;500;600&display=swap');
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg-base:#0e0e11;--bg-surface:#16161a;--bg-elevated:#1c1c21;--bg-section:#1a1a1f;--code-bg:#0c0c0f;
+  --border:rgba(255,255,255,0.07);--border-hi:rgba(255,255,255,0.12);
+  --orange:#f4762a;--salmon:#f08080;--cyan:#4ecdc4;--green:#4ade80;--yellow:#f4d03f;
+  --purple:#c084fc;--sky:#5db8f2;--amber:#f4b942;--red:#f87171;
+  --orange-dim:rgba(244,118,42,0.10);--orange-glow:rgba(244,118,42,0.05);
+  --cyan-dim:rgba(78,205,196,0.10);--salmon-dim:rgba(240,128,128,0.10);
+  --yellow-dim:rgba(244,208,63,0.10);--green-dim:rgba(74,222,128,0.10);
+  --purple-dim:rgba(192,132,252,0.10);--sky-dim:rgba(93,184,242,0.10);
+  --text-primary:#e8e8ee;--text-secondary:#8b8b9a;--text-muted:#4a4a5a;
+  --mono:'JetBrains Mono',monospace;--sans:'Inter',system-ui,sans-serif;
+}
+body{background:var(--bg-base);color:var(--text-primary);font-family:var(--sans);font-size:13px;line-height:1.8;}
+.b-orange{color:var(--orange);font-weight:600}.b-salmon{color:var(--salmon);font-weight:600}
+.b-cyan{color:var(--cyan);font-weight:600}.b-green{color:var(--green);font-weight:600}
+.b-yellow{color:var(--yellow);font-weight:600}
+.kw-orange{font-family:var(--mono);font-size:12px;color:var(--orange);background:var(--orange-dim);border:1px solid rgba(244,118,42,0.2);border-radius:3px;padding:1px 5px;}
+.kw-cyan{font-family:var(--mono);font-size:12px;color:var(--cyan);background:var(--cyan-dim);border:1px solid rgba(78,205,196,0.2);border-radius:3px;padding:1px 5px;}
+.box-salmon{font-size:13px;color:var(--salmon);background:var(--salmon-dim);border:1px solid rgba(240,128,128,0.2);border-radius:3px;padding:1px 6px;}
+.box-yellow{font-size:13px;color:var(--yellow);background:var(--yellow-dim);border:1px solid rgba(244,208,63,0.2);border-radius:3px;padding:1px 6px;}
+.box-green{font-size:13px;color:var(--green);background:var(--green-dim);border:1px solid rgba(74,222,128,0.2);border-radius:3px;padding:1px 6px;}
+.def{font-style:italic;color:var(--text-secondary)}
+.doc-wrap{max-width:860px;margin:0 auto;display:flex;flex-direction:column;}
+.doc-header{padding:22px 26px 16px;border-bottom:1px solid var(--border);background:var(--bg-surface);}
+.badges{display:flex;gap:8px;margin-bottom:11px;flex-wrap:wrap}
+.badge{font-family:var(--mono);font-size:10px;font-weight:500;letter-spacing:0.07em;text-transform:uppercase;padding:3px 8px;border-radius:4px;border:1px solid;}
+.badge-type{color:var(--orange);background:var(--orange-dim);border-color:rgba(244,118,42,0.25)}
+.badge-mod{color:var(--sky);background:var(--sky-dim);border-color:rgba(93,184,242,0.25)}
+.doc-title{font-size:20px;font-weight:600;letter-spacing:-0.02em}
+.doc-subtitle{font-size:11px;font-family:var(--mono);color:var(--text-muted);margin-top:4px}
+.stat-row{display:flex;gap:20px;flex-wrap:wrap;margin-top:13px;padding-top:13px;border-top:1px solid var(--border);}
+.stat-val{font-family:var(--mono);font-size:15px;font-weight:600;color:var(--text-primary)}
+.stat-lbl{font-size:10px;text-transform:uppercase;letter-spacing:0.06em;color:var(--text-muted);margin-top:1px}
+.doc-body{padding:22px 26px;display:flex;flex-direction:column;gap:10px}
+.module-label{display:flex;align-items:center;gap:10px}
+.module-num{font-family:var(--mono);font-size:10px;font-weight:600;color:var(--orange);letter-spacing:0.1em;text-transform:uppercase;}
+.module-rule{flex:1;height:1px;background:linear-gradient(to right,rgba(244,118,42,0.25),transparent);}
+.module-title{font-size:17px;font-weight:600;margin-bottom:10px}
+.overview{background:var(--bg-surface);border-top:2px solid var(--sky);border-radius:0 0 8px 8px;padding:14px 18px;}
+.overview-label{font-family:var(--mono);font-size:10px;font-weight:600;color:var(--sky);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:10px;}
+.overview-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
+.overview-item{background:var(--bg-elevated);border:1px solid var(--border);border-radius:6px;padding:8px 10px;display:flex;align-items:flex-start;gap:8px;}
+.ov-letter{font-family:var(--mono);font-size:10px;font-weight:600;color:var(--sky);background:var(--sky-dim);border:1px solid rgba(93,184,242,0.2);border-radius:3px;padding:2px 5px;flex-shrink:0;}
+.ov-title{font-size:12px;font-weight:500;color:var(--text-primary)}
+.ov-desc{font-size:11px;color:var(--text-secondary);margin-top:2px}
+.overview-divider{height:1px;background:var(--border);margin:10px 0}
+.meta-row{display:flex;gap:20px;flex-wrap:wrap}
+.meta-lbl{font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:0.07em;color:var(--text-muted)}
+.meta-val{font-size:12px;color:var(--text-secondary);margin-top:2px}
+.intro{background:var(--bg-surface);border-left:3px solid var(--purple);border-radius:0 8px 8px 0;padding:14px 18px;}
+.intro-label{font-family:var(--mono);font-size:10px;font-weight:600;color:var(--purple);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:8px;}
+.intro p{font-size:13px;color:var(--text-secondary);line-height:1.8}
+.intro p+p{margin-top:8px}
+.section-card{background:var(--bg-section);border:1px solid var(--border);border-radius:10px;overflow:hidden;transition:border-color 0.15s;}
+.section-card:hover{border-color:var(--border-hi)}
+.section-hdr{padding:12px 17px 10px;border-bottom:1px solid var(--border);position:relative;overflow:hidden;display:flex;align-items:center;gap:10px;}
+.section-letter{font-family:var(--mono);font-size:12px;font-weight:600;width:25px;height:25px;border-radius:5px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.section-title{font-size:13px;font-weight:500;flex:1}
+.ghost-glyph{position:absolute;right:13px;top:50%;transform:translateY(-50%);font-family:var(--mono);font-size:58px;font-weight:700;color:rgba(255,255,255,0.025);pointer-events:none;user-select:none;line-height:1;}
+.section-body{padding:15px 17px;display:flex;flex-direction:column;gap:13px}
+.subsection{display:flex;flex-direction:column;gap:8px}
+.subsection+.subsection{padding-top:13px;border-top:1px solid var(--border)}
+.sub-hdr{display:flex;align-items:center;gap:8px}
+.sub-num{font-family:var(--mono);font-size:10px;font-weight:500;color:var(--cyan);background:var(--cyan-dim);border:1px solid rgba(78,205,196,0.2);padding:2px 6px;border-radius:4px;}
+.sub-title{font-size:13px;font-weight:500}
+.sub-body{display:flex;flex-direction:column;gap:8px}
+.sub-body p{font-size:13px;color:var(--text-secondary);line-height:1.8}
+.enrich-plus{font-family:var(--mono);font-size:9px;font-weight:600;color:var(--green);background:var(--green-dim);border:1px solid rgba(74,222,128,0.2);padding:1px 4px;border-radius:3px;margin-left:4px;vertical-align:middle;}
+.keypoints{background:var(--orange-glow);border:1px solid rgba(244,118,42,0.12);border-left:3px solid var(--orange);border-radius:0 6px 6px 0;padding:10px 14px;}
+.kp-label{font-family:var(--mono);font-size:10px;font-weight:600;color:var(--orange);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:7px;}
+.kp-list{list-style:none;display:flex;flex-direction:column;gap:5px}
+.kp-list li{font-size:12px;color:var(--text-secondary);line-height:1.6;display:flex;gap:7px}
+.kp-list li::before{content:'›';color:var(--orange);font-weight:700;font-size:14px;flex-shrink:0}
+.code-block{background:var(--code-bg);border:1px solid rgba(255,255,255,0.06);border-radius:8px;overflow:hidden;}
+.code-topbar{display:flex;justify-content:space-between;align-items:center;padding:7px 12px;background:rgba(255,255,255,0.025);border-bottom:1px solid rgba(255,255,255,0.05);}
+.code-lang{font-family:var(--mono);font-size:10px;color:var(--text-muted);letter-spacing:0.06em;text-transform:uppercase;}
+.code-dots{display:flex;gap:5px}
+.code-dot{width:7px;height:7px;border-radius:50%}
+.code-pre{padding:13px 16px;font-family:var(--mono);font-size:12px;line-height:1.85;color:#c9d1d9;overflow-x:auto;white-space:pre;}
+.ck{color:#ff79c6}.cf{color:#50fa7b}.cs{color:#f1fa8c}.cn{color:#bd93f9}.cc{color:#6272a4;font-style:italic}.ct{color:#8be9fd}
+.summary-block{background:var(--bg-surface);border:1px solid var(--border);border-bottom:2px solid var(--orange);border-radius:8px 8px 0 0;padding:14px 18px;}
+.summary-label{font-family:var(--mono);font-size:10px;font-weight:600;color:var(--orange);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:8px;}
+.summary-list{list-style:none;display:flex;flex-direction:column;gap:5px}
+.summary-list li{font-size:13px;color:var(--text-secondary);line-height:1.7;display:flex;gap:7px;}
+.summary-list li::before{content:'›';color:var(--orange);font-weight:700;font-size:14px;flex-shrink:0}
+
+@media(max-width:600px){.doc-header,.doc-body{padding-left:16px;padding-right:16px}.doc-footer{padding:12px 16px}.overview-grid{grid-template-columns:1fr}.footer-btn{width:100px;height:52px;font-size:10px}}
+
+
+/* ========================================
+   FOOTER NAVIGATION CSS
+   Synaptix Runtime — shared component
+   Copy into any artifact <style> block
+======================================== */
+
+.snx-footer{
+  background:var(--bg-surface);
+  border-top:1px solid var(--border);
+  padding:16px 26px 18px;
+}
+
+/* ── Meta bar ── */
+.snx-footer-meta{
+  display:flex;align-items:baseline;gap:10px;
+  padding-bottom:13px;
+  border-bottom:1px solid var(--border);
+  margin-bottom:13px;
+}
+.snx-footer-course{
+  font-family:var(--mono);font-size:10px;font-weight:600;
+  letter-spacing:0.14em;text-transform:uppercase;color:var(--text-muted);
+}
+.snx-footer-divider{
+  font-family:var(--mono);font-size:10px;color:var(--text-muted);opacity:0.4;
+}
+.snx-footer-module{
+  font-family:var(--mono);font-size:11px;font-weight:500;
+  color:var(--text-secondary);letter-spacing:0.04em;
+}
+
+/* ── Nav row ── */
+.snx-footer-nav{
+  display:flex;align-items:center;
+  gap:10px;
+}
+
+/* prev / next */
+.snx-nav-prev,
+.snx-nav-next{
+  font-family:var(--mono);font-size:11px;font-weight:500;
+  color:var(--text-secondary);
+  background:transparent;
+  border:1px solid var(--border);
+  border-radius:6px;
+  padding:6px 13px;
+  display:flex;align-items:center;gap:6px;
+  white-space:nowrap;
+  transition:border-color 0.13s,color 0.13s;
+  flex-shrink:0;
+  text-decoration:none;
+}
+.snx-nav-prev:hover,
+.snx-nav-next:hover{
+  border-color:var(--border-hi);
+  color:var(--text-primary);
+}
+.snx-nav-chevron{
+  font-size:13px;line-height:1;
+  color:var(--text-muted);
+  transition:color 0.13s;
+}
+.snx-nav-prev:hover .snx-nav-chevron,
+.snx-nav-next:hover .snx-nav-chevron{color:var(--text-secondary)}
+
+/* center hub */
+.snx-nav-hub{
+  flex:1;display:flex;align-items:center;
+  justify-content:center;gap:6px;flex-wrap:wrap;
+}
+
+/* hub buttons */
+.snx-hub-btn{
+  font-family:var(--mono);font-size:10px;font-weight:500;
+  letter-spacing:0.04em;
+  padding:6px 13px;border-radius:6px;border:1px solid;
+  display:inline-flex;align-items:center;gap:5px;
+  transition:background 0.13s;
+  text-decoration:none;white-space:nowrap;
+}
+.snx-hub-btn-recall{
+  color:var(--cyan);background:var(--cyan-dim);
+  border-color:rgba(78,205,196,0.22);
+}
+.snx-hub-btn-recall:hover{background:rgba(78,205,196,0.18)}
+
+.snx-hub-btn-tree{
+  color:var(--green);background:var(--green-dim);
+  border-color:rgba(74,222,128,0.22);
+}
+.snx-hub-btn-tree:hover{background:rgba(74,222,128,0.18)}
+
+.snx-hub-btn-compact{
+  color:var(--yellow);background:var(--yellow-dim);
+  border-color:rgba(244,208,63,0.22);
+}
+.snx-hub-btn-compact:hover{background:rgba(244,208,63,0.18)}
+
+.snx-hub-btn-quiz{
+  color:var(--orange);background:var(--orange-dim);
+  border-color:rgba(244,118,42,0.22);
+}
+.snx-hub-btn-quiz:hover{background:rgba(244,118,42,0.18)}
+
+.snx-hub-btn-module{
+  color:var(--purple);background:var(--purple-dim);
+  border-color:rgba(192,132,252,0.22);
+}
+.snx-hub-btn-module:hover{background:rgba(192,132,252,0.18)}
+
+/* active state — current artifact type */
+.snx-hub-btn[aria-current="page"]{
+  opacity:1;cursor:default;
+  box-shadow:0 0 0 1px currentColor;
+}
+
+/* mobile */
+@media(max-width:640px){
+  .snx-footer{padding:14px 16px 16px}
+  .snx-footer-nav{flex-wrap:wrap}
+  .snx-nav-hub{order:3;flex-basis:100%;justify-content:flex-start}
+}
+
+</style>
+</head>
+<body>
+<div class="doc-wrap">
+
+<!-- HEADER -->
+<div class="doc-header">
+  <div class="badges">
+    <span class="badge badge-type">Comprehensive · High</span>
+    <span class="badge badge-mod">Module 1 of 1 · Merged · 4 Lessons</span>
+  </div>
+  <div class="doc-title">Claude MasterClass Volume 2 — Advanced Prompting, Routines, Design &amp; Model Mastery</div>
+  <div class="doc-subtitle">source: Claude_MasterClass_-_Volume_2.html · generated 2026-06-24 · subject: Claude MasterClass</div>
+  <div class="stat-row">
+    <div class="stat-item"><div class="stat-val">6</div><div class="stat-lbl">Sections</div></div>
+    <div class="stat-item"><div class="stat-val">32</div><div class="stat-lbl">Subsections</div></div>
+    <div class="stat-item"><div class="stat-val">5</div><div class="stat-lbl">Code Blocks</div></div>
+    <div class="stat-item"><div class="stat-val">5</div><div class="stat-lbl">Enriched</div></div>
+  </div>
+</div>
+
+<div class="doc-body">
+
+<div class="module-label"><span class="module-num">Module 1</span><div class="module-rule"></div></div>
+<div class="module-title">Claude MasterClass Volume 2 — Advanced Prompting, Routines, Design &amp; Model Mastery</div>
+
+<!-- OVERVIEW -->
+<div class="overview">
+  <div class="overview-label">Module Overview</div>
+  <div class="overview-grid">
+    <div class="overview-item"><span class="ov-letter">A</span><div><div class="ov-title">The Five Prompt Mistakes</div><div class="ov-desc">Diagnostic framework: five failure patterns that degrade every prompt — identified, named, and explained.</div></div></div>
+    <div class="overview-item"><span class="ov-letter">B</span><div><div class="ov-title">Eight Power Techniques</div><div class="ov-desc">The structured prompting arsenal: four-block formula, XML tags, prefill, constraint stacking, prompt chaining, because rationale, iterative refinement, and real stacked workflows.</div></div></div>
+    <div class="overview-item"><span class="ov-letter">C</span><div><div class="ov-title">Claude Routines</div><div class="ov-desc">Local vs remote architecture, setup walkthrough, trigger types, connectors, session logs, seven gotchas, and production workflow examples.</div></div></div>
+    <div class="overview-item"><span class="ov-letter">D</span><div><div class="ov-title">Claude Design</div><div class="ov-desc">Design system setup, four-step generation framework, three refinement modes, token economy rules, and the Design→Code→Vercel pipeline.</div></div></div>
+    <div class="overview-item"><span class="ov-letter">E</span><div><div class="ov-title">Claude 4.5 Model Family</div><div class="ov-desc">Sonnet, Opus, Haiku — architecture changes, benchmarks, pricing, the effort parameter, extended thinking, context awareness, and the memory tool.</div></div></div>
+    <div class="overview-item"><span class="ov-letter">F</span><div><div class="ov-title">Claude 4.5 vs Gemini 3 Pro</div><div class="ov-desc">Head-to-head benchmark comparison, cost analysis, reliability vs raw performance trade-offs, and the complementary use-case decision matrix.</div></div></div>
+  </div>
+  <div class="overview-divider"></div>
+  <div class="meta-row">
+    <div class="meta-item"><div class="meta-lbl">Prerequisites</div><div class="meta-val">Volume 1 concepts (model selection, Projects, Claude Code basics) strongly recommended</div></div>
+    <div class="meta-item"><div class="meta-lbl">Leads to</div><div class="meta-val">Production multi-agent pipelines, Claude API usage, automated content systems</div></div>
+  </div>
+</div>
+
+<!-- INTRO -->
+<div class="intro">
+  <div class="intro-label">Module Introduction</div>
+  <p>Volume 1 established the platform — what Claude is, what its modes do, and how to navigate the ecosystem. Volume 2 goes deeper on the craft layer: why most prompts underperform, what structural techniques reliably fix them, and how to move from one-off queries to autonomous background systems. The progression across four lessons is intentional — diagnose what's broken first (Section A), then build the repair toolkit (Section B), then extend that toolkit into automation (Section C), visual generation (Section D), and model-selection mastery (Sections E and F).</p>
+  <p>The through-line across all four lessons is the same: Claude performs at a dramatically higher level when you treat it as an executor following a precise specification rather than a search engine responding to a query. Every technique in this module — XML tags, prefill, routines, design systems, effort parameters — is an expression of that principle applied to a different surface.</p>
+</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- SECTION A: The Five Prompt Mistakes             -->
+<!-- ═══════════════════════════════════════════════ -->
+<div class="section-card">
+  <div class="section-hdr">
+    <span class="section-letter" style="color:var(--sky);background:var(--sky-dim);border:1px solid rgba(93,184,242,0.2)">A</span>
+    <span class="section-title">A. The Five Prompt Mistakes</span>
+    <span class="ghost-glyph">A</span>
+  </div>
+  <div class="section-body">
+
+    <div class="subsection">
+      <div class="sub-hdr"><span class="sub-num">A1</span><span class="sub-title">Mistake 1 — Searching Instead of Briefing</span></div>
+      <div class="sub-body">
+        <p>The most pervasive mistake is treating Claude like a search engine — typing short, keyword-style queries and expecting polished output. Claude is not retrieving a pre-written best answer from a database; it is generating fresh content from your technical specification. A one-line prompt like <em>"write article about nootropics"</em> gives Claude no audience, no angle, no constraints, and no voice — so it defaults to Wikipedia-level generic output. The same request reframed as a structured brief (context, audience, constraints, format) produces something fundamentally different. <span class="enrich-plus">[+]</span> Anthropic's own documentation frames this explicitly: Claude behaves like a new employee who performs precisely as well as the brief they receive. The golden rule is <span class="b-orange">stop searching, start briefing</span>. Empirical result from the source: switching from search-style to brief-style prompting produced 3× better first drafts and 75% fewer revisions across 50 test prompts.</p>
+        <div class="keypoints">
+          <div class="kp-label">Key Points</div>
+          <ul class="kp-list">
+            <li>Claude generates from your specification — it is not retrieving a cached best answer.</li>
+            <li>Short keyword queries give Claude no context, producing generic, voiceless output.</li>
+            <li>Source benchmark: brief-style → 3× better first drafts, 75% fewer revisions on 50 prompts.</li>
+            <li>Mental model: write a technical specification, not a Google query.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <div class="sub-hdr"><span class="sub-num">A2</span><span class="sub-title">Mistake 2 — Wall-of-Text Prompts</span></div>
+      <div class="sub-body">
+        <p>When instructions, context, examples, and constraints merge into a single unbroken paragraph, Claude cannot tell where one component ends and another begins. It guesses at priorities — and when a model guesses, it averages out, producing output that technically addresses the prompt but misses buried constraints entirely. The source illustrates this with a real case: a 300-word wall-of-text prompt for a sales email where the constraint "no pricing mentions" was buried in line 12. Claude missed it and required three revision rounds. The identical prompt with visual hierarchy (line breaks separating context from task from constraints) succeeded on the first attempt. Anthropic's testing shows <span class="b-green">40% better instruction-following</span> with structured prompts. The fix is visual separation: use line breaks, blank lines between sections, and explicit labels.</p>
+        <div class="keypoints">
+          <div class="kp-label">Key Points</div>
+          <ul class="kp-list">
+            <li>Merged paragraphs force Claude to guess at instruction priority — it averages rather than executes.</li>
+            <li>Buried constraints are consistently missed in wall-of-text prompts.</li>
+            <li>Anthropic benchmark: 40% better instruction-following with structured, separated prompts.</li>
+            <li>Fix: line breaks + section labels. Separate context, task, and constraints visually.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <div class="sub-hdr"><span class="sub-num">A3</span><span class="sub-title">Mistake 3 — No Role or Audience</span></div>
+      <div class="sub-body">
+        <p>Without a specified role, Claude writes for no one — producing text with no voice, no depth calibration, and no vocabulary register. The difference between <em>"write about nutraceuticals"</em> and <em>"you're an interventional cardiologist writing for the American Heart Journal"</em> is not merely tonal; it is the difference between 6/10 and 9/10 quality output on the same medical topic. Claude does not merely adopt expertise when given a role — it picks up tone, vocabulary, assumed reader knowledge, and depth simultaneously. The fix is to start every conversation with <span class="kw-cyan">You are...</span> and <span class="kw-cyan">You're writing for...</span>. Role specificity is the single highest-leverage variable in the five-part framework: the more precisely a role is defined, the more sharply the response focuses.</p>
+        <div class="keypoints">
+          <div class="kp-label">Key Points</div>
+          <ul class="kp-list">
+            <li>No role → Claude writes for no one → unmistakable AI flatness.</li>
+            <li>Role adoption carries tone, vocabulary, depth, and assumed reader knowledge — not just expertise label.</li>
+            <li>"You are a pricing strategist for solo creators" outperforms "a marketing expert" by a measurable margin.</li>
+            <li>Always open with "You are..." and "You're writing for..." — the two highest-signal lines in any prompt.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <div class="sub-hdr"><span class="sub-num">A4</span><span class="sub-title">Mistake 4 — Expecting One-Shot Perfection</span></div>
+      <div class="sub-body">
+        <p>One of the most damaging misconceptions is that a high-quality first response signals good prompting and a mediocre one signals failure. Anthropic's own documentation is explicit: <span class="b-cyan">iteration is part of the process, not a sign of failure</span>. The source tracked real usage data: first attempts averaged 70% satisfaction; after one targeted revision, 92%; after two, 98%. The correct mental model is draft → critique → revise, not single-shot. The chat interface continues after each response for precisely this reason. The workflow covered in Technique 8 (iterative refinement) formalizes this: Claude generates, Claude critiques its own output, Claude rewrites incorporating the critique — three roles, one model, dramatically higher final quality.</p>
+        <div class="keypoints">
+          <div class="kp-label">Key Points</div>
+          <ul class="kp-list">
+            <li>One-shot perfection is a myth Anthropic itself does not believe in.</li>
+            <li>Satisfaction curve: 1st attempt 70% → after 1 revision 92% → after 2 revisions 98%.</li>
+            <li>Time cost of 2 revisions: ~5 minutes total vs. 30 minutes writing from scratch.</li>
+            <li>The chat continues for a reason — use it. Draft → critique → revise is the intended workflow.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <div class="sub-hdr"><span class="sub-num">A5</span><span class="sub-title">Mistake 5 — Underfeeding Context</span></div>
+      <div class="sub-body">
+        <p>Claude 4.6 supports a 200,000-token context window (approximately 500 pages / 150,000 words) and now tracks its remaining context in real time. Yet the most common usage pattern is feeding fragments — two-page summaries of 50-page reports, bullet-point excerpts of full transcripts — and then wondering why outputs lack precision. The source contrasts two approaches on a 50-page quarterly report: feeding a 2-page executive summary produced generic insights. Feeding the full report, Claude surfaced buried supply-chain risks in footnotes and connected patterns across five departments that the user had missed entirely. The analogy is precise: using a 200K-token model on fragments is driving a Formula 1 car in first gear. The correct approach is to load the full document and let Claude see the complete picture.</p>
+        <div class="keypoints">
+          <div class="kp-label">Key Points</div>
+          <ul class="kp-list">
+            <li>200K tokens ≈ 500 pages. Most users consume 2–5% of available context — wasted potential.</li>
+            <li>Fragments produce generic insights; full documents enable pattern detection across hidden sections.</li>
+            <li>Context tracker is now built in — check it. If you're at 5K of 200K, you're leaving 97.5% unused.</li>
+            <li>Always upload the complete document, report, or transcript. Let Claude see the full picture.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- SECTION B: Eight Power Techniques              -->
+<!-- ═══════════════════════════════════════════════ -->
+<div class="section-card">
+  <div class="section-hdr">
+    <span class="section-letter" style="color:var(--cyan);background:var(--cyan-dim);border:1px solid rgba(78,205,196,0.2)">B</span>
+    <span class="section-title">B. Eight Power Techniques</span>
+    <span class="ghost-glyph">B</span>
+  </div>
+  <div class="section-body">
+
+    <div class="subsection">
+      <div class="sub-hdr"><span class="sub-num">B1</span><span class="sub-title">Technique 1 — The Four-Block Formula</span></div>
+      <div class="sub-body">
+        <p>The <span class="b-orange">four-block formula</span> is the 2026 standard Anthropic recommends for structuring any substantive prompt. Each block performs exactly one job: <span class="b-cyan">Instructions</span> (what Claude should do and how), <span class="b-green">Context</span> (background information, reference documents, constraints), <span class="b-yellow">Task</span> (the specific deliverable — one clear ask), and <span class="b-salmon">Output Format</span> (the exact structure of the response). The formula works because it eliminates Claude's need to guess at any of the four variables. Without it, a request like "write me a welcome email for new users of my fitness app" produces generic onboarding copy that could be for any product and any audience. With the formula applied, every element of the prompt — role, audience, timing, length, CTA — serves a specific function, and Claude's output reflects that precision. The source frames it memorably: <em>you're not writing a prompt, you're drafting a contract. The clearer the terms, the more reliable the execution.</em></p>
+        <div class="code-block">
+          <div class="code-topbar"><span class="code-lang">prompt · four-block formula</span><div class="code-dots"><div class="code-dot" style="background:#ff5f57"></div><div class="code-dot" style="background:#febc2e"></div><div class="code-dot" style="background:#28c840"></div></div></div>
+          <pre class="code-pre"><span class="ct">INSTRUCTIONS:</span>
+<span class="cs">You are a conversion copywriter for mobile fitness apps.
+Write in a direct, motivating tone — no filler phrases.</span>
+
+<span class="ct">CONTEXT:</span>
+<span class="cs">App targets busy professionals aged 30–45.
+Free trial is 14 days. Key differentiator: 15-minute workouts.
+This email sends one hour after sign-up.</span>
+
+<span class="ct">TASK:</span>
+<span class="cs">Write a single welcome email that hooks on the 15-minute angle
+and drives the user to start their first workout immediately.</span>
+
+<span class="ct">OUTPUT FORMAT:</span>
+<span class="cs">- Subject line (under 50 chars)
+- Preview text (under 90 chars)
+- Body (under 150 words)
+- One CTA button label</span></pre>
+        </div>
+        <div class="keypoints">
+          <div class="kp-label">Key Points</div>
+          <ul class="kp-list">
+            <li>Four blocks: Instructions · Context · Task · Output Format. Each block does exactly one job.</li>
+            <li>The formula eliminates guessing — Claude stops averaging and starts executing specified constraints.</li>
+            <li>Think "contract terms," not "chat message." Precision in → precision out.</li>
+            <li>The Task block should contain exactly one deliverable. Multiple asks in Task = mixed results.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <div class="sub-hdr"><span class="sub-num">B2</span><span class="sub-title">Technique 2 — XML Tags</span></div>
+      <div class="sub-body">
+        <p>XML tags are Claude's native structuring language — Anthropic uses XML extensively in their own internal prompts, and Claude's training reflects this. Wrapping prompt sections in semantic tags (<span class="kw-cyan">&lt;instructions&gt;</span>, <span class="kw-cyan">&lt;context&gt;</span>, <span class="kw-cyan">&lt;examples&gt;</span>, <span class="kw-cyan">&lt;constraints&gt;</span>, <span class="kw-cyan">&lt;output_format&gt;</span>) tells Claude exactly what each section is without ambiguity. The source tested 40 prompts both ways: with XML tags, Claude followed formatting rules 94% of the time; without, 61%. That is a 33-percentage-point improvement from adding angle brackets. The analogy is apt: a desktop with all files dumped on it vs. the same files organized in clearly labeled folders — same content, radically different navigability. XML is the folder system for Claude's input.</p>
+        <div class="keypoints">
+          <div class="kp-label">Key Points</div>
+          <ul class="kp-list">
+            <li>XML is Claude's native structuring language — trained on Anthropic's own XML-heavy internal prompts.</li>
+            <li>Benchmark: 94% formatting compliance with XML vs. 61% without — 33pp improvement.</li>
+            <li>Tags prevent Claude from treating context as a request to respond to.</li>
+            <li>Pair with the four-block formula: XML tags implement the formula's block structure formally.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <div class="sub-hdr"><span class="sub-num">B3</span><span class="sub-title">Technique 3 — Prefill (Response Seeding)</span></div>
+      <div class="sub-body">
+        <p><span class="b-orange">Prefill</span> is the technique of writing the first few words of Claude's response yourself, so that Claude continues from exactly where you left off — skipping preamble entirely. Instead of beginning with "Sure, I'd be happy to help. Here's the first one..." (47 words of throat-clearing before any real content), prefilling forces Claude to begin at the deliverable. The source applied this to generating 50 identical-format product descriptions: without prefill, Claude opened with an explanatory paragraph. With prefill (starting the response with "Product 1: Ultra Comfort Ergonomic Chair | Price: $299 | Features:"), Claude continued in clean bullet points with consistent structure for all 50 items — zero manual cleanup, reducing two hours of reformatting to 15 minutes. Prefill is especially powerful for <span class="b-cyan">rigid output formats</span>: JSON, CSV, tables, bullet lists, and anywhere you need to kill the "happy to help" intro and force a specific tone from word one.</p>
+        <div class="keypoints">
+          <div class="kp-label">Key Points</div>
+          <ul class="kp-list">
+            <li>Prefill: write the first words of Claude's response yourself — Claude continues seamlessly.</li>
+            <li>Eliminates preamble and explanation before actual content ("Sure, I'd be happy to help..." = dead tokens).</li>
+            <li>Best for: rigid output formats (JSON, CSV, tables, lists), bulk generation tasks, forced tone from word one.</li>
+            <li>Pairs with XML: XML structures the input; prefill structures the start of the output. Two layers of precision.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <div class="sub-hdr"><span class="sub-num">B4</span><span class="sub-title">Technique 4 — Constraint Stacking</span></div>
+      <div class="sub-body">
+        <p>The counterintuitive truth about Claude: <span class="b-green">more constraints produce better writing, not worse</span>. Constraints don't limit the model — they free it from defaulting to the generic safe mode it enters when given unlimited options. An unconstrained prompt like "write a LinkedIn post about AI in healthcare" gives Claude infinite choices and produces the output everyone recognizes and hates: <em>"In today's rapidly evolving landscape..."</em>. Stack specific constraints — real statistic opener, under 150 words, no jargon, conversational not corporate, one concrete example, end with a question — and Claude is forced to find original phrasing because every cliché has been ruled out. The source tracked 50 posts over three weeks: constraint-stacked posts averaged 3× higher engagement than unconstrained equivalents. The principle: <span class="b-orange">specificity forces originality</span>. Every banned cliché makes Claude find a better word.</p>
+        <div class="keypoints">
+          <div class="kp-label">Key Points</div>
+          <ul class="kp-list">
+            <li>Constraints free Claude from generic defaults — they don't limit quality, they force originality.</li>
+            <li>Benchmark: constraint-stacked posts → 3× higher engagement over 50-post, 3-week test.</li>
+            <li>Every banned cliché ("in today's rapidly evolving landscape") forces Claude toward a better alternative.</li>
+            <li>Stack three layers: XML (input structure) + prefill (output start) + constraint stacking (output quality). One workflow.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <div class="sub-hdr"><span class="sub-num">B5</span><span class="sub-title">Technique 5 — Prompt Chaining</span></div>
+      <div class="sub-body">
+        <p><span class="b-orange">Prompt chaining</span> breaks a complex multi-deliverable task into sequential focused steps where each response feeds the next — rather than issuing one massive prompt that tries to do everything at once. Claude's 200K context window makes chaining uniquely powerful: the entire chain lives in one conversation and Claude retains full fidelity from step one through step five. In tools with shorter context windows, chains lose coherence fast. The source contrasts a single mega-prompt for a 5-email cold outreach sequence (result: five identical-sounding first emails, contradicting arguments, no narrative arc) against a four-step chain: (1) map the top five buyer objections, (2) sequence them by buyer-journey phase, (3) write emails 1–2 addressing those objections in order, (4) write emails 3–5 advancing the same narrative. The chained result is a real sequence where each email earns the right to the next one. The mental model is project management for prompts: break into milestones, review each, adjust before moving forward.</p>
+        <div class="code-block">
+          <div class="code-topbar"><span class="code-lang">prompt chain · B2B email sequence</span><div class="code-dots"><div class="code-dot" style="background:#ff5f57"></div><div class="code-dot" style="background:#febc2e"></div><div class="code-dot" style="background:#28c840"></div></div></div>
+          <pre class="code-pre"><span class="cc">// Step 1 — Map objections (establishes ground truth)</span>
+<span class="cs">"You're a B2B sales strategist. List the top 5 objections
+a marketing director at a mid-size e-commerce company
+has against adopting a new analytics platform."</span>
+
+<span class="cc">// Step 2 — Sequence (transforms list into narrative arc)</span>
+<span class="cs">"Rank these objections in the order they appear
+in the buyer's journey, from first contact to decision."</span>
+
+<span class="cc">// Step 3 — Build emails 1–2 (each addresses one objection)</span>
+<span class="cs">"Write emails 1 and 2. Each addresses exactly one objection.
+Email 2 must open by referencing email 1 — not repeat it."</span>
+
+<span class="cc">// Step 4 — Complete sequence (narrative must build pressure)</span>
+<span class="cs">"Write emails 3–5 following the same logic. Each email
+advances the narrative. No repeated arguments. Email 5
+creates urgency without a fake deadline."</span></pre>
+        </div>
+        <div class="keypoints">
+          <div class="kp-label">Key Points</div>
+          <ul class="kp-list">
+            <li>Chaining vs. mega-prompts: chains review intermediate outputs and catch errors before they propagate.</li>
+            <li>Claude's 200K context means the full chain stays coherent — step-one instructions carry full weight at step five.</li>
+            <li>Each step produces one focused deliverable. Review before continuing — this is the quality checkpoint.</li>
+            <li>Mental model: treat complex tasks as project milestones, not single deliverables.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <div class="sub-hdr"><span class="sub-num">B6</span><span class="sub-title">Technique 6 — One Style Example</span></div>
+      <div class="sub-body">
+        <p>Instead of describing a desired writing style with adjectives (<em>"friendly but professional, concise but detailed"</em> — contradictions Claude averages into bland mush), drop a single well-chosen example of the target writing into the prompt. Claude mirrors voice, rhythm, paragraph length, sentence construction, and even punctuation habits from one reference sample with striking accuracy. The source tested this across 30 different writing styles (blog posts, emails, ad copy): one well-chosen example consistently outperformed multi-paragraph style descriptions. The source example is instructive — a single paragraph of opinionated, grounded tech-product writing was enough for Claude to match that exact voice on a completely different product review. The principle: <span class="b-cyan">show, don't describe</span>. Contradictory adjectives give Claude nothing to anchor to; a concrete example gives it everything.</p>
+        <div class="keypoints">
+          <div class="kp-label">Key Points</div>
+          <ul class="kp-list">
+            <li>One example > a paragraph of style adjectives. Claude mirrors from sample; it cannot resolve contradictions in description.</li>
+            <li>Claude captures: voice, rhythm, paragraph length, sentence structure, punctuation habits — all from one paragraph.</li>
+            <li>Tested across 30 styles: single example consistently outperformed multi-paragraph descriptions.</li>
+            <li>Prompt structure: "Here's how I write: [example]. Match this style exactly. Now write: [task]."</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <div class="sub-hdr"><span class="sub-num">B7</span><span class="sub-title">Technique 7 — Motivated Instructions (the "Because" Rule)</span></div>
+      <div class="sub-body">
+        <p>Adding the word <span class="kw-orange">because</span> — or an equivalent rationale — to a rule transforms how Claude applies it. The model applies instructions more precisely when it understands their purpose; this is a documented feature of Claude 4.6. The difference is between drilling Claude with a command and explaining logic: <em>"Don't use ellipses"</em> is a command; <em>"Don't use ellipses because the output will be read by a TTS system that can't pronounce them"</em> is a motivated rule. Claude doesn't just follow the letter of a motivated rule — it understands the spirit and applies it correctly even in edge cases that the command phrasing wouldn't cover. This technique is especially powerful for constraints that have non-obvious reasoning: formatting rules, content restrictions, output structure choices.</p>
+        <div class="keypoints">
+          <div class="kp-label">Key Points</div>
+          <ul class="kp-list">
+            <li>Documented Claude 4.6 behavior: instructions are followed more precisely when reasoning is included.</li>
+            <li>Command → letter of the rule. Motivated instruction → spirit of the rule, applied in edge cases.</li>
+            <li>Pattern: "Don't do X because Y" — the "because Y" clause handles cases the command alone wouldn't cover.</li>
+            <li>Especially powerful for non-obvious formatting, content restrictions, and structural constraints.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <div class="sub-hdr"><span class="sub-num">B8</span><span class="sub-title">Technique 8 — Iterative Refinement (Draft → Critique → Rewrite)</span></div>
+      <div class="sub-body">
+        <p><span class="b-orange">Iterative refinement</span> is the formal three-step process that addresses Mistake 4 (expecting one-shot perfection). Step 1: generate a first draft with a normal, well-structured prompt. Step 2: ask Claude to critically analyze its own response — find weak spots, redundancies, gaps, contradictions. Step 3: ask Claude to rewrite the response incorporating the critique. The source clocks a complex 1,500-word guide from blank page to publishable draft at 12 minutes using this workflow with the full technique stack. Without the stack, the same task requires three to four rounds of back-and-forth and still needs heavy editing. The key insight is using Claude in two distinct roles simultaneously: author and editor. Anthropic's prompt engineering console even includes a built-in prompt improver that automates a four-step version of this process.</p>
+        <div class="keypoints">
+          <div class="kp-label">Key Points</div>
+          <ul class="kp-list">
+            <li>Three steps: generate → self-critique → rewrite. One model, two roles: author and editor.</li>
+            <li>Step 2 prompt: "Critically analyze your response. Find weak spots, redundancies, gaps, contradictions."</li>
+            <li>Source benchmark: full technique stack → publishable 1,500-word draft in 12 minutes.</li>
+            <li>Anthropic's prompt console has a built-in prompt improver that automates a 4-step variant of this process.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <div class="sub-hdr"><span class="sub-num">B9</span><span class="sub-title">Prompt Debugging: Four Steps When Output Is Still Wrong</span></div>
+      <div class="sub-body">
+        <p>When a well-intentioned prompt still produces off-target output, the source provides a systematic four-step debug process rather than abandoning the task. <span class="b-orange">Step 1</span> — reread the prompt as a stranger seeing it for the first time; half of all problems are instructions that are clear in the writer's head but ambiguous on screen. <span class="b-cyan">Step 2</span> — add an explicit constraints block using "don't do X, do Y instead" phrasing; telling Claude what to avoid is as powerful as telling it what to do. <span class="b-green">Step 3</span> — give Claude permission for uncertainty with a line like "if data is insufficient, say so, don't guess" — this single addition dramatically reduces hallucinations because Claude will default to fabricating rather than admitting knowledge gaps without explicit permission to do otherwise. <span class="b-yellow">Step 4</span> — if the format is still wrong, stop describing the format and show a rigid output schema (JSON skeleton or headed structure) using prefill. The main principle: one small fix often flips the entire output from useless to exactly right.</p>
+        <div class="keypoints">
+          <div class="kp-label">Key Points</div>
+          <ul class="kp-list">
+            <li>Step 1: reread as a stranger — ambiguity that's invisible to the author is visible to the model.</li>
+            <li>Step 2: explicit "don't do X" constraints block — avoidance rules are as powerful as positive instructions.</li>
+            <li>Step 3: "if data is insufficient, say so, don't guess" — one line that dramatically reduces hallucinations.</li>
+            <li>Step 4: show the output schema (prefill), don't describe it. Claude follows templates better than descriptions.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- SECTION C: Claude Routines                     -->
+<!-- ═══════════════════════════════════════════════ -->
+<div class="section-card">
+  <div class="section-hdr">
+    <span class="section-letter" style="color:var(--purple);background:var(--purple-dim);border:1px solid rgba(192,132,252,0.2)">C</span>
+    <span class="section-title">C. Claude Routines</span>
+    <span class="ghost-glyph">C</span>
+  </div>
+  <div class="section-body">
+
+    <div class="subsection">
+      <div class="sub-hdr"><span class="sub-num">C1</span><span class="sub-title">What Routines Are &amp; Why They're Different</span></div>
+      <div class="sub-body">
+        <p><span class="kw-orange">Claude Routines</span> (released April 14, 2026, currently a research preview) are autonomous scheduled tasks that run in the background — local or cloud — without manual prompting. The fundamental architectural difference from tools like N8N or Zapier is the type of processing: automation tools are <span class="b-cyan">deterministic</span> (same input always produces same output; no judgment). Routines are <span class="b-orange">reasoning-based</span> — Claude writes a paragraph describing what should happen, and Claude reasons through the steps each run, adapting if inputs change. This means tasks requiring judgment ("which of these 40 emails actually needs a reply?" or "does this PR introduce a breaking change?") become automatable for the first time. Access: <span class="kw-cyan">claude.ai/code/routines</span> or Claude desktop → Code tab → Routines → New Routine.</p>
+        <div class="keypoints">
+          <div class="kp-label">Key Points</div>
+          <ul class="kp-list">
+            <li>Released April 14, 2026 — research preview. Access: claude.ai/code/routines or desktop Code tab.</li>
+            <li>Key distinction: automation tools = deterministic (same input → same output). Routines = reasoning-based (Claude adapts to changing inputs).</li>
+            <li>Unlocks judgment-requiring tasks for automation: email triage, PR review, competitor scanning.</li>
+            <li>Instruction format: a plain paragraph — no code, no API keys, no nodes to wire.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <div class="sub-hdr"><span class="sub-num">C2</span><span class="sub-title">Local vs Remote Routines</span></div>
+      <div class="sub-body">
+        <p>The first decision when creating any routine is <span class="b-orange">local vs remote</span> — a choice most tutorials skip but that determines everything about setup complexity and reliability. <span class="b-green">Local routines</span> run on the user's machine: zero setup, four fields (name, description, instructions, schedule), operational in under two minutes, but only run while the computer is awake and Claude Code is open. <span class="b-cyan">Remote routines</span> run on Anthropic's cloud in a fresh Linux environment (4 vCPUs, 16 GB RAM, 30 GB disk) spun up per run — the machine can be off and the routine still fires. Remote requires: a GitHub repository as a workspace (can be an empty private repo created in 30 seconds), cloud environment variables for secrets, and cloud-hosted connectors. The recommended approach: <span class="b-orange">start local, graduate to remote</span> — prove the logic works locally first, then move to cloud when you need the "laptop off guarantee" or connector integrations.</p>
+        <div class="keypoints">
+          <div class="kp-label">Key Points</div>
+          <ul class="kp-list">
+            <li>Local: 4 fields, 2-minute setup, machine-dependent. Remote: cloud-execution, laptop-off guarantee, more setup.</li>
+            <li>Remote environment: fresh Linux · 4 vCPUs · 16 GB RAM · 30 GB disk — spun up and torn down per run.</li>
+            <li>GitHub repo for remote = just an empty private folder. Not intimidating — 30-second setup.</li>
+            <li>Strategy: start local to validate logic, then graduate to remote for reliability and connector access.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <div class="sub-hdr"><span class="sub-num">C3</span><span class="sub-title">Trigger Types: Schedule, API, GitHub Events</span></div>
+      <div class="sub-body">
+        <p>Remote routines support three trigger mechanisms. <span class="b-orange">Schedule</span>: hourly, nightly, weekday-only, weekly, or custom cron expression. The minimum interval is <span class="b-salmon">1 hour</span> — no sub-hourly scheduling. <span class="b-cyan">API trigger</span>: every routine gets a dedicated HTTPS endpoint with a bearer token. POST to that URL and the routine fires immediately. The required beta header is <span class="kw-cyan">anthropic-beta: experimental-cc-routine-20260401</span>. This opens routines to any external tool that can send an HTTP request — Zapier webhooks, form submissions, Slack commands, or N8N for high-frequency triggering. <span class="b-green">GitHub Events</span>: fires on PR opened, PR updated, release published, with granular filters on author, branch, labels, draft status, and fork. One critical constraint: in the current preview, GitHub events past per-routine and per-account hourly caps are <span class="b-salmon">silently dropped</span> (not failed, not logged — dropped).</p>
+        <div class="keypoints">
+          <div class="kp-label">Key Points</div>
+          <ul class="kp-list">
+            <li>Schedule: minimum 1 hour interval. For higher frequency, use API trigger + external cron.</li>
+            <li>API trigger: dedicated HTTPS endpoint per routine. Bearer token auth. Beta header required.</li>
+            <li>N8N + Routines complement each other: N8N handles high-frequency plumbing; Routines handle the reasoning step.</li>
+            <li>GitHub Events: silently drops events past hourly cap in current preview — design accordingly for event-heavy workflows.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <div class="sub-hdr"><span class="sub-num">C4</span><span class="sub-title">Environment Variables, Connectors &amp; the Env Trap</span></div>
+      <div class="sub-body">
+        <p>The single most critical configuration concept in remote routines is where secrets live. <span class="b-salmon">Never put API keys, tokens, or secrets in a .env file for remote routines.</span> The .env file is gitignored, which means it never reaches GitHub, which means Claude's cloud environment never sees it. The routine fires, Claude looks for the key, finds nothing, and either fails silently or proceeds without it in an unpredictable way. The correct location is the <span class="b-orange">Environment Variables panel inside the Cloud Environment section</span> — not in .env, not in the prompt. Additionally, always include an explicit line in the prompt: <span class="kw-cyan">"The API key is available as an environment variable — do not look for a .env file."</span> Without this instruction, Claude may still try the .env path by habit. <span class="kw-orange">Connectors</span> are cloud-hosted integrations (Slack, Gmail, GitHub, Notion, Linear, Sentry, Google Drive, and more) authorized directly in the connectors directory — local MCP servers do not work in remote routines.</p>
+        <div class="keypoints">
+          <div class="kp-label">Key Points</div>
+          <ul class="kp-list">
+            <li>Secrets go in Environment Variables panel — never in .env. .env is gitignored and never reaches the cloud.</li>
+            <li>Always add to prompt: "API key is in environment variable — do not look for a .env file."</li>
+            <li>Cloud connectors: Slack · Gmail · GitHub · Notion · Linear · Sentry · Drive + more. Authorized in connector directory.</li>
+            <li>Local MCP servers are not reachable from cloud routines — host externally or use built-in connector directory.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <div class="sub-hdr"><span class="sub-num">C5</span><span class="sub-title">Session Log &amp; Debugging</span></div>
+      <div class="sub-body">
+        <p>After each routine run, the <span class="kw-orange">session log</span> (right panel of the Routines interface) contains a complete record: every step Claude took, every tool call made, every file read or written, every decision point — with timestamps, token counts, and the full reasoning chain. The source recommends reading it like a pull request diff: it is both a debugging surface and an execution receipt. For a simple digest routine, run time is typically 2–4 minutes. The log makes debugging systematic — if the output is wrong, the log shows exactly which step produced the deviation and why.</p>
+        <div class="keypoints">
+          <div class="kp-label">Key Points</div>
+          <ul class="kp-list">
+            <li>Session log: complete step-by-step record — tool calls, file reads/writes, decisions, timestamps, token counts.</li>
+            <li>Read it like a PR diff — it is both a debugging surface and a run receipt.</li>
+            <li>Simple routine run time: 2–4 minutes. Complex production routines (Gmail + Slack): ~4 minutes 11 seconds.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <div class="sub-hdr"><span class="sub-num">C6</span><span class="sub-title">Seven Gotchas</span></div>
+      <div class="sub-body">
+        <p>The source documents seven failure patterns in order of severity:</p>
+        <p><span class="b-salmon">1. The Env Trap</span> — secrets in .env never reach the cloud (covered above — the most critical gotcha). <span class="b-salmon">2. Network trust mode</span> — default "trusted" mode reaches npm, PyPI, major cloud hosts; use "custom" and allowlist specific domains only when a custom API is needed. Don't blindly set full network access. <span class="b-salmon">3. The 1-hour minimum</span> — no sub-hourly scheduling on schedule trigger; use API trigger + external cron for higher frequency. <span class="b-salmon">4. Statelessness</span> — every remote run starts from zero: working tree, browser cookies, Playwright sessions, local disk — all gone. Persist state to GitHub, a database via API, or a connector. <span class="b-salmon">5. The claude/ branch guardrail</span> — by default Claude can only push to branches prefixed with <span class="kw-cyan">claude/</span>. It cannot push to main. Leave this on — it prevents a bad run from touching production. <span class="b-salmon">6. Identity scope</span> — routines operate under your identity. Auto-replies send from you, commits commit as you. Plan identity implications for any externally-facing action. <span class="b-salmon">7. No mid-run approval</span> — Claude runs start to finish without pause. If a human approval gate is needed, build a two-routine architecture: Routine A drafts and posts to Slack; human approves; Routine B fires via API and executes.</p>
+        <div class="keypoints">
+          <div class="kp-label">Key Points</div>
+          <ul class="kp-list">
+            <li>1. Secrets: Environment Variables panel, not .env. 2. Network: start trusted, extend minimally.</li>
+            <li>3. 1-hour floor on scheduling. 4. Every remote run is stateless — plan persistence explicitly.</li>
+            <li>5. claude/ branch guard: leave on. Prevents production writes on bad runs.</li>
+            <li>6. Identity: everything Claude does happens under your account. 7. No mid-run pause — use two-routine architecture for approval gates.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- SECTION D: Claude Design                       -->
+<!-- ═══════════════════════════════════════════════ -->
+<div class="section-card">
+  <div class="section-hdr">
+    <span class="section-letter" style="color:var(--orange);background:var(--orange-dim);border:1px solid rgba(244,118,42,0.2)">D</span>
+    <span class="section-title">D. Claude Design</span>
+    <span class="ghost-glyph">D</span>
+  </div>
+  <div class="section-body">
+
+    <div class="subsection">
+      <div class="sub-hdr"><span class="sub-num">D1</span><span class="sub-title">What Claude Design Is &amp; Where It Lives</span></div>
+      <div class="sub-body">
+        <p><span class="kw-orange">Claude Design</span> lives at <span class="kw-cyan">claude.ai/design</span>. It is not an image generator — it is a brand-consistent visual generation environment that produces landing pages, pitch decks, app prototypes, social media carousels, and one-pagers without requiring Figma or design skill. The conceptual framing the source uses is precise: Claude Design acts like a junior designer who has already read your brand book. The output is not a generic AI aesthetic — it is assets that look like they came from your team, because the brand system you define up front shapes every generation. Four modes are available: <span class="b-cyan">prototype</span>, <span class="b-green">slide deck</span>, <span class="b-orange">from template</span>, and <span class="b-yellow">other</span>. Always use prototype with the high-fidelity setting — wireframe mode is for rough exploration only.</p>
+        <div class="keypoints">
+          <div class="kp-label">Key Points</div>
+          <ul class="kp-list">
+            <li>URL: claude.ai/design. Not an image generator — a brand-consistent visual production environment.</li>
+            <li>Framing: junior designer who already read your brand book. Outputs match your team's aesthetic, not a default AI style.</li>
+            <li>Four modes: prototype · slide deck · from template · other. Always prototype + high-fidelity.</li>
+            <li>Core problem solved: branded visual consistency at production speed, without a design hire.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <div class="sub-hdr"><span class="sub-num">D2</span><span class="sub-title">Design System Setup (The Most Critical Step)</span></div>
+      <div class="sub-body">
+        <p>The biggest mistake users make is skipping the design system and hitting "create" immediately. The <span class="b-orange">design system is the setup step that determines the quality of every subsequent generation</span>. Everything goes into one field: brand description, colors, fonts, voice, references — all together in a single paragraph, minimum 200 words. The more specific this field, the more on-brand every generation will be from the first draft. Below that field is the asset upload area where a high-value hack applies: <span class="kw-cyan">getdesign.md</span> provides a library of ready-made brand system markdown files from companies like Vercel, Linear, Stripe, and Notion. Copy the file from a company whose aesthetic matches the target brand, save it as a .md file, and drag it directly into the design system field. Once the system is built and approved section by section (typography, colors, spacing, components), it is published and set as default — every new project in the workspace uses it automatically.</p>
+        <div class="keypoints">
+          <div class="kp-label">Key Points</div>
+          <ul class="kp-list">
+            <li>Design system first — always. Skipping it produces generic AI aesthetics on every run.</li>
+            <li>One field: everything together (brand description + colors + fonts + voice + references). 200-word minimum.</li>
+            <li>Hack: getdesign.md provides brand system markdown files from major companies. Drop in as foundation.</li>
+            <li>Approved system → published as default → every new project inherits it automatically.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <div class="sub-hdr"><span class="sub-num">D3</span><span class="sub-title">Three Refinement Modes (Before Touching the Prompt)</span></div>
+      <div class="sub-body">
+        <p>Claude Design offers three refinement tools in the top toolbar that should be exhausted before spending tokens on a full prompt-based regeneration. <span class="b-orange">Tweaks</span>: a panel of custom controls generated specifically for the design — atmosphere, glow intensity, accent color swaps, spacing rhythm, motion toggles. Clicking through these options costs zero tokens and functions as a free preview gallery. <span class="b-cyan">Markup</span>: click any element on the page or drag to draw around a section, then tell Claude exactly what to change right there — the fastest method for targeted feedback without writing a new prompt. <span class="b-green">Edit</span>: a direct property panel for background color, font, and size changes made without Claude's involvement and without token expenditure. The correct priority order is: Tweaks → Markup → Edit → main prompt. Most iterations should happen in the first three modes, not the chat.</p>
+        <div class="keypoints">
+          <div class="kp-label">Key Points</div>
+          <ul class="kp-list">
+            <li>Three refinement modes: Tweaks (zero tokens) → Markup (targeted feedback) → Edit (direct property panel, no Claude).</li>
+            <li>Always exhaust free refinement options before going back to the main prompt.</li>
+            <li>Tweaks: auto-generated controls specific to your design — not generic sliders.</li>
+            <li>Most iterations should happen in Tweaks/Markup/Edit — not in the chat interface.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <div class="sub-hdr"><span class="sub-num">D4</span><span class="sub-title">Token Economy Rules &amp; Export Pipeline</span></div>
+      <div class="sub-body">
+        <p>Three rules govern token-efficient use of Claude Design. <span class="b-salmon">Rule 1</span>: never iterate on a full page — ask Claude to regenerate a specific section only; a full page costs roughly 10× what a single section costs. <span class="b-salmon">Rule 2</span>: batch related work into one session (five carousels done in one sitting, not spread across days) — switching between unrelated projects burns extra tokens per switch. <span class="b-salmon">Rule 3</span>: tight design systems enable short prompts, which cost fewer tokens; push work upstream into the system definition rather than writing detailed prompts each time. The export pipeline is: Share menu → export options (ZIP, PDF, PPTX, standalone HTML, Canva, or hand off to Claude Code). Handing off to Claude Code provides two options: <span class="kw-cyan">Send to Claude Code web</span> (new browser session, design file attached) or <span class="kw-cyan">Send to local coding agent</span> (terminal command for local builds). Before any export, ask Claude to generate a README explaining the project structure — one extra prompt that makes every handoff significantly smoother.</p>
+        <div class="keypoints">
+          <div class="kp-label">Key Points</div>
+          <ul class="kp-list">
+            <li>Full page regeneration costs ~10× a single section. Always target sections, not pages.</li>
+            <li>Batch related work: switching projects burns tokens per session restart.</li>
+            <li>Tight design system = short prompts = fewer input tokens on every generation.</li>
+            <li>Export pipeline: Claude Design → (Claude Code → GitHub → Vercel) → live URL in ~10 minutes.</li>
+            <li>Always add README before export: one prompt, 10× smoother handoff.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- SECTION E: Claude 4.5 Model Family             -->
+<!-- ═══════════════════════════════════════════════ -->
+<div class="section-card">
+  <div class="section-hdr">
+    <span class="section-letter" style="color:var(--sky);background:var(--sky-dim);border:1px solid rgba(93,184,242,0.2)">E</span>
+    <span class="section-title">E. Claude 4.5 Model Family</span>
+    <span class="ghost-glyph">E</span>
+  </div>
+  <div class="section-body">
+
+    <div class="subsection">
+      <div class="sub-hdr"><span class="sub-num">E1</span><span class="sub-title">Architecture Changes in Claude 4.5</span></div>
+      <div class="sub-body">
+        <p>Claude 4.5 is not an incremental speed improvement — Anthropic rebuilt the foundation across four dimensions. First, <span class="b-orange">context windows expanded</span>: all three models (Sonnet, Opus, Haiku) support 200,000 tokens; Sonnet additionally has a 1-million-token beta window. Second, <span class="b-cyan">Extended Thinking is now available on all three models</span> including Haiku — previously only available on select tiers. Third, <span class="b-green">context awareness</span>: Claude 4.5 models actively track their own token usage after every tool call or file upload, preventing premature task abandonment (a known failure mode in earlier versions where Claude would give up mid-task believing it was running out of space when it wasn't). Fourth, <span class="b-yellow">the memory tool</span>: all three models integrate with external storage — Claude can store key information in a file during a session and retrieve it later without re-loading everything into the context window each time.</p>
+        <div class="keypoints">
+          <div class="kp-label">Key Points</div>
+          <ul class="kp-list">
+            <li>200K tokens across all three models. Sonnet: 1M token beta window.</li>
+            <li>Extended Thinking now on Haiku — previously limited to higher tiers.</li>
+            <li>Context awareness: Claude tracks remaining tokens per tool call; prevents mid-task abandonment.</li>
+            <li>Memory tool: external storage (like a notebook); stores key info, retrieves when needed — doesn't eat context window.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <div class="sub-hdr"><span class="sub-num">E2</span><span class="sub-title">Sonnet 4.5 — The Daily Driver</span></div>
+      <div class="sub-body">
+        <p><span class="kw-orange">Sonnet 4.5</span> is Anthropic's marketed "best model for agents and everyday power tasks." Benchmark: <span class="b-green">77.2% on SWE-Bench Verified</span> (real GitHub issue resolution). On Terminal Bench 2.0, published runs land in the 40–46% range. Developers describe it as handling multi-file logic smoothly, maintaining context better than predecessors, and rarely hallucinating file names. Pricing: <span class="b-cyan">$3 per million input tokens / $15 per million output tokens</span>. This is mid-tier cost for top-tier performance — the model to open first for writing, research, data analysis, brainstorming, project planning, and any task needing intelligence without excessive latency. Sonnet is the correct default in the Claude Code Opus→Sonnet handoff (plans with Opus, builds with Sonnet).</p>
+        <div class="keypoints">
+          <div class="kp-label">Key Points</div>
+          <ul class="kp-list">
+            <li>SWE-Bench Verified: 77.2%. Terminal Bench 2.0: 40–46% range in published runs.</li>
+            <li>Pricing: $3/M input · $15/M output. Mid-tier cost, top-tier performance.</li>
+            <li>Use for: writing · research · data analysis · brainstorming · project planning · agent building.</li>
+            <li>Default model — start here. Escalate to Opus only when Sonnet's depth is genuinely insufficient.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <div class="sub-hdr"><span class="sub-num">E3</span><span class="sub-title">Opus 4.5 — The Expert Reviewer</span></div>
+      <div class="sub-body">
+        <p><span class="kw-orange">Opus 4.5</span> is the flagship model — slower, more expensive, and reserved for tasks where accuracy matters more than speed. Benchmark: <span class="b-green">80.9% on SWE-Bench Verified</span> — the first model to break the 80% barrier. Terminal Bench 2.0: high 50s to low 60s depending on agent setup. Pricing: <span class="b-salmon">$5 per million input / $25 per million output</span> — 5× more expensive than Haiku on output. The defining exclusive feature is the <span class="b-orange">effort parameter</span>: Opus 4.5 is the only model that lets you explicitly control token usage per response. Set <span class="kw-cyan">high effort</span> for maximum thoroughness (final reviews, deep analysis), <span class="kw-cyan">medium effort</span> for balanced responses, <span class="kw-cyan">low effort</span> for quick answers. This gives Opus the flexibility of three modes in one model. Use cases: final code review before shipping, complex reasoning where mistakes are costly, deep research, enterprise-grade analysis, multi-agent coordination.</p>
+        <div class="keypoints">
+          <div class="kp-label">Key Points</div>
+          <ul class="kp-list">
+            <li>SWE-Bench Verified: 80.9% — first model to break 80%. Terminal Bench 2.0: high 50s–low 60s.</li>
+            <li>Pricing: $5/M input · $25/M output. 5× Haiku output cost. Use deliberately.</li>
+            <li>Exclusive: effort parameter (high / medium / low) — one model that adapts thoroughness to the task.</li>
+            <li>Reserve for: final reviews, costly decisions, deep research, complex cross-concept reasoning.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <div class="sub-hdr"><span class="sub-num">E4</span><span class="sub-title">Haiku 4.5 — The Speed &amp; Scale Engine</span></div>
+      <div class="sub-body">
+        <p><span class="kw-orange">Haiku 4.5</span> is the "surprise star" of the family: near-frontier performance at one-third the cost and 4–5× the speed of Sonnet. Benchmark: <span class="b-green">73.3% on SWE-Bench Verified</span> — a score that would have been state-of-the-art just six months prior. Pricing: <span class="b-cyan">$1 per million input / $5 per million output</span>. The key trade-off: Haiku loses track faster in long sessions — it may forget variable names or change identifiers if a conversation extends too far. For short, well-defined tasks it is perfect; for extended back-and-forth, switch to Sonnet. Developer use pattern: Sonnet breaks a complex problem into steps, then spins up multiple Haiku instances to execute sub-tasks in parallel — fast, cheap, and effective sub-agent orchestration. Ideal for: customer support bots, real-time content moderation, high-volume document processing, fast chat, prototyping.</p>
+        <div class="keypoints">
+          <div class="kp-label">Key Points</div>
+          <ul class="kp-list">
+            <li>SWE-Bench Verified: 73.3%. Speed: 4–5× faster than Sonnet. Cost: $1/M input · $5/M output.</li>
+            <li>Trade-off: loses context in long sessions (forgets variable names, changes identifiers). Keep tasks short and defined.</li>
+            <li>Sub-agent pattern: Sonnet orchestrates, Haiku executes subtasks in parallel — fast + cheap.</li>
+            <li>Best for: support bots · content moderation · high-volume processing · rapid prototyping · fast chat.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <div class="sub-hdr"><span class="sub-num">E5</span><span class="sub-title">Extended Thinking in Claude 4.5</span></div>
+      <div class="sub-body">
+        <p>Extended Thinking in Claude 4.5 works by creating a visible <span class="b-orange">thinking block</span> before the final response: Claude considers different approaches, rejects bad paths, and builds toward a solution step by step — visibly. In Claude 4 models, the visible thinking is a <span class="b-cyan">summarized reasoning trace</span> (not the full raw internal chain of thought, but a useful summary of the decision path). A key advanced behavior is <span class="b-green">interleaved thinking</span>: when Claude uses tools (running code, searching files, calling APIs), it can think between tool calls — run a command, see the result, think about what to do next, run another command. This creates agentic behavior powered by reasoning loops. One operational note: <span class="b-salmon">Extended Thinking reduces prompt caching efficiency</span> because the thinking blocks change on every run, reducing cache hits. For repetitive identical workflows, toggle thinking off strategically to preserve caching benefits.</p>
+        <div class="keypoints">
+          <div class="kp-label">Key Points</div>
+          <ul class="kp-list">
+            <li>Thinking block = summarized reasoning trace (not full raw CoT). Useful for understanding decisions, catching bad assumptions.</li>
+            <li>Interleaved thinking: Claude reasons between tool calls — the foundation of coherent multi-step agentic behavior.</li>
+            <li>Transparency benefit: see bad assumptions before they produce wrong output. Correct and re-run.</li>
+            <li>Caching trade-off: thinking blocks change every run → fewer cache hits. Toggle off for repetitive identical workflows.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- SECTION F: Claude 4.5 vs Gemini 3 Pro         -->
+<!-- ═══════════════════════════════════════════════ -->
+<div class="section-card">
+  <div class="section-hdr">
+    <span class="section-letter" style="color:var(--cyan);background:var(--cyan-dim);border:1px solid rgba(78,205,196,0.2)">F</span>
+    <span class="section-title">F. Claude 4.5 vs Gemini 3 Pro</span>
+    <span class="ghost-glyph">F</span>
+  </div>
+  <div class="section-body">
+
+    <div class="subsection">
+      <div class="sub-hdr"><span class="sub-num">F1</span><span class="sub-title">Where Gemini 3 Pro Leads</span></div>
+      <div class="sub-body">
+        <p>Gemini 3 Pro leads Claude 4.5 in two categories. <span class="b-orange">General reasoning</span>: 91.9% on GPQA Diamond (graduate-level science reasoning) vs. Claude Opus 4.5's approximately 87%. <span class="b-cyan">Multimodal tasks</span>: Gemini scored 87.6% on Video-MMU (video understanding) — a category where Claude currently does not compete, as Claude cannot process video or generate images. Gemini's native 1-million-token context window (vs. Claude Sonnet's 200K default with 1M beta) also gives Gemini a raw capacity edge. Pricing advantage: Gemini 3 Pro costs $2 per million input tokens / $12 per million output — cheaper than Claude Opus 4.5 ($5/$25) and cheaper than Claude Sonnet ($3/$15) on output. For high-volume inference where accuracy margin is less critical, Gemini is the more cost-efficient option.</p>
+        <div class="keypoints">
+          <div class="kp-label">Key Points</div>
+          <ul class="kp-list">
+            <li>Gemini leads: general reasoning (91.9% GPQA Diamond vs ~87% Opus) and video/multimodal (87.6% Video-MMU).</li>
+            <li>Claude cannot process video or generate images — Gemini wins multimodal by default.</li>
+            <li>Gemini pricing: $2/M input · $12/M output — cheaper than both Sonnet and Opus.</li>
+            <li>Native 1M token context vs. Sonnet's 200K default (1M beta) — Gemini has raw capacity edge.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <div class="sub-hdr"><span class="sub-num">F2</span><span class="sub-title">Where Claude 4.5 Leads</span></div>
+      <div class="sub-body">
+        <p>Claude 4.5 leads Gemini 3 Pro on the two dimensions developers weigh most heavily: <span class="b-green">code reliability</span> and <span class="b-orange">agent coherence</span>. On SWE-Bench Verified, Claude Sonnet 4.5 scored 77.2% and Opus 4.5 scored 80.9% — both above Gemini 3 Pro's 76.2%. Developers consistently report Claude's code "just works more often" — fewer hallucinated functions, fewer broken imports, cleaner outputs. On agentic tasks (Terminal Bench 2.0), Gemini 3 Pro scored 54.2%; Claude Sonnet's published runs land in the 40–46% range. However, for long-running agentic tasks where the model must maintain focus across dozens of tool calls, Claude stays on track longer — developers describe Gemini as "brilliant but unpredictable" and Claude as "dependable." Extended Thinking and the effort parameter are exclusive to Claude — Gemini has no equivalent transparency or thoroughness-control mechanism.</p>
+        <div class="keypoints">
+          <div class="kp-label">Key Points</div>
+          <ul class="kp-list">
+            <li>Code reliability: Sonnet 77.2% / Opus 80.9% vs. Gemini 76.2% on SWE-Bench. Claude edges it out.</li>
+            <li>Developer verdict: Claude code works more often. Fewer hallucinated functions, fewer broken imports.</li>
+            <li>Long-running agents: Claude stays coherent longer. Gemini: brilliant but unpredictable.</li>
+            <li>Claude exclusives: Extended Thinking (transparent reasoning) + effort parameter (thoroughness control). Gemini has neither.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <div class="sub-hdr"><span class="sub-num">F3</span><span class="sub-title">Decision Matrix — When to Use Which</span></div>
+      <div class="sub-body">
+        <p>The source's honest verdict: use both, because they are complementary tools rather than competitors. The decision splits cleanly along workflow type. <span class="b-cyan">Use Gemini 3 Pro when</span>: working heavily with video, images, or multimodal content; needing the absolute largest native context window; optimizing for cost-per-token at high volume; comfortable supervising a powerful but occasionally unpredictable assistant. <span class="b-orange">Use Claude 4.5 when</span>: reliable code generation and agent workflows are the priority; transparency through Extended Thinking matters; working in regulated industries where mistakes are costly; needing a model that behaves like a careful senior engineer rather than a fast-moving junior. The recommended production split: Gemini for front-end visuals and multimodal work; Claude for back-end logic, data analysis, and anything mission-critical. Context awareness (built into Claude 4.5 but absent from Gemini) is specifically valuable for sustained agentic work where session length and token management matter.</p>
+        <div class="keypoints">
+          <div class="kp-label">Key Points</div>
+          <ul class="kp-list">
+            <li>Gemini: video/multimodal · raw context capacity · cost-efficient high-volume · front-end visuals.</li>
+            <li>Claude: reliable code · agent coherence · regulated industries · mission-critical work · back-end logic.</li>
+            <li>Production split: Gemini for visuals; Claude for everything where correctness has consequences.</li>
+            <li>These are complements, not competitors. The optimal stack uses both for their respective strengths.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- MODULE SUMMARY -->
+<div class="summary-block">
+  <div class="summary-label">Module Summary</div>
+  <ul class="summary-list">
+    <li>The five prompt mistakes share a root cause: treating Claude as a search engine rather than a specification executor. Fix one (briefing vs. searching, structure vs. walls of text, role vs. no role) and output quality improves measurably; fix all five simultaneously and the improvement is compound.</li>
+    <li>The eight techniques build in a specific order: the four-block formula establishes structure → XML formalizes it → prefill controls output start → constraint stacking controls output quality → prompt chaining handles complex multi-deliverable tasks → style examples capture voice → motivated instructions ensure edge-case compliance → iterative refinement brings every output to publishable quality.</li>
+    <li>Claude Routines are the first automation product to make judgment-requiring tasks schedulable without developer infrastructure. The critical architecture choice is local (zero setup, machine-dependent) vs. remote (cloud execution, laptop-off guarantee, connectors). The non-negotiable rule: secrets in Environment Variables, never in .env.</li>
+    <li>Claude Design's value is front-loaded into the design system: a tight, specific system definition produces on-brand output from the first generation and makes prompts shorter (fewer tokens per run). The three refinement modes (Tweaks → Markup → Edit) should be exhausted before touching the main prompt.</li>
+    <li>Claude 4.5's four architectural changes (expanded context, extended thinking on all models, context awareness, memory tool) make it a system designed for sustained work rather than single-shot queries. The three-model decision is simple: Sonnet is the daily driver, Opus is the final reviewer with effort control, Haiku is the sub-agent executor at scale.</li>
+    <li>Claude and Gemini are complementary: Gemini wins on multimodal, raw context, and cost; Claude wins on code reliability, agent coherence, transparency, and mission-critical dependability. The optimal production stack uses both.</li>
+  </ul>
+</div>
+
+</div><!-- /doc-body -->
+
+</div><!-- /doc-wrap -->
+
+<footer class="snx-footer">
+
+  <!-- Meta bar -->
+  <div class="snx-footer-meta">
+    <span class="snx-footer-course">Claude MasterClass</span>
+    <span class="snx-footer-divider">·</span>
+    <span class="snx-footer-module">Module 02 · Advanced Prompting, Routines, Design &amp; Model Mastery</span>
+  </div>
+
+  <!-- Nav row -->
+  <nav class="snx-footer-nav" aria-label="Artifact navigation">
+
+    <!-- Left: Previous -->
+    <a class="snx-nav-prev" href="./01_claude-masterclass-reviewer.html">
+      <span class="snx-nav-chevron">‹</span>
+      Previous
+    </a>
+
+    <!-- Center: Hub -->
+    <div class="snx-nav-hub">
+      <a class="snx-hub-btn snx-hub-btn-recall"  href="../recalls/01_claude-masterclass-recall.html">Recall</a>
+      <a class="snx-hub-btn snx-hub-btn-tree"    href="../trees/01_claude-masterclass-tree.html">Tree</a>
+      <a class="snx-hub-btn snx-hub-btn-compact" href="../compact/02_claude-masterclass-compact.html">Compact</a>
+      <a class="snx-hub-btn snx-hub-btn-quiz"    href="../quizzes/01_claude-masterclass-quiz.html">Quiz</a>
+      <a class="snx-hub-btn snx-hub-btn-module"  href="#" aria-current="page">Module</a>
+    </div>
+
+    <!-- Right: Next -->
+    <a class="snx-nav-next" href="#">
+      Next
+      <span class="snx-nav-chevron">›</span>
+    </a>
+
+  </nav>
+
+</footer>
+
+<script>
+function sendPrompt(t){if(window.parent&&window.parent.postMessage){window.parent.postMessage({type:'user_message',message:t},'*');}}
+function quizQuick()  { sendPrompt('/quiz mc(10) hard'); }
+function recallQuick(){ sendPrompt('/recall mixed(15) hard'); }
+function exportMd()   { sendPrompt('/export -md'); }
+</script>
+</body>
+</html>

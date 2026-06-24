@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Claude MasterClass Volume 2 — Recall Cards</title>
+<style>
+/* synaptix-runtime v1.0 */
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@300;400;500;600&display=swap');
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg-base:#0e0e11;--bg-surface:#16161a;--bg-elevated:#1c1c21;--bg-section:#1a1a1f;
+  --border:rgba(255,255,255,0.07);--border-hi:rgba(255,255,255,0.12);
+  --orange:#f4762a;--salmon:#f08080;--cyan:#4ecdc4;--green:#4ade80;--yellow:#f4d03f;
+  --purple:#c084fc;--sky:#5db8f2;--amber:#f4b942;
+  --orange-dim:rgba(244,118,42,0.10);--cyan-dim:rgba(78,205,196,0.10);
+  --salmon-dim:rgba(240,128,128,0.10);--sky-dim:rgba(93,184,242,0.10);
+  --green-dim:rgba(74,222,128,0.10);
+  --text-primary:#e8e8ee;--text-secondary:#8b8b9a;--text-muted:#4a4a5a;
+  --mono:'JetBrains Mono',monospace;--sans:'Inter',system-ui,sans-serif;
+}
+body{background:var(--bg-base);color:var(--text-primary);font-family:var(--sans);font-size:13px;line-height:1.8;}
+.doc-wrap{max-width:860px;margin:0 auto;display:flex;flex-direction:column;}
+.doc-header{padding:22px 26px 16px;border-bottom:1px solid var(--border);background:var(--bg-surface);}
+.badges{display:flex;gap:8px;margin-bottom:11px;flex-wrap:wrap}
+.badge{font-family:var(--mono);font-size:10px;font-weight:500;letter-spacing:0.07em;text-transform:uppercase;padding:3px 8px;border-radius:4px;border:1px solid;}
+.badge-type{color:var(--orange);background:var(--orange-dim);border-color:rgba(244,118,42,0.25)}
+.badge-mod{color:var(--sky);background:var(--sky-dim);border-color:rgba(93,184,242,0.25)}
+.doc-title{font-size:20px;font-weight:600;letter-spacing:-0.02em}
+.doc-subtitle{font-size:11px;font-family:var(--mono);color:var(--text-muted);margin-top:4px}
+.stat-row{display:flex;gap:20px;flex-wrap:wrap;margin-top:13px;padding-top:13px;border-top:1px solid var(--border);}
+.stat-val{font-family:var(--mono);font-size:15px;font-weight:600;color:var(--text-primary)}
+.stat-lbl{font-size:10px;text-transform:uppercase;letter-spacing:0.06em;color:var(--text-muted);margin-top:1px}
+.doc-body{padding:22px 26px;display:flex;flex-direction:column;gap:14px}
+.fc-wrap{display:flex;flex-direction:column;align-items:center;gap:16px;padding:10px 0}
+.fc-progress{font-family:var(--mono);font-size:11px;color:var(--text-muted);text-align:center;letter-spacing:0.05em;}
+.fc-bar-wrap{width:100%;max-width:620px;height:3px;background:var(--border);border-radius:2px;}
+.fc-bar{height:100%;background:var(--cyan);border-radius:2px;transition:width 0.3s ease;}
+.fc-scene{width:100%;max-width:620px;perspective:1200px;}
+.fc-card{width:100%;min-height:230px;position:relative;transform-style:preserve-3d;transition:transform 0.38s cubic-bezier(.4,0,.2,1);cursor:pointer;}
+.fc-card.flipped{transform:rotateY(180deg)}
+.fc-face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;background:var(--bg-section);border:1px solid var(--border);border-radius:12px;padding:28px 30px;display:flex;flex-direction:column;justify-content:center;transition:border-color 0.15s;}
+.fc-face:hover{border-color:var(--border-hi)}
+.fc-back-face{transform:rotateY(180deg);border-top:2px solid var(--cyan);}
+.fc-face p{font-size:15px;color:var(--text-primary);line-height:1.75;text-align:center;}
+.fc-ref{font-family:var(--mono);font-size:10px;color:var(--text-muted);text-align:center;margin-top:14px;padding-top:10px;border-top:1px solid var(--border);letter-spacing:0.06em;text-transform:uppercase;}
+.fc-type-badge{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;padding:2px 7px;border-radius:3px;border:1px solid;display:inline-block;margin-bottom:14px;align-self:center;}
+.fc-type-term{color:var(--orange);background:var(--orange-dim);border-color:rgba(244,118,42,0.25)}
+.fc-type-question{color:var(--purple);background:rgba(192,132,252,0.10);border-color:rgba(192,132,252,0.25)}
+.fc-flip-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:180px;height:46px;border-radius:10px;background:var(--cyan-dim);border:1px solid rgba(78,205,196,0.3);color:var(--cyan);font-family:var(--mono);font-size:12px;font-weight:600;cursor:pointer;transition:background 0.15s;letter-spacing:0.04em;}
+.fc-flip-btn:hover{background:rgba(78,205,196,0.18)}
+.fc-actions{display:none;flex-direction:row;gap:12px;}
+.fc-btn{display:flex;align-items:center;justify-content:center;gap:7px;width:152px;height:46px;border-radius:10px;font-family:var(--mono);font-size:12px;font-weight:600;cursor:pointer;transition:background 0.15s;letter-spacing:0.03em;border:1px solid;}
+.fc-btn-got{color:var(--green);background:rgba(74,222,128,0.10);border-color:rgba(74,222,128,0.3)}
+.fc-btn-missed{color:var(--salmon);background:var(--salmon-dim);border-color:rgba(240,128,128,0.3)}
+.fc-btn-got:hover{background:rgba(74,222,128,0.18)}.fc-btn-missed:hover{background:rgba(240,128,128,0.15)}
+.fc-nav{display:flex;gap:10px;}
+.fc-nav-btn{display:flex;align-items:center;justify-content:center;width:100px;height:36px;border-radius:8px;background:transparent;border:1px solid var(--border);color:var(--text-muted);font-family:var(--mono);font-size:11px;cursor:pointer;transition:all 0.15s;}
+.fc-nav-btn:hover{border-color:var(--border-hi);color:var(--text-secondary)}
+.fc-summary{width:100%;max-width:620px;background:var(--bg-section);border:1px solid var(--border);border-top:2px solid var(--cyan);border-radius:0 0 10px 10px;padding:28px 30px;text-align:center;}
+.fc-sum-title{font-family:var(--mono);font-size:13px;font-weight:600;color:var(--cyan);letter-spacing:0.05em;margin-bottom:14px;}
+.fc-sum-row{font-size:13px;color:var(--text-secondary);line-height:2;}
+.fc-sum-review{font-family:var(--mono);font-size:11px;color:var(--text-muted);margin-top:12px;padding-top:10px;border-top:1px solid var(--border);}
+
+@media(max-width:600px){
+  .doc-header,.doc-body{padding-left:16px;padding-right:16px}
+  .doc-footer{padding:12px 16px}.footer-btn{width:100px;height:52px;font-size:10px}
+  .fc-actions{flex-direction:column;align-items:center}
+  .fc-face{padding:20px 18px}.fc-face p{font-size:14px}
+}
+
+/* ========================================
+   FOOTER NAVIGATION CSS
+   Synaptix Runtime — shared component
+   Copy into any artifact <style> block
+======================================== */
+
+.snx-footer{
+  background:var(--bg-surface);
+  border-top:1px solid var(--border);
+  padding:16px 26px 18px;
+}
+
+/* ── Meta bar ── */
+.snx-footer-meta{
+  display:flex;align-items:baseline;gap:10px;
+  padding-bottom:13px;
+  border-bottom:1px solid var(--border);
+  margin-bottom:13px;
+}
+.snx-footer-course{
+  font-family:var(--mono);font-size:10px;font-weight:600;
+  letter-spacing:0.14em;text-transform:uppercase;color:var(--text-muted);
+}
+.snx-footer-divider{
+  font-family:var(--mono);font-size:10px;color:var(--text-muted);opacity:0.4;
+}
+.snx-footer-module{
+  font-family:var(--mono);font-size:11px;font-weight:500;
+  color:var(--text-secondary);letter-spacing:0.04em;
+}
+
+/* ── Nav row ── */
+.snx-footer-nav{
+  display:flex;align-items:center;
+  gap:10px;
+}
+
+/* prev / next */
+.snx-nav-prev,
+.snx-nav-next{
+  font-family:var(--mono);font-size:11px;font-weight:500;
+  color:var(--text-secondary);
+  background:transparent;
+  border:1px solid var(--border);
+  border-radius:6px;
+  padding:6px 13px;
+  display:flex;align-items:center;gap:6px;
+  white-space:nowrap;
+  transition:border-color 0.13s,color 0.13s;
+  flex-shrink:0;
+  text-decoration:none;
+}
+.snx-nav-prev:hover,
+.snx-nav-next:hover{
+  border-color:var(--border-hi);
+  color:var(--text-primary);
+}
+.snx-nav-chevron{
+  font-size:13px;line-height:1;
+  color:var(--text-muted);
+  transition:color 0.13s;
+}
+.snx-nav-prev:hover .snx-nav-chevron,
+.snx-nav-next:hover .snx-nav-chevron{color:var(--text-secondary)}
+
+/* center hub */
+.snx-nav-hub{
+  flex:1;display:flex;align-items:center;
+  justify-content:center;gap:6px;flex-wrap:wrap;
+}
+
+/* hub buttons */
+.snx-hub-btn{
+  font-family:var(--mono);font-size:10px;font-weight:500;
+  letter-spacing:0.04em;
+  padding:6px 13px;border-radius:6px;border:1px solid;
+  display:inline-flex;align-items:center;gap:5px;
+  transition:background 0.13s;
+  text-decoration:none;white-space:nowrap;
+}
+.snx-hub-btn-recall{
+  color:var(--cyan);background:var(--cyan-dim);
+  border-color:rgba(78,205,196,0.22);
+}
+.snx-hub-btn-recall:hover{background:rgba(78,205,196,0.18)}
+
+.snx-hub-btn-tree{
+  color:var(--green);background:var(--green-dim);
+  border-color:rgba(74,222,128,0.22);
+}
+.snx-hub-btn-tree:hover{background:rgba(74,222,128,0.18)}
+
+.snx-hub-btn-compact{
+  color:var(--yellow);background:var(--yellow-dim);
+  border-color:rgba(244,208,63,0.22);
+}
+.snx-hub-btn-compact:hover{background:rgba(244,208,63,0.18)}
+
+.snx-hub-btn-quiz{
+  color:var(--orange);background:var(--orange-dim);
+  border-color:rgba(244,118,42,0.22);
+}
+.snx-hub-btn-quiz:hover{background:rgba(244,118,42,0.18)}
+
+.snx-hub-btn-module{
+  color:var(--purple);background:var(--purple-dim);
+  border-color:rgba(192,132,252,0.22);
+}
+.snx-hub-btn-module:hover{background:rgba(192,132,252,0.18)}
+
+/* active state — current artifact type */
+.snx-hub-btn[aria-current="page"]{
+  opacity:1;cursor:default;
+  box-shadow:0 0 0 1px currentColor;
+}
+
+/* mobile */
+@media(max-width:640px){
+  .snx-footer{padding:14px 16px 16px}
+  .snx-footer-nav{flex-wrap:wrap}
+  .snx-nav-hub{order:3;flex-basis:100%;justify-content:flex-start}
+}
+
+
+</style>
+</head>
+<body>
+<div class="doc-wrap">
+
+<div class="doc-header">
+  <div class="badges">
+    <span class="badge badge-type">Recall · Mixed · Hard</span>
+    <span class="badge badge-mod">20 Cards · Module 1 · Vol. 2</span>
+  </div>
+  <div class="doc-title">Claude MasterClass Volume 2 — Recall Cards</div>
+  <div class="doc-subtitle">source: Knowledge Map — Claude MasterClass · generated 2026-06-24</div>
+  <div class="stat-row">
+    <div class="stat-item"><div class="stat-val">10</div><div class="stat-lbl">Term Cards</div></div>
+    <div class="stat-item"><div class="stat-val">10</div><div class="stat-lbl">Question Cards</div></div>
+    <div class="stat-item"><div class="stat-val">Hard</div><div class="stat-lbl">Difficulty</div></div>
+    <div class="stat-item"><div class="stat-val">A–F</div><div class="stat-lbl">Coverage</div></div>
+  </div>
+</div>
+
+<div class="doc-body">
+  <div class="fc-wrap" id="fc-wrap">
+    <div class="fc-progress" id="fc-progress">Card 1 of 20</div>
+    <div class="fc-bar-wrap"><div class="fc-bar" id="fc-bar" style="width:5%"></div></div>
+    <div class="fc-scene">
+      <div class="fc-card" id="fc-card" onclick="_fc.flipOnCard()">
+        <div class="fc-face">
+          <span class="fc-type-badge fc-type-term" id="fc-type-badge">Term</span>
+          <p id="fc-front"></p>
+        </div>
+        <div class="fc-face fc-back-face">
+          <p id="fc-back"></p>
+          <div class="fc-ref" id="fc-ref"></div>
+        </div>
+      </div>
+    </div>
+    <button class="fc-flip-btn" id="fc-flip-btn" onclick="_fc.flip()">Flip Card</button>
+    <div class="fc-actions" id="fc-actions">
+      <button class="fc-btn fc-btn-got"    onclick="_fc.mark(true)">&#10003; Got it</button>
+      <button class="fc-btn fc-btn-missed" onclick="_fc.mark(false)">&#10007; Missed it</button>
+    </div>
+    <div class="fc-nav">
+      <button class="fc-nav-btn" onclick="_fc.prev()">&#8592; Prev</button>
+      <button class="fc-nav-btn" onclick="_fc.next()">Next &#8594;</button>
+    </div>
+  </div>
+</div>
+
+
+</div>
+
+<footer class="snx-footer">
+
+  <!-- Meta bar -->
+  <div class="snx-footer-meta">
+    <span class="snx-footer-course">Claude MasterClass</span>
+    <span class="snx-footer-divider">·</span>
+    <span class="snx-footer-module">Module 02 · Advanced Prompting, Routines, Design &amp; Model Mastery</span>
+  </div>
+
+  <!-- Nav row -->
+  <nav class="snx-footer-nav" aria-label="Artifact navigation">
+
+    <!-- Left: Previous -->
+    <a class="snx-nav-prev" href="./01_claude-masterclass-recall.html">
+      <span class="snx-nav-chevron">‹</span>
+      Previous
+    </a>
+
+    <!-- Center: Hub -->
+    <div class="snx-nav-hub">
+      <a class="snx-hub-btn snx-hub-btn-recall"  href="#" aria-current="page">Recall</a>
+      <a class="snx-hub-btn snx-hub-btn-tree"    href="../trees/01_claude-masterclass-tree.html">Tree</a>
+      <a class="snx-hub-btn snx-hub-btn-compact" href="../compact/02_claude-masterclass-compact.html">Compact</a>
+      <a class="snx-hub-btn snx-hub-btn-quiz"    href="../quizzes/01_claude-masterclass-quiz.html">Quiz</a>
+      <a class="snx-hub-btn snx-hub-btn-module"  href="../modules/01_claude-masterclass-reviewer.html">Module</a>
+    </div>
+
+    <!-- Right: Next -->
+    <a class="snx-nav-next" href="#">
+      Next
+      <span class="snx-nav-chevron">›</span>
+    </a>
+
+  </nav>
+
+</footer>
+
+<script>
+function sendPrompt(t){if(window.parent&&window.parent.postMessage){window.parent.postMessage({type:'user_message',message:t},'*');}}
+function quizQuick(){sendPrompt('/quiz mc(10) hard');}
+function exportMd(){sendPrompt('/export -md');}
+
+var _fc = {
+  cards: [
+
+    /* ── TERM CARDS (10) ── */
+    {
+      type:'term',
+      front:'3× better first drafts · 75% fewer revisions · treat Claude like a new employee with a brief',
+      back:'Briefing over Searching (Prompt Mistake 1)<br><small>Claude generates from your specification. Keyword queries → generic output. Brief-style prompts → measurably better results on 50-prompt test.</small>',
+      section:'A1 · Mistake 1 — Searching vs Briefing'
+    },
+    {
+      type:'term',
+      front:'40% better instruction-following · line breaks between sections · buried constraints consistently missed',
+      back:'Structured Prompts over Wall-of-Text (Prompt Mistake 2)<br><small>Visual hierarchy separates context / task / constraints. Anthropic benchmark: 40% improvement. Same content, different layout → dramatically different compliance.</small>',
+      section:'A2 · Mistake 2 — Wall-of-Text'
+    },
+    {
+      type:'term',
+      front:'Four blocks: what to do · background info · one deliverable · exact structure',
+      back:'The Four-Block Formula (Technique 1)<br><small>Instructions · Context · Task · Output Format. The 2026 Anthropic-recommended prompt standard. Task block = one deliverable only.</small>',
+      section:'B1 · Technique 1 — Four-Block Formula'
+    },
+    {
+      type:'term',
+      front:'94% formatting compliance vs 61% · Claude\'s native structuring language · folder system for input',
+      back:'XML Tags (Technique 2)<br><small>Wrap prompt sections in &lt;instructions&gt; &lt;context&gt; &lt;constraints&gt; &lt;output_format&gt;. 33pp improvement over unstructured prompts. Pairs with four-block formula.</small>',
+      section:'B2 · Technique 2 — XML Tags'
+    },
+    {
+      type:'term',
+      front:'Write first words of Claude\'s response yourself · kills preamble · 2 hrs reformatting → 15 min',
+      back:'Prefill / Response Seeding (Technique 3)<br><small>Claude continues from exactly where you left off. Best for: rigid output formats (JSON, CSV, tables), bulk generation, forced tone from word one.</small>',
+      section:'B3 · Technique 3 — Prefill'
+    },
+    {
+      type:'term',
+      front:'3× higher engagement · specificity forces originality · every banned cliché improves the result',
+      back:'Constraint Stacking (Technique 4)<br><small>More constraints = better writing, not worse. Constraints free Claude from generic safe mode. 50 posts, 3 weeks benchmark. The "in today\'s rapidly evolving landscape" killer.</small>',
+      section:'B4 · Technique 4 — Constraint Stacking'
+    },
+    {
+      type:'term',
+      front:'Documented Claude 4.6 behavior · adds rationale after a rule · handles edge cases the command phrasing misses',
+      back:'Motivated Instructions — the "Because" Rule (Technique 7)<br><small>"Don\'t use ellipses because TTS can\'t pronounce them." Command → letter of rule. Motivated instruction → spirit of rule in every edge case.</small>',
+      section:'B7 · Technique 7 — Motivated Instructions'
+    },
+    {
+      type:'term',
+      front:'April 14, 2026 · deterministic tools can\'t do this · reasoning adapts if inputs change',
+      back:'Claude Routines (core concept)<br><small>Autonomous scheduled tasks (local or cloud). Key difference from N8N/Zapier: routines are reasoning-based, not deterministic. Judgment-requiring tasks become automatable.</small>',
+      section:'C1 · What Routines Are'
+    },
+    {
+      type:'term',
+      front:'.gitignored · never reaches GitHub · cloud environment never sees it → silent failure',
+      back:'The Env Trap (Routines Gotcha 1)<br><small>Secrets in .env files are never available to remote routines. Always use the Environment Variables panel inside Cloud Environment. Also tell Claude in the prompt: "do not look for a .env file."</small>',
+      section:'C4 · Env Trap'
+    },
+    {
+      type:'term',
+      front:'Effort parameter · $5/M input · $25/M output · first to break 80% SWE-Bench',
+      back:'Opus 4.5<br><small>80.9% SWE-Bench Verified. Exclusive: effort parameter (high / medium / low) controls thoroughness per response — one model that adapts depth to the task. Use for final reviews, costly decisions, deep research.</small>',
+      section:'E3 · Opus 4.5'
+    },
+
+    /* ── QUESTION CARDS (10) ── */
+    {
+      type:'question',
+      front:'What is the correct mental model and measured outcome for iteration in Claude — why should you never expect one-shot perfection?',
+      back:'Anthropic documents iteration as part of the intended process. Tracked satisfaction: 70% (first attempt) → 92% (after 1 revision) → 98% (after 2). Total time: ~5 minutes vs. 30 minutes from scratch. Draft → critique → revise is the designed workflow, not a fallback.',
+      section:'A4 · Mistake 4 — One-Shot Perfection'
+    },
+    {
+      type:'question',
+      front:'What are the three steps of Iterative Refinement, and what makes the second step the critical differentiator?',
+      back:'Step 1: generate first draft with a well-structured prompt. Step 2: ask Claude to critically analyze its own response (weak spots, redundancies, gaps, contradictions). Step 3: ask Claude to rewrite incorporating the critique. The second step is the differentiator — it uses Claude as editor, not just author. One model, two roles. Source benchmark: publishable 1,500-word draft in 12 minutes.',
+      section:'B8 · Technique 8 — Iterative Refinement'
+    },
+    {
+      type:'question',
+      front:'What is prompt chaining, and why does Claude\'s 200K context window make it uniquely powerful compared to other AI tools?',
+      back:'Prompt chaining breaks complex tasks into sequential steps where each response feeds the next. Claude\'s 200K context means the entire chain stays in one conversation — step-one instructions carry full weight at step five. In tools with shorter context windows, chains lose coherence fast. The review step between each chain link is where errors are caught before they propagate downstream.',
+      section:'B5 · Technique 5 — Prompt Chaining'
+    },
+    {
+      type:'question',
+      front:'Why does a one-paragraph style example outperform a multi-paragraph style description when asking Claude to match a writing voice?',
+      back:'Adjective-based style descriptions ("friendly but professional, concise but detailed") are contradictions Claude averages into bland output. A concrete example gives Claude everything it needs — voice, rhythm, paragraph length, sentence construction, punctuation habits — in one sample. Tested across 30 styles: one well-chosen example consistently outperformed multi-paragraph descriptions. Show, don\'t describe.',
+      section:'B6 · Technique 6 — One Style Example'
+    },
+    {
+      type:'question',
+      front:'What is the four-step prompt debug protocol, and what does Step 3 specifically prevent?',
+      back:'Step 1: reread as a stranger (half of problems are clear in your head, ambiguous on screen). Step 2: add explicit "don\'t do X, do Y instead" constraints block. Step 3: add "if data is insufficient, say so, don\'t guess" — prevents hallucinations; without explicit permission Claude defaults to fabricating rather than admitting uncertainty. Step 4: stop describing the format, show the exact output schema using prefill.',
+      section:'B9 · Prompt Debug Protocol'
+    },
+    {
+      type:'question',
+      front:'What are the three trigger types for remote Claude Routines, and what is the critical constraint on each?',
+      back:'Schedule: hourly to weekly; minimum interval 1 hour (no sub-hourly). API trigger: dedicated HTTPS endpoint + bearer token; fires on POST; beta header required (anthropic-beta: experimental-cc-routine-20260401); no built-in deduplication — retrying webhook senders cause duplicate runs. GitHub Events: fires on PR/release events with granular filters; events past hourly cap are silently dropped (not failed, not logged).',
+      section:'C3 · Trigger Types'
+    },
+    {
+      type:'question',
+      front:'What are the three refinement modes in Claude Design, in what order should they be used, and what does each cost in tokens?',
+      back:'Tweaks: auto-generated design controls (atmosphere, accent color, spacing, motion) — zero tokens. Markup: click any element or drag to select a section, give targeted feedback — costs only that targeted instruction. Edit: direct property panel (color, font, size) with no Claude involvement — zero tokens. Order: Tweaks → Markup → Edit → main prompt. Most iterations should happen in the first three before spending tokens on full regeneration.',
+      section:'D3 · Three Refinement Modes'
+    },
+    {
+      type:'question',
+      front:'What are the three token economy rules in Claude Design, and what is the cost ratio between full-page and section-level regeneration?',
+      back:'Rule 1: never regenerate a full page — target specific sections only; full page costs ~10× a single section. Rule 2: batch related work in one session — switching projects burns extra tokens per restart. Rule 3: tight design system = shorter prompts = fewer input tokens per generation. The cost ratio (full page = 10× section) makes section-level iteration the only economical choice for iterative refinement.',
+      section:'D4 · Token Rules'
+    },
+    {
+      type:'question',
+      front:'In what three specific categories does Claude 4.5 outperform Gemini 3 Pro, and what two features does Claude have that Gemini lacks entirely?',
+      back:'Three categories where Claude leads: (1) Code reliability — Sonnet 77.2% / Opus 80.9% vs. Gemini 76.2% SWE-Bench; (2) Long-running agent coherence — Claude stays on track longer across dozens of tool calls; (3) Developer reliability — fewer hallucinated functions, fewer broken imports. Two Claude exclusives Gemini lacks: Extended Thinking (transparent reasoning trace) and the effort parameter (thoroughness control on Opus).',
+      section:'F2 · Where Claude Leads'
+    },
+    {
+      type:'question',
+      front:'What are the four architectural changes Anthropic introduced in Claude 4.5, and which one specifically prevents premature task abandonment?',
+      back:'Four changes: (1) 200K context across all three models (Sonnet also has 1M beta). (2) Extended Thinking on all three models including Haiku. (3) Context awareness: models actively track remaining tokens after every tool call — this is the one that prevents premature mid-task abandonment (prior models sometimes gave up believing they were out of space when they weren\'t). (4) Memory tool: external storage for key info without consuming context window.',
+      section:'E1 · Architecture Changes'
+    }
+
+  ],
+  idx:0, got:0, missed:0, results:[],
+
+  render: function(){
+    var c = this.cards[this.idx];
+    if(!c){ this.summary(); return; }
+    document.getElementById('fc-progress').textContent = 'Card '+(this.idx+1)+' of '+this.cards.length;
+    var pct = ((this.idx+1)/this.cards.length*100).toFixed(1);
+    document.getElementById('fc-bar').style.width = pct+'%';
+    var badge = document.getElementById('fc-type-badge');
+    if(c.type==='term'){badge.textContent='Term';badge.className='fc-type-badge fc-type-term';}
+    else{badge.textContent='Question';badge.className='fc-type-badge fc-type-question';}
+    document.getElementById('fc-front').innerHTML = c.front;
+    document.getElementById('fc-back').innerHTML  = c.back;
+    document.getElementById('fc-ref').textContent  = c.section;
+    document.getElementById('fc-card').classList.remove('flipped');
+    document.getElementById('fc-flip-btn').style.display='flex';
+    document.getElementById('fc-actions').style.display='none';
+  },
+
+  flip: function(){
+    document.getElementById('fc-card').classList.add('flipped');
+    document.getElementById('fc-flip-btn').style.display='none';
+    document.getElementById('fc-actions').style.display='flex';
+  },
+
+  flipOnCard: function(){
+    if(!document.getElementById('fc-card').classList.contains('flipped')) this.flip();
+  },
+
+  mark: function(correct){
+    this.results[this.idx]=correct;
+    if(correct) this.got++; else this.missed++;
+    this.idx++;
+    this.render();
+  },
+
+  prev: function(){ if(this.idx>0){this.idx--;this.render();} },
+  next: function(){ if(this.idx<this.cards.length-1){this.idx++;this.render();} },
+
+  summary: function(){
+    var total=this.cards.length, pct=Math.round(this.got/total*100);
+    var missedSections=this.cards
+      .filter(function(c,i){return !_fc.results[i];})
+      .map(function(c){return c.section.split(' · ')[0];})
+      .filter(function(v,i,a){return a.indexOf(v)===i;});
+    document.getElementById('fc-bar').style.width='100%';
+    document.getElementById('fc-wrap').innerHTML=
+      '<div class="fc-summary">'+
+      '<div class="fc-sum-title">Session complete — '+total+' cards</div>'+
+      '<div class="fc-sum-row">Got it: <strong>'+_fc.got+' ('+pct+'%)</strong></div>'+
+      '<div class="fc-sum-row">Missed it: <strong>'+_fc.missed+' ('+(100-pct)+'%)</strong></div>'+
+      (missedSections.length?'<div class="fc-sum-review">Review: '+missedSections.join(' · ')+'</div>':'')+
+      '<div style="margin-top:18px"><button class="fc-flip-btn" onclick="_fc.restart()" style="margin:0 auto">Restart</button></div>'+
+      '</div>';
+  },
+
+  restart: function(){
+    this.idx=0;this.got=0;this.missed=0;this.results=[];
+    document.getElementById('fc-wrap').innerHTML=
+      '<div class="fc-progress" id="fc-progress"></div>'+
+      '<div class="fc-bar-wrap"><div class="fc-bar" id="fc-bar" style="width:5%"></div></div>'+
+      '<div class="fc-scene"><div class="fc-card" id="fc-card" onclick="_fc.flipOnCard()">'+
+      '<div class="fc-face"><span class="fc-type-badge fc-type-term" id="fc-type-badge">Term</span><p id="fc-front"></p></div>'+
+      '<div class="fc-face fc-back-face"><p id="fc-back"></p><div class="fc-ref" id="fc-ref"></div></div>'+
+      '</div></div>'+
+      '<button class="fc-flip-btn" id="fc-flip-btn" onclick="_fc.flip()">Flip Card</button>'+
+      '<div class="fc-actions" id="fc-actions">'+
+      '<button class="fc-btn fc-btn-got" onclick="_fc.mark(true)">&#10003; Got it</button>'+
+      '<button class="fc-btn fc-btn-missed" onclick="_fc.mark(false)">&#10007; Missed it</button>'+
+      '</div>'+
+      '<div class="fc-nav">'+
+      '<button class="fc-nav-btn" onclick="_fc.prev()">&#8592; Prev</button>'+
+      '<button class="fc-nav-btn" onclick="_fc.next()">Next &#8594;</button>'+
+      '</div>';
+    this.render();
+  }
+};
+
+_fc.render();
+</script>
+</body>
+</html>

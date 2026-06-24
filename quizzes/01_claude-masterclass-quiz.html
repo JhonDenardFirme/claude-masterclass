@@ -1,0 +1,1166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Quiz A — Claude MasterClass</title>
+<style>
+/* synaptix-runtime v1.0 */
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@300;400;500;600&display=swap');
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg-base:#0e0e11;--bg-surface:#16161a;--bg-elevated:#1c1c21;--bg-section:#1a1a1f;
+  --border:rgba(255,255,255,0.07);--border-hi:rgba(255,255,255,0.12);
+  --orange:#f4762a;--salmon:#f08080;--cyan:#4ecdc4;--green:#4ade80;--yellow:#f4d03f;
+  --purple:#c084fc;--sky:#5db8f2;--amber:#f4b942;--red:#f87171;
+  --orange-dim:rgba(244,118,42,0.10);--cyan-dim:rgba(78,205,196,0.10);
+  --salmon-dim:rgba(240,128,128,0.10);--sky-dim:rgba(93,184,242,0.10);
+  --purple-dim:rgba(192,132,252,0.10);--green-dim:rgba(74,222,128,0.10);
+  --text-primary:#e8e8ee;--text-secondary:#8b8b9a;--text-muted:#4a4a5a;
+  --mono:'JetBrains Mono',monospace;--sans:'Inter',system-ui,sans-serif;
+  --pass:#4ade80;--fail:#f87171;
+}
+body{background:var(--bg-base);color:var(--text-primary);font-family:var(--sans);font-size:13px;line-height:1.8;}
+.doc-wrap{max-width:860px;margin:0 auto;display:flex;flex-direction:column;}
+/* Header */
+.doc-header{padding:22px 26px 16px;border-bottom:1px solid var(--border);background:var(--bg-surface);}
+.badges{display:flex;gap:8px;margin-bottom:11px;flex-wrap:wrap}
+.badge{font-family:var(--mono);font-size:10px;font-weight:500;letter-spacing:0.07em;text-transform:uppercase;padding:3px 8px;border-radius:4px;border:1px solid;}
+.badge-type{color:var(--orange);background:var(--orange-dim);border-color:rgba(244,118,42,0.25)}
+.badge-mod{color:var(--sky);background:var(--sky-dim);border-color:rgba(93,184,242,0.25)}
+.doc-title{font-size:20px;font-weight:600;letter-spacing:-0.02em}
+.doc-subtitle{font-size:11px;font-family:var(--mono);color:var(--text-muted);margin-top:4px}
+.stat-row{display:flex;gap:20px;flex-wrap:wrap;margin-top:13px;padding-top:13px;border-top:1px solid var(--border);}
+.stat-val{font-family:var(--mono);font-size:15px;font-weight:600;color:var(--text-primary)}
+.stat-lbl{font-size:10px;text-transform:uppercase;letter-spacing:0.06em;color:var(--text-muted);margin-top:1px}
+/* Body */
+.doc-body{padding:22px 26px;display:flex;flex-direction:column;gap:10px}
+/* Section labels */
+.qz-section{font-family:var(--mono);font-size:10px;font-weight:600;color:var(--sky);letter-spacing:0.1em;text-transform:uppercase;padding:6px 0 4px;border-bottom:1px solid var(--border);margin-bottom:4px;display:flex;align-items:center;gap:10px;}
+.qz-section-rule{flex:1;height:1px;background:linear-gradient(to right,rgba(93,184,242,0.2),transparent);}
+/* Question cards */
+.q-card{background:var(--bg-section);border:1px solid var(--border);border-radius:10px;padding:16px 18px;display:flex;flex-direction:column;gap:10px;transition:border-color 0.15s;}
+.q-card:hover{border-color:var(--border-hi)}
+.q-meta{display:flex;align-items:center;gap:8px;}
+.q-num{font-family:var(--mono);font-size:10px;font-weight:600;color:var(--cyan);background:var(--cyan-dim);border:1px solid rgba(78,205,196,0.2);padding:2px 7px;border-radius:4px;}
+.q-type-badge{font-family:var(--mono);font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:0.07em;padding:2px 6px;border-radius:3px;border:1px solid;}
+.qt-mc   {color:var(--orange);background:var(--orange-dim);border-color:rgba(244,118,42,0.2)}
+.qt-fill {color:var(--cyan);background:var(--cyan-dim);border-color:rgba(78,205,196,0.2)}
+.qt-tof  {color:var(--yellow);background:rgba(244,208,63,0.08);border-color:rgba(244,208,63,0.2)}
+.qt-enum {color:var(--purple);background:var(--purple-dim);border-color:rgba(192,132,252,0.2)}
+.qt-conn {color:var(--sky);background:var(--sky-dim);border-color:rgba(93,184,242,0.2)}
+.q-stem{font-size:13px;color:var(--text-primary);line-height:1.75;}
+/* MC options */
+.q-options{display:flex;flex-direction:column;gap:6px;}
+.q-opt{display:flex;align-items:flex-start;gap:10px;padding:8px 11px;border:1px solid var(--border);border-radius:7px;cursor:pointer;transition:all 0.12s;}
+.q-opt:hover{border-color:var(--border-hi);background:rgba(255,255,255,0.02)}
+.q-opt.selected{border-color:rgba(78,205,196,0.4);background:var(--cyan-dim)}
+.q-opt.correct-reveal{border-color:rgba(74,222,128,0.5);background:rgba(74,222,128,0.08)}
+.q-opt.wrong-reveal{border-color:rgba(248,113,113,0.4);background:rgba(248,113,113,0.07)}
+.q-opt-letter{font-family:var(--mono);font-size:10px;font-weight:600;color:var(--text-muted);width:16px;flex-shrink:0;padding-top:1px;}
+.q-opt-text{font-size:13px;color:var(--text-secondary);line-height:1.65;}
+/* Fill blank */
+.fill-blank{border:none;border-bottom:2px solid rgba(78,205,196,0.4);background:transparent;color:var(--text-primary);font-family:var(--sans);font-size:13px;padding:2px 6px;min-width:160px;outline:none;transition:border-color 0.15s;}
+.fill-blank:focus{border-color:var(--cyan)}
+.fill-blank.correct-fill{border-color:var(--green);color:var(--green)}
+.fill-blank.wrong-fill{border-color:var(--red);color:var(--red)}
+/* TOF */
+.tof-opts{display:flex;gap:10px;margin-top:4px;}
+.tof-btn{display:flex;align-items:center;justify-content:center;width:90px;height:36px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--text-secondary);font-family:var(--mono);font-size:11px;cursor:pointer;transition:all 0.12s;font-weight:500;}
+.tof-btn:hover{border-color:var(--border-hi)}
+.tof-btn.sel-true{border-color:rgba(74,222,128,0.4);background:rgba(74,222,128,0.1);color:var(--green)}
+.tof-btn.sel-false{border-color:rgba(248,113,113,0.4);background:rgba(248,113,113,0.07);color:var(--red)}
+.tof-btn.correct-t{border-color:var(--green);background:rgba(74,222,128,0.12);color:var(--green)}
+.tof-btn.wrong-t{border-color:var(--red);background:rgba(248,113,113,0.1);color:var(--red)}
+/* Enum */
+.enum-list{display:flex;flex-direction:column;gap:6px;margin-top:4px;}
+.enum-input{background:var(--bg-elevated);border:1px solid var(--border);border-radius:6px;padding:7px 10px;color:var(--text-primary);font-family:var(--sans);font-size:13px;outline:none;transition:border-color 0.15s;width:100%;}
+.enum-input:focus{border-color:var(--border-hi)}
+/* Connect */
+.connect-wrap{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:6px;}
+.connect-col-label{font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:0.07em;color:var(--text-muted);margin-bottom:6px;}
+.connect-item{background:var(--bg-elevated);border:1px solid var(--border);border-radius:6px;padding:8px 11px;font-size:12px;color:var(--text-secondary);line-height:1.55;}
+.connect-item strong{color:var(--orange);font-family:var(--mono);font-size:11px;}
+.connect-select{width:100%;background:var(--bg-elevated);border:1px solid var(--border);border-radius:6px;padding:7px 10px;color:var(--text-primary);font-family:var(--sans);font-size:13px;outline:none;cursor:pointer;margin-top:4px;}
+.connect-select:focus{border-color:var(--border-hi)}
+/* Progress bar */
+.qz-prog-bar-wrap{height:3px;background:var(--border);border-radius:2px;margin-bottom:14px;}
+.qz-prog-bar{height:100%;background:var(--orange);border-radius:2px;transition:width 0.3s ease;}
+/* Submit */
+.qz-submit-wrap{display:flex;justify-content:center;margin-top:6px;}
+.qz-submit{display:flex;align-items:center;justify-content:center;gap:8px;width:220px;height:50px;border-radius:12px;background:var(--orange-dim);border:1px solid rgba(244,118,42,0.35);color:var(--orange);font-family:var(--mono);font-size:12px;font-weight:600;cursor:pointer;transition:background 0.15s;letter-spacing:0.04em;}
+.qz-submit:hover{background:rgba(244,118,42,0.18)}
+.qz-submit:disabled{opacity:0.4;cursor:not-allowed}
+/* Results panel */
+.qz-results{display:none;background:var(--bg-surface);border:1px solid var(--border);border-top:2px solid var(--orange);border-radius:0 0 10px 10px;padding:22px 24px;margin-top:10px;}
+.qz-score-row{display:flex;align-items:center;gap:20px;margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid var(--border);}
+.qz-score-big{font-family:var(--mono);font-size:36px;font-weight:700;color:var(--orange);letter-spacing:-0.02em;}
+.qz-score-sub{font-size:12px;color:var(--text-muted);font-family:var(--mono);margin-top:3px;}
+/* Section breakdown */
+.sec-breakdown{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px;margin-bottom:16px;}
+.sec-item{background:var(--bg-elevated);border:1px solid var(--border);border-radius:7px;padding:8px 11px;}
+.sec-label{font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:0.06em;color:var(--text-muted);margin-bottom:3px;}
+.sec-pct{font-family:var(--mono);font-size:16px;font-weight:600;}
+/* Evaluator panel */
+.eval-panel{background:var(--bg-section);border:1px solid var(--border);border-left:3px solid var(--amber);border-radius:0 8px 8px 0;padding:16px 18px;margin-top:14px;}
+.eval-label{font-family:var(--mono);font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:var(--amber);margin-bottom:10px;}
+.eval-body{font-size:13px;color:var(--text-secondary);line-height:1.85;}
+.eval-body h1{font-size:14px;font-weight:600;color:var(--text-primary);margin:14px 0 6px;font-family:var(--sans);}
+.eval-body strong{color:var(--amber)}
+/* Answer key */
+.key-section{background:var(--bg-section);border:1px solid var(--border);border-radius:10px;overflow:hidden;}
+.key-hdr{padding:12px 16px;border-bottom:1px solid var(--border);font-family:var(--mono);font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-muted);}
+.key-body{padding:14px 16px;display:flex;flex-direction:column;gap:6px;}
+.key-item{display:flex;gap:12px;font-size:12px;color:var(--text-secondary);line-height:1.65;padding:5px 0;border-bottom:1px solid rgba(255,255,255,0.03);}
+.key-item:last-child{border-bottom:none;padding-bottom:0;}
+.key-num{font-family:var(--mono);font-size:11px;font-weight:600;color:var(--text-muted);width:26px;flex-shrink:0;}
+.key-ans{color:var(--cyan);font-family:var(--mono);font-size:11px;font-weight:600;min-width:36px;flex-shrink:0;}
+.key-topic{flex:1;}
+
+@media(max-width:600px){
+  .doc-header,.doc-body{padding-left:16px;padding-right:16px}
+  .connect-wrap{grid-template-columns:1fr}
+  .footer-btn{width:100px;height:52px;font-size:10px}
+}
+
+/* ========================================
+   FOOTER NAVIGATION CSS
+   Synaptix Runtime — shared component
+   Copy into any artifact <style> block
+======================================== */
+
+.snx-footer{
+  background:var(--bg-surface);
+  border-top:1px solid var(--border);
+  padding:16px 26px 18px;
+}
+
+/* ── Meta bar ── */
+.snx-footer-meta{
+  display:flex;align-items:baseline;gap:10px;
+  padding-bottom:13px;
+  border-bottom:1px solid var(--border);
+  margin-bottom:13px;
+}
+.snx-footer-course{
+  font-family:var(--mono);font-size:10px;font-weight:600;
+  letter-spacing:0.14em;text-transform:uppercase;color:var(--text-muted);
+}
+.snx-footer-divider{
+  font-family:var(--mono);font-size:10px;color:var(--text-muted);opacity:0.4;
+}
+.snx-footer-module{
+  font-family:var(--mono);font-size:11px;font-weight:500;
+  color:var(--text-secondary);letter-spacing:0.04em;
+}
+
+/* ── Nav row ── */
+.snx-footer-nav{
+  display:flex;align-items:center;
+  gap:10px;
+}
+
+/* prev / next */
+.snx-nav-prev,
+.snx-nav-next{
+  font-family:var(--mono);font-size:11px;font-weight:500;
+  color:var(--text-secondary);
+  background:transparent;
+  border:1px solid var(--border);
+  border-radius:6px;
+  padding:6px 13px;
+  display:flex;align-items:center;gap:6px;
+  white-space:nowrap;
+  transition:border-color 0.13s,color 0.13s;
+  flex-shrink:0;
+  text-decoration:none;
+}
+.snx-nav-prev:hover,
+.snx-nav-next:hover{
+  border-color:var(--border-hi);
+  color:var(--text-primary);
+}
+.snx-nav-chevron{
+  font-size:13px;line-height:1;
+  color:var(--text-muted);
+  transition:color 0.13s;
+}
+.snx-nav-prev:hover .snx-nav-chevron,
+.snx-nav-next:hover .snx-nav-chevron{color:var(--text-secondary)}
+
+/* center hub */
+.snx-nav-hub{
+  flex:1;display:flex;align-items:center;
+  justify-content:center;gap:6px;flex-wrap:wrap;
+}
+
+/* hub buttons */
+.snx-hub-btn{
+  font-family:var(--mono);font-size:10px;font-weight:500;
+  letter-spacing:0.04em;
+  padding:6px 13px;border-radius:6px;border:1px solid;
+  display:inline-flex;align-items:center;gap:5px;
+  transition:background 0.13s;
+  text-decoration:none;white-space:nowrap;
+}
+.snx-hub-btn-recall{
+  color:var(--cyan);background:var(--cyan-dim);
+  border-color:rgba(78,205,196,0.22);
+}
+.snx-hub-btn-recall:hover{background:rgba(78,205,196,0.18)}
+
+.snx-hub-btn-tree{
+  color:var(--green);background:var(--green-dim);
+  border-color:rgba(74,222,128,0.22);
+}
+.snx-hub-btn-tree:hover{background:rgba(74,222,128,0.18)}
+
+.snx-hub-btn-compact{
+  color:var(--yellow);background:var(--yellow-dim);
+  border-color:rgba(244,208,63,0.22);
+}
+.snx-hub-btn-compact:hover{background:rgba(244,208,63,0.18)}
+
+.snx-hub-btn-quiz{
+  color:var(--orange);background:var(--orange-dim);
+  border-color:rgba(244,118,42,0.22);
+}
+.snx-hub-btn-quiz:hover{background:rgba(244,118,42,0.18)}
+
+.snx-hub-btn-module{
+  color:var(--purple);background:var(--purple-dim);
+  border-color:rgba(192,132,252,0.22);
+}
+.snx-hub-btn-module:hover{background:rgba(192,132,252,0.18)}
+
+/* active state — current artifact type */
+.snx-hub-btn[aria-current="page"]{
+  opacity:1;cursor:default;
+  box-shadow:0 0 0 1px currentColor;
+}
+
+/* mobile */
+@media(max-width:640px){
+  .snx-footer{padding:14px 16px 16px}
+  .snx-footer-nav{flex-wrap:wrap}
+  .snx-nav-hub{order:3;flex-basis:100%;justify-content:flex-start}
+}
+
+
+</style>
+</head>
+<body>
+<div class="doc-wrap">
+
+<div class="doc-header">
+  <div class="badges">
+    <span class="badge badge-type">Quiz A · Hard</span>
+    <span class="badge badge-mod">50 Items · MC 20 · Fill 10 · TOF 10 · Enum 5 · Connect 5</span>
+  </div>
+  <div class="doc-title">Quiz A — Claude MasterClass: Complete Practical Guide</div>
+  <div class="doc-subtitle">50 items · mc(20) fill(10) tof(10) enum(5) connect(5) · hard · explain off</div>
+  <div class="stat-row">
+    <div class="stat-item"><div class="stat-val">50</div><div class="stat-lbl">Total Items</div></div>
+    <div class="stat-item"><div class="stat-val">Hard</div><div class="stat-lbl">Difficulty</div></div>
+    <div class="stat-item"><div class="stat-val">A–F</div><div class="stat-lbl">Coverage</div></div>
+    <div class="stat-item"><div class="stat-val">5</div><div class="stat-lbl">Types</div></div>
+  </div>
+</div>
+
+<div class="doc-body">
+<div class="qz-prog-bar-wrap"><div class="qz-prog-bar" id="qz-prog-bar" style="width:0%"></div></div>
+
+<!-- ══════════════════════════════════════════ -->
+<!-- PART I — MULTIPLE CHOICE (20 items)       -->
+<!-- ══════════════════════════════════════════ -->
+<div class="qz-section">Part I — Multiple Choice (20 items)<div class="qz-section-rule"></div></div>
+
+<!-- MC1 -->
+<div class="q-card">
+  <div class="q-meta"><span class="q-num">1</span><span class="q-type-badge qt-mc">MC</span></div>
+  <div class="q-stem">A developer on Claude Pro runs the same complex multi-step reasoning task every day. After noticing they exhaust their monthly Opus allocation by mid-month, which model cascade should they adopt to preserve limits while maintaining quality?</div>
+  <div class="q-options">
+    <div class="q-opt" onclick="_q.select(this,1,'A')"><span class="q-opt-letter">A</span><span class="q-opt-text">Opus for everything — quality must not be compromised even at the cost of limits.</span></div>
+    <div class="q-opt" onclick="_q.select(this,1,'B')"><span class="q-opt-letter">B</span><span class="q-opt-text">Start every task with Sonnet 4.6; escalate to Opus only when Sonnet's depth is genuinely insufficient; use Haiku for bulk or trivial sub-tasks.</span></div>
+    <div class="q-opt" onclick="_q.select(this,1,'C')"><span class="q-opt-letter">C</span><span class="q-opt-text">Start with Haiku to conserve resources, then upgrade to Sonnet if quality is poor, and reserve Opus for final reviews only.</span></div>
+    <div class="q-opt" onclick="_q.select(this,1,'D')"><span class="q-opt-letter">D</span><span class="q-opt-text">Alternate between Opus and Sonnet on every other task so limit depletion is spread evenly across the month.</span></div>
+  </div>
+</div>
+
+<!-- MC2 -->
+<div class="q-card">
+  <div class="q-meta"><span class="q-num">2</span><span class="q-type-badge qt-mc">MC</span></div>
+  <div class="q-stem">Which of the following best explains why Extended Thinking should be applied to approximately 20% of queries rather than all of them?</div>
+  <div class="q-options">
+    <div class="q-opt" onclick="_q.select(this,2,'A')"><span class="q-opt-letter">A</span><span class="q-opt-text">Extended Thinking disables web search and memory features, making it unsuitable for research tasks.</span></div>
+    <div class="q-opt" onclick="_q.select(this,2,'B')"><span class="q-opt-letter">B</span><span class="q-opt-text">Extended Thinking costs more message limits and takes longer; applying it indiscriminately wastes resources on simple queries that don't benefit from deep deliberation.</span></div>
+    <div class="q-opt" onclick="_q.select(this,2,'C')"><span class="q-opt-letter">C</span><span class="q-opt-text">Anthropic has rate-limited Extended Thinking to 20% of sessions to prevent server overload.</span></div>
+    <div class="q-opt" onclick="_q.select(this,2,'D')"><span class="q-opt-letter">D</span><span class="q-opt-text">Extended Thinking degrades response quality after prolonged use in the same session, so spacing it out preserves output fidelity.</span></div>
+  </div>
+</div>
+
+<!-- MC3 -->
+<div class="q-card">
+  <div class="q-meta"><span class="q-num">3</span><span class="q-type-badge qt-mc">MC</span></div>
+  <div class="q-stem">A user wants Claude to remember their technical stack preferences and communication style across all future conversations. Which combination of features should they configure?</div>
+  <div class="q-options">
+    <div class="q-opt" onclick="_q.select(this,3,'A')"><span class="q-opt-letter">A</span><span class="q-opt-text">Enable Incognito Mode and write preferences in each new chat manually.</span></div>
+    <div class="q-opt" onclick="_q.select(this,3,'B')"><span class="q-opt-letter">B</span><span class="q-opt-text">Configure Custom Instructions for permanent authored preferences, and enable Memory to auto-synthesize evolving context from conversations.</span></div>
+    <div class="q-opt" onclick="_q.select(this,3,'C')"><span class="q-opt-letter">C</span><span class="q-opt-text">Use Custom Styles for tech stack preferences, since styles persist across sessions and control what Claude knows.</span></div>
+    <div class="q-opt" onclick="_q.select(this,3,'D')"><span class="q-opt-letter">D</span><span class="q-opt-text">Upload preference documents to every new chat since there is no other mechanism to carry context across sessions.</span></div>
+  </div>
+</div>
+
+<!-- MC4 -->
+<div class="q-card">
+  <div class="q-meta"><span class="q-num">4</span><span class="q-type-badge qt-mc">MC</span></div>
+  <div class="q-stem">A published Claude Artifact on the web calls Claude's API to generate content dynamically for every visitor. Which technical mechanism enables this without requiring each visitor to have their own API key?</div>
+  <div class="q-options">
+    <div class="q-opt" onclick="_q.select(this,4,'A')"><span class="q-opt-letter">A</span><span class="q-opt-text">The artifact embeds a shared API key in its HTML source code that all visitors use simultaneously.</span></div>
+    <div class="q-opt" onclick="_q.select(this,4,'B')"><span class="q-opt-letter">B</span><span class="q-opt-text">Published artifacts call the Anthropic API through <code>window.claude.complete</code>, which handles authentication server-side so visitors need no credentials.</span></div>
+    <div class="q-opt" onclick="_q.select(this,4,'C')"><span class="q-opt-letter">C</span><span class="q-opt-text">Visitors must log in to claude.ai before the artifact can generate content; public access without authentication is not supported.</span></div>
+    <div class="q-opt" onclick="_q.select(this,4,'D')"><span class="q-opt-letter">D</span><span class="q-opt-text">Live artifacts use Google Sheets as a proxy to route Claude API calls, eliminating the need for visitor credentials.</span></div>
+  </div>
+</div>
+
+<!-- MC5 -->
+<div class="q-card">
+  <div class="q-meta"><span class="q-num">5</span><span class="q-type-badge qt-mc">MC</span></div>
+  <div class="q-stem">What is the primary functional difference between Adaptive Thinking (Opus 4.7) and Extended Thinking (the UI toggle)?</div>
+  <div class="q-options">
+    <div class="q-opt" onclick="_q.select(this,5,'A')"><span class="q-opt-letter">A</span><span class="q-opt-text">Adaptive Thinking is a free-tier feature; Extended Thinking requires a Pro plan.</span></div>
+    <div class="q-opt" onclick="_q.select(this,5,'B')"><span class="q-opt-letter">B</span><span class="q-opt-text">Extended Thinking is a UI toggle that switches on deep reasoning for all queries in a session; Adaptive Thinking is triggered by specific phrases like "think carefully" or "ultra think" in the prompt itself.</span></div>
+    <div class="q-opt" onclick="_q.select(this,5,'C')"><span class="q-opt-letter">C</span><span class="q-opt-text">Adaptive Thinking uses web search to supplement reasoning; Extended Thinking operates purely on the model's internal knowledge.</span></div>
+    <div class="q-opt" onclick="_q.select(this,5,'D')"><span class="q-opt-letter">D</span><span class="q-opt-text">They are functionally identical — Adaptive Thinking is simply the rebranded name for Extended Thinking in newer model versions.</span></div>
+  </div>
+</div>
+
+<!-- MC6 -->
+<div class="q-card">
+  <div class="q-meta"><span class="q-num">6</span><span class="q-type-badge qt-mc">MC</span></div>
+  <div class="q-stem">A freelancer creates three separate Claude Projects: one for client emails, one for blog drafts, and one for code reviews. Which project management practice does this correctly implement, and why?</div>
+  <div class="q-options">
+    <div class="q-opt" onclick="_q.select(this,6,'A')"><span class="q-opt-letter">A</span><span class="q-opt-text">It is an inefficient approach — a single "Work" project with all tasks in one place would consolidate context and improve Claude's output quality.</span></div>
+    <div class="q-opt" onclick="_q.select(this,6,'B')"><span class="q-opt-letter">B</span><span class="q-opt-text">The one-project-per-workflow-type rule — separate projects prevent context pollution and keep each workflow's instructions, examples, and constraints focused on a single purpose.</span></div>
+    <div class="q-opt" onclick="_q.select(this,6,'C')"><span class="q-opt-letter">C</span><span class="q-opt-text">It is an acceptable approach, but only if all three projects share the same instruction set so Claude's tone remains consistent across task types.</span></div>
+    <div class="q-opt" onclick="_q.select(this,6,'D')"><span class="q-opt-letter">D</span><span class="q-opt-text">Projects are only useful for code-related tasks; email and blog drafts should be handled in regular chats without project context.</span></div>
+  </div>
+</div>
+
+<!-- MC7 -->
+<div class="q-card">
+  <div class="q-meta"><span class="q-num">7</span><span class="q-type-badge qt-mc">MC</span></div>
+  <div class="q-stem">In Claude Code, why do negative constraints in claude.md ("don't touch schema.prisma", "don't use default exports") outperform equivalent positive instructions in improving first-attempt accuracy?</div>
+  <div class="q-options">
+    <div class="q-opt" onclick="_q.select(this,7,'A')"><span class="q-opt-letter">A</span><span class="q-opt-text">Negative constraints are processed by a separate, higher-priority parsing layer in the Claude Code engine that positive instructions don't reach.</span></div>
+    <div class="q-opt" onclick="_q.select(this,7,'B')"><span class="q-opt-letter">B</span><span class="q-opt-text">Negative constraints set hard boundaries on what not to do, preventing the most common error patterns before they occur; positive instructions describe desired behavior that Claude might interpret ambiguously in context.</span></div>
+    <div class="q-opt" onclick="_q.select(this,7,'C')"><span class="q-opt-letter">C</span><span class="q-opt-text">claude.md only supports negative-constraint syntax; positive instructions written in that file are silently ignored by Claude Code.</span></div>
+    <div class="q-opt" onclick="_q.select(this,7,'D')"><span class="q-opt-letter">D</span><span class="q-opt-text">Positive instructions cause Claude to over-generate and apply changes too broadly; negative constraints produce fewer but higher-quality outputs.</span></div>
+  </div>
+</div>
+
+<!-- MC8 -->
+<div class="q-card">
+  <div class="q-meta"><span class="q-num">8</span><span class="q-type-badge qt-mc">MC</span></div>
+  <div class="q-stem">A team wants Claude to read their internal Notion pages, draft emails in Gmail, and pull project tasks from Asana — all in a single workflow. Which Claude capability enables this multi-service coordination?</div>
+  <div class="q-options">
+    <div class="q-opt" onclick="_q.select(this,8,'A')"><span class="q-opt-letter">A</span><span class="q-opt-text">Deep Research mode, which automatically scans connected accounts during an extended research session.</span></div>
+    <div class="q-opt" onclick="_q.select(this,8,'B')"><span class="q-opt-letter">B</span><span class="q-opt-text">Connectors (MCP integrations) configured in Settings → Connectors, enabling Claude to read and act within multiple services simultaneously — with explicit user confirmation before any action.</span></div>
+    <div class="q-opt" onclick="_q.select(this,8,'C')"><span class="q-opt-letter">C</span><span class="q-opt-text">Artifacts with persistent storage, which can pull data from external services once published and connected to live data sources.</span></div>
+    <div class="q-opt" onclick="_q.select(this,8,'D')"><span class="q-opt-letter">D</span><span class="q-opt-text">The Memory feature, which indexes all connected accounts automatically when enabled and makes that data available across sessions.</span></div>
+  </div>
+</div>
+
+<!-- MC9 -->
+<div class="q-card">
+  <div class="q-meta"><span class="q-num">9</span><span class="q-type-badge qt-mc">MC</span></div>
+  <div class="q-stem">Which scenario correctly distinguishes when to use Cowork's scheduled tasks vs Claude Code's Routines?</div>
+  <div class="q-options">
+    <div class="q-opt" onclick="_q.select(this,9,'A')"><span class="q-opt-letter">A</span><span class="q-opt-text">Cowork Scheduled Tasks automate file-based workflows with cloud execution; Claude Code Routines require manual activation from the terminal.</span></div>
+    <div class="q-opt" onclick="_q.select(this,9,'B')"><span class="q-opt-letter">B</span><span class="q-opt-text">Both are local schedulers requiring the machine to be awake and Claude desktop open; Cowork tasks automate general file + research workflows, while Claude Code Routines automate code-specific tasks (commit reviews, dependency audits, test tracking).</span></div>
+    <div class="q-opt" onclick="_q.select(this,9,'C')"><span class="q-opt-letter">C</span><span class="q-opt-text">Claude Code Routines run in the cloud independently of the local machine; Cowork tasks are only local and stop if the machine sleeps.</span></div>
+    <div class="q-opt" onclick="_q.select(this,9,'D')"><span class="q-opt-letter">D</span><span class="q-opt-text">Cowork tasks are available on free plans; Claude Code Routines require an API billing account with a minimum spend threshold.</span></div>
+  </div>
+</div>
+
+<!-- MC10 -->
+<div class="q-card">
+  <div class="q-meta"><span class="q-num">10</span><span class="q-type-badge qt-mc">MC</span></div>
+  <div class="q-stem">A developer pastes a screenshot of a broken UI button into Claude Code and says "fix this." What does Claude Code do, and why can it do this without being told which file or element is responsible?</div>
+  <div class="q-options">
+    <div class="q-opt" onclick="_q.select(this,10,'A')"><span class="q-opt-letter">A</span><span class="q-opt-text">Claude Code searches the web for the component library matching the screenshot's visual style and applies the matching fix to all files in the project.</span></div>
+    <div class="q-opt" onclick="_q.select(this,10,'B')"><span class="q-opt-letter">B</span><span class="q-opt-text">Claude Code has simultaneous access to both the screenshot and the live codebase on disk, allowing it to identify the responsible element and file autonomously without user direction.</span></div>
+    <div class="q-opt" onclick="_q.select(this,10,'C')"><span class="q-opt-letter">C</span><span class="q-opt-text">Claude Code guesses which file is responsible based on the most recently modified files and applies the fix there first, prompting the user if that file was incorrect.</span></div>
+    <div class="q-opt" onclick="_q.select(this,10,'D')"><span class="q-opt-letter">D</span><span class="q-opt-text">Claude Code cannot process screenshots — image input in Claude Code is limited to Figma exports and requires a Design Connector to be enabled first.</span></div>
+  </div>
+</div>
+
+<!-- MC11 -->
+<div class="q-card">
+  <div class="q-meta"><span class="q-num">11</span><span class="q-type-badge qt-mc">MC</span></div>
+  <div class="q-stem">What critical security constraint applies to Claude for Chrome that does not apply to using Claude in a regular browser tab?</div>
+  <div class="q-options">
+    <div class="q-opt" onclick="_q.select(this,11,'A')"><span class="q-opt-letter">A</span><span class="q-opt-text">Claude for Chrome requires Two-Factor Authentication on the Anthropic account before it can access any browser page.</span></div>
+    <div class="q-opt" onclick="_q.select(this,11,'B')"><span class="q-opt-letter">B</span><span class="q-opt-text">Claude for Chrome has access to the user's real authenticated browser sessions, meaning it can interact with any site the user is already logged into — including banking or medical portals.</span></div>
+    <div class="q-opt" onclick="_q.select(this,11,'C')"><span class="q-opt-letter">C</span><span class="q-opt-text">Claude for Chrome stores all browsing history locally in plain text, which creates a data exfiltration risk if the device is compromised.</span></div>
+    <div class="q-opt" onclick="_q.select(this,11,'D')"><span class="q-opt-letter">D</span><span class="q-opt-text">Claude for Chrome can only access public websites and is blocked by default from any site requiring authentication.</span></div>
+  </div>
+</div>
+
+<!-- MC12 -->
+<div class="q-card">
+  <div class="q-meta"><span class="q-num">12</span><span class="q-type-badge qt-mc">MC</span></div>
+  <div class="q-stem">The 1M token context window achieves 76% retrieval accuracy at context edges. Why is this metric specifically significant compared to prior models?</div>
+  <div class="q-options">
+    <div class="q-opt" onclick="_q.select(this,12,'A')"><span class="q-opt-letter">A</span><span class="q-opt-text">It confirms that Claude's response time remains constant regardless of how full the context window is, which enables faster real-time applications.</span></div>
+    <div class="q-opt" onclick="_q.select(this,12,'B')"><span class="q-opt-letter">B</span><span class="q-opt-text">Prior models showed only 18% accuracy at context edges, meaning information at the start of long documents was largely inaccessible; the improvement makes long-document analysis practically reliable.</span></div>
+    <div class="q-opt" onclick="_q.select(this,12,'C')"><span class="q-opt-letter">C</span><span class="q-opt-text">It means users no longer need to upload multiple files; the 76% rate proves the model can reconstruct missing information from partial context alone.</span></div>
+    <div class="q-opt" onclick="_q.select(this,12,'D')"><span class="q-opt-letter">D</span><span class="q-opt-text">The metric confirms that context compaction never loses critical information, making it safe to run compaction at any point during a session.</span></div>
+  </div>
+</div>
+
+<!-- MC13 -->
+<div class="q-card">
+  <div class="q-meta"><span class="q-num">13</span><span class="q-type-badge qt-mc">MC</span></div>
+  <div class="q-stem">When should a developer trigger /compact during a Claude Code session?</div>
+  <div class="q-options">
+    <div class="q-opt" onclick="_q.select(this,13,'A')"><span class="q-opt-letter">A</span><span class="q-opt-text">Only at the start of a new session to load the previous session's context into the current window.</span></div>
+    <div class="q-opt" onclick="_q.select(this,13,'B')"><span class="q-opt-letter">B</span><span class="q-opt-text">Mid-session when Claude starts giving inconsistent or looping answers, which indicates the context window is filling and noise is degrading output quality.</span></div>
+    <div class="q-opt" onclick="_q.select(this,13,'C')"><span class="q-opt-letter">C</span><span class="q-opt-text">After every five code edits to ensure that test results and error messages don't accumulate in the context window.</span></div>
+    <div class="q-opt" onclick="_q.select(this,13,'D')"><span class="q-opt-letter">D</span><span class="q-opt-text">/compact is automatically triggered by Claude Code when the context window reaches 80% capacity and does not need to be run manually.</span></div>
+  </div>
+</div>
+
+<!-- MC14 -->
+<div class="q-card">
+  <div class="q-meta"><span class="q-num">14</span><span class="q-type-badge qt-mc">MC</span></div>
+  <div class="q-stem">A content creator uploads three previous articles to generate a Custom Style. What does this Custom Style specifically control, and how does it differ from Custom Instructions?</div>
+  <div class="q-options">
+    <div class="q-opt" onclick="_q.select(this,14,'A')"><span class="q-opt-letter">A</span><span class="q-opt-text">Custom Styles control what Claude knows about the user (professional background, preferences); Custom Instructions control how Claude formats output.</span></div>
+    <div class="q-opt" onclick="_q.select(this,14,'B')"><span class="q-opt-letter">B</span><span class="q-opt-text">Custom Styles control how Claude writes — tone, voice, and phrasing patterns; Custom Instructions control what Claude knows about the user. Both can be active simultaneously.</span></div>
+    <div class="q-opt" onclick="_q.select(this,14,'C')"><span class="q-opt-letter">C</span><span class="q-opt-text">Custom Styles replace Custom Instructions when active; only one layer can be in effect at a time per session.</span></div>
+    <div class="q-opt" onclick="_q.select(this,14,'D')"><span class="q-opt-letter">D</span><span class="q-opt-text">Custom Styles are session-scoped and reset on every new chat; Custom Instructions are the only persistent user preference mechanism.</span></div>
+  </div>
+</div>
+
+<!-- MC15 -->
+<div class="q-card">
+  <div class="q-meta"><span class="q-num">15</span><span class="q-type-badge qt-mc">MC</span></div>
+  <div class="q-stem">The interview-first method instructs Claude to ask 5–7 clarifying questions before starting. Which of the following task types derives the least benefit from this method?</div>
+  <div class="q-options">
+    <div class="q-opt" onclick="_q.select(this,15,'A')"><span class="q-opt-letter">A</span><span class="q-opt-text">Writing a comprehensive brand strategy for a new product launch.</span></div>
+    <div class="q-opt" onclick="_q.select(this,15,'B')"><span class="q-opt-letter">B</span><span class="q-opt-text">Drafting a technical brief comparing two architectural approaches for a complex codebase refactor.</span></div>
+    <div class="q-opt" onclick="_q.select(this,15,'C')"><span class="q-opt-letter">C</span><span class="q-opt-text">Reformatting a plain-text list of 50 items into a Markdown table.</span></div>
+    <div class="q-opt" onclick="_q.select(this,15,'D')"><span class="q-opt-letter">D</span><span class="q-opt-text">Designing a research framework for a topic with multiple competing academic perspectives.</span></div>
+  </div>
+</div>
+
+<!-- MC16 -->
+<div class="q-card">
+  <div class="q-meta"><span class="q-num">16</span><span class="q-type-badge qt-mc">MC</span></div>
+  <div class="q-stem">Why is Cowork's parallel sub-agent architecture specifically significant for multi-file document processing tasks, compared to running the same task in Chat?</div>
+  <div class="q-options">
+    <div class="q-opt" onclick="_q.select(this,16,'A')"><span class="q-opt-letter">A</span><span class="q-opt-text">Cowork can access cloud storage directly while Chat cannot, enabling larger file transfers for document-heavy workflows.</span></div>
+    <div class="q-opt" onclick="_q.select(this,16,'B')"><span class="q-opt-letter">B</span><span class="q-opt-text">Cowork decomposes tasks into parallel sub-workflows — reading and writing multiple files simultaneously — producing finished native files in a fraction of the time that sequential Chat processing would require.</span></div>
+    <div class="q-opt" onclick="_q.select(this,16,'C')"><span class="q-opt-letter">C</span><span class="q-opt-text">Chat processes files one at a time due to context window limits, while Cowork compresses each file before processing so more can fit in a single pass.</span></div>
+    <div class="q-opt" onclick="_q.select(this,16,'D')"><span class="q-opt-letter">D</span><span class="q-opt-text">Both Chat and Cowork process files identically; the only difference is that Cowork saves outputs to the designated output/ folder automatically.</span></div>
+  </div>
+</div>
+
+<!-- MC17 -->
+<div class="q-card">
+  <div class="q-meta"><span class="q-num">17</span><span class="q-type-badge qt-mc">MC</span></div>
+  <div class="q-stem">Opus 4.7's image resolution increase to 2,576 pixels unlocks which category of use case that was previously unreliable?</div>
+  <div class="q-options">
+    <div class="q-opt" onclick="_q.select(this,17,'A')"><span class="q-opt-letter">A</span><span class="q-opt-text">Generating high-resolution hero images for websites and marketing materials directly from prompts.</span></div>
+    <div class="q-opt" onclick="_q.select(this,17,'B')"><span class="q-opt-letter">B</span><span class="q-opt-text">Reading fine text on document screenshots, parsing dense financial spreadsheets, and analyzing architectural drawings where prior lower resolution made text illegible.</span></div>
+    <div class="q-opt" onclick="_q.select(this,17,'C')"><span class="q-opt-letter">C</span><span class="q-opt-text">Video frame analysis, since the higher pixel density allows individual video frames to be processed without quality loss during extraction.</span></div>
+    <div class="q-opt" onclick="_q.select(this,17,'D')"><span class="q-opt-letter">D</span><span class="q-opt-text">Real-time screen sharing, where Claude monitors a live desktop session and provides instant feedback on UI changes.</span></div>
+  </div>
+</div>
+
+<!-- MC18 -->
+<div class="q-card">
+  <div class="q-meta"><span class="q-num">18</span><span class="q-type-badge qt-mc">MC</span></div>
+  <div class="q-stem">A project's claude.md file has grown to 450 lines covering both global preferences and project-specific rules. What is the recommended fix, and why?</div>
+  <div class="q-options">
+    <div class="q-opt" onclick="_q.select(this,18,'A')"><span class="q-opt-letter">A</span><span class="q-opt-text">Split the file into multiple claude.md files placed in subdirectories, which Claude Code automatically merges at session start.</span></div>
+    <div class="q-opt" onclick="_q.select(this,18,'B')"><span class="q-opt-letter">B</span><span class="q-opt-text">Move global rules (preferences applying to all projects) to ~/.claude/claude.md and keep only project-specific rules in the project's claude.md, trimmed to under 200 lines.</span></div>
+    <div class="q-opt" onclick="_q.select(this,18,'C')"><span class="q-opt-letter">C</span><span class="q-opt-text">Compress the file using /compact before each session to reduce its line count; Claude Code processes compressed files more efficiently.</span></div>
+    <div class="q-opt" onclick="_q.select(this,18,'D')"><span class="q-opt-letter">D</span><span class="q-opt-text">Length doesn't matter for claude.md — Claude Code always reads the full file regardless of size without any performance penalty.</span></div>
+  </div>
+</div>
+
+<!-- MC19 -->
+<div class="q-card">
+  <div class="q-meta"><span class="q-num">19</span><span class="q-type-badge qt-mc">MC</span></div>
+  <div class="q-stem">Meta-prompting instructs Claude to "explain 3 things you changed" after rewriting a prompt. What is the primary pedagogical value of requesting this explanation?</div>
+  <div class="q-options">
+    <div class="q-opt" onclick="_q.select(this,19,'A')"><span class="q-opt-letter">A</span><span class="q-opt-text">It forces Claude to self-verify the rewritten prompt's accuracy against the original, reducing hallucinations in the output.</span></div>
+    <div class="q-opt" onclick="_q.select(this,19,'B')"><span class="q-opt-letter">B</span><span class="q-opt-text">The explanation teaches the user what variables — role specificity, XML structure, success criteria, thinking triggers — most improve prompt quality, making them a better prompt writer over time.</span></div>
+    <div class="q-opt" onclick="_q.select(this,19,'C')"><span class="q-opt-letter">C</span><span class="q-opt-text">Requesting an explanation causes Claude to take more time before generating, which increases the model's effective "thinking budget" for the rewrite task.</span></div>
+    <div class="q-opt" onclick="_q.select(this,19,'D')"><span class="q-opt-letter">D</span><span class="q-opt-text">It provides a version history that the user can submit to Anthropic to improve the prompt engineering guidelines in future model releases.</span></div>
+  </div>
+</div>
+
+<!-- MC20 -->
+<div class="q-card">
+  <div class="q-meta"><span class="q-num">20</span><span class="q-type-badge qt-mc">MC</span></div>
+  <div class="q-stem">A developer using Claude Code encounters the same bug correction failing three times in a row. According to the five common mistakes framework, what is the correct diagnosis and remedy?</div>
+  <div class="q-options">
+    <div class="q-opt" onclick="_q.select(this,20,'A')"><span class="q-opt-letter">A</span><span class="q-opt-text">The claude.md file is outdated — run /init again to regenerate it and then retry the correction in the same session.</span></div>
+    <div class="q-opt" onclick="_q.select(this,20,'B')"><span class="q-opt-letter">B</span><span class="q-opt-text">The session context is poisoned by accumulated failed attempts; start a fresh session with a clean description of the problem and only the minimally relevant code.</span></div>
+    <div class="q-opt" onclick="_q.select(this,20,'C')"><span class="q-opt-letter">C</span><span class="q-opt-text">Switch to Opus mid-session — the repeated failure indicates that Sonnet lacks the reasoning capacity for this fix and a model upgrade is required.</span></div>
+    <div class="q-opt" onclick="_q.select(this,20,'D')"><span class="q-opt-letter">D</span><span class="q-opt-text">Run /compact to reduce the context window; the bug is likely caused by conflicting file states accumulated across the session's edit history.</span></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════ -->
+<!-- PART II — FILL IN THE BLANK (10 items)    -->
+<!-- ══════════════════════════════════════════ -->
+<div class="qz-section">Part II — Fill in the Blank (10 items)<div class="qz-section-rule"></div></div>
+
+<!-- F1 -->
+<div class="q-card">
+  <div class="q-meta"><span class="q-num">21</span><span class="q-type-badge qt-fill">Fill</span></div>
+  <div class="q-stem">To prevent Claude from treating background context as a request to respond rather than as information to use, Anthropic recommends wrapping prompt sections in native <input class="fill-blank" id="f21" placeholder="___________"> tags.</div>
+</div>
+
+<!-- F2 -->
+<div class="q-card">
+  <div class="q-meta"><span class="q-num">22</span><span class="q-type-badge qt-fill">Fill</span></div>
+  <div class="q-stem">In Claude Code, after Opus produces a complete architectural plan, the developer switches to Sonnet using the command <input class="fill-blank" id="f22" placeholder="___________"> to begin the build phase.</div>
+</div>
+
+<!-- F3 -->
+<div class="q-card">
+  <div class="q-meta"><span class="q-num">23</span><span class="q-type-badge qt-fill">Fill</span></div>
+  <div class="q-stem">Claude's context compaction feature automatically <input class="fill-blank" id="f23" placeholder="___________"> older turns in a long conversation to prevent session output quality from degrading as the context window fills.</div>
+</div>
+
+<!-- F4 -->
+<div class="q-card">
+  <div class="q-meta"><span class="q-num">24</span><span class="q-type-badge qt-fill">Fill</span></div>
+  <div class="q-stem">The three subfolders recommended inside a Cowork Station directory are <input class="fill-blank" id="f24" placeholder="___________">, projects/, and output/.</div>
+</div>
+
+<!-- F5 -->
+<div class="q-card">
+  <div class="q-meta"><span class="q-num">25</span><span class="q-type-badge qt-fill">Fill</span></div>
+  <div class="q-stem">A skill file in Claude's Skills system is always named <input class="fill-blank" id="f25" placeholder="___________"> and uploaded as a .zip archive to Settings → Capabilities → Skills.</div>
+</div>
+
+<!-- F6 -->
+<div class="q-card">
+  <div class="q-meta"><span class="q-num">26</span><span class="q-type-badge qt-fill">Fill</span></div>
+  <div class="q-stem">Opus 4.7's image resolution support was increased to <input class="fill-blank" id="f26" placeholder="___________"> pixels, approximately 3.75 megapixels, enabling reliable analysis of fine text and dense visual documents.</div>
+</div>
+
+<!-- F7 -->
+<div class="q-card">
+  <div class="q-meta"><span class="q-num">27</span><span class="q-type-badge qt-fill">Fill</span></div>
+  <div class="q-stem">The five-part prompt framework components are Role, Task, Context, Constraints, and <input class="fill-blank" id="f27" placeholder="___________">.</div>
+</div>
+
+<!-- F8 -->
+<div class="q-card">
+  <div class="q-meta"><span class="q-num">28</span><span class="q-type-badge qt-fill">Fill</span></div>
+  <div class="q-stem">When a Claude Code session is generating inconsistent or looping answers due to a full context window, the developer should run <input class="fill-blank" id="f28" placeholder="___________"> to summarize key decisions while dropping accumulated noise.</div>
+</div>
+
+<!-- F9 -->
+<div class="q-card">
+  <div class="q-meta"><span class="q-num">29</span><span class="q-type-badge qt-fill">Fill</span></div>
+  <div class="q-stem">Artifact persistent storage capacity is limited to <input class="fill-blank" id="f29" placeholder="___________"> MB per artifact and only becomes active after the artifact is published — it does not function in development mode.</div>
+</div>
+
+<!-- F10 -->
+<div class="q-card">
+  <div class="q-meta"><span class="q-num">30</span><span class="q-type-badge qt-fill">Fill</span></div>
+  <div class="q-stem">In Cowork, the feature that lets a user send a task from their phone to be executed on their desktop is called <input class="fill-blank" id="f30" placeholder="___________">.</div>
+</div>
+
+<!-- ══════════════════════════════════════════ -->
+<!-- PART III — TRUE OR FALSE (10 items)       -->
+<!-- ══════════════════════════════════════════ -->
+<div class="qz-section">Part III — True or False (10 items)<div class="qz-section-rule"></div></div>
+
+<!-- T1 -->
+<div class="q-card">
+  <div class="q-meta"><span class="q-num">31</span><span class="q-type-badge qt-tof">T/F</span></div>
+  <div class="q-stem">Claude for Chrome is compatible with Brave and Arc browsers because they are both Chromium-based, sharing the same extension architecture as Google Chrome.</div>
+  <div class="tof-opts">
+    <button class="tof-btn" onclick="_q.tof(this,31,'T')">True</button>
+    <button class="tof-btn" onclick="_q.tof(this,31,'F')">False</button>
+  </div>
+</div>
+
+<!-- T2 -->
+<div class="q-card">
+  <div class="q-meta"><span class="q-num">32</span><span class="q-type-badge qt-tof">T/F</span></div>
+  <div class="q-stem">Custom Instructions and Memory can be active simultaneously — they serve different roles where instructions govern authored preferences and memory governs auto-synthesized context.</div>
+  <div class="tof-opts">
+    <button class="tof-btn" onclick="_q.tof(this,32,'T')">True</button>
+    <button class="tof-btn" onclick="_q.tof(this,32,'F')">False</button>
+  </div>
+</div>
+
+<!-- T3 -->
+<div class="q-card">
+  <div class="q-meta"><span class="q-num">33</span><span class="q-type-badge qt-tof">T/F</span></div>
+  <div class="q-stem">Cowork's scheduled tasks run in Anthropic's cloud infrastructure, meaning they execute even when the user's computer is off or Claude desktop is closed.</div>
+  <div class="tof-opts">
+    <button class="tof-btn" onclick="_q.tof(this,33,'T')">True</button>
+    <button class="tof-btn" onclick="_q.tof(this,33,'F')">False</button>
+  </div>
+</div>
+
+<!-- T4 -->
+<div class="q-card">
+  <div class="q-meta"><span class="q-num">34</span><span class="q-type-badge qt-tof">T/F</span></div>
+  <div class="q-stem">Connectors give Claude read access to external services and require explicit user confirmation before Claude performs any action such as sending an email or creating a record.</div>
+  <div class="tof-opts">
+    <button class="tof-btn" onclick="_q.tof(this,34,'T')">True</button>
+    <button class="tof-btn" onclick="_q.tof(this,34,'F')">False</button>
+  </div>
+</div>
+
+<!-- T5 -->
+<div class="q-card">
+  <div class="q-meta"><span class="q-num">35</span><span class="q-type-badge qt-tof">T/F</span></div>
+  <div class="q-stem">The free tier of claude.ai does not include Memory generation — this feature is exclusively available to Pro, Team, and Enterprise subscribers.</div>
+  <div class="tof-opts">
+    <button class="tof-btn" onclick="_q.tof(this,35,'T')">True</button>
+    <button class="tof-btn" onclick="_q.tof(this,35,'F')">False</button>
+  </div>
+</div>
+
+<!-- T6 -->
+<div class="q-card">
+  <div class="q-meta"><span class="q-num">36</span><span class="q-type-badge qt-tof">T/F</span></div>
+  <div class="q-stem">In Claude Code's Plan Mode, Claude lists all intended file modifications and waits for explicit user approval before touching any file in the project.</div>
+  <div class="tof-opts">
+    <button class="tof-btn" onclick="_q.tof(this,36,'T')">True</button>
+    <button class="tof-btn" onclick="_q.tof(this,36,'F')">False</button>
+  </div>
+</div>
+
+<!-- T7 -->
+<div class="q-card">
+  <div class="q-meta"><span class="q-num">37</span><span class="q-type-badge qt-tof">T/F</span></div>
+  <div class="q-stem">Sonnet 4.6 costs five times more per token than Opus 4.6, making Opus the cost-efficient choice for high-volume daily tasks.</div>
+  <div class="tof-opts">
+    <button class="tof-btn" onclick="_q.tof(this,37,'T')">True</button>
+    <button class="tof-btn" onclick="_q.tof(this,37,'F')">False</button>
+  </div>
+</div>
+
+<!-- T8 -->
+<div class="q-card">
+  <div class="q-meta"><span class="q-num">38</span><span class="q-type-badge qt-tof">T/F</span></div>
+  <div class="q-stem">Deep Research mode is available on all Claude plans, including the free tier, and can combine web search with connected Google Drive data in a single research session.</div>
+  <div class="tof-opts">
+    <button class="tof-btn" onclick="_q.tof(this,38,'T')">True</button>
+    <button class="tof-btn" onclick="_q.tof(this,38,'F')">False</button>
+  </div>
+</div>
+
+<!-- T9 -->
+<div class="q-card">
+  <div class="q-meta"><span class="q-num">39</span><span class="q-type-badge qt-tof">T/F</span></div>
+  <div class="q-stem">Running /init in a Claude Code project generates a claude.md file that serves as Claude's session memory, read automatically at the start of every subsequent session in that project.</div>
+  <div class="tof-opts">
+    <button class="tof-btn" onclick="_q.tof(this,39,'T')">True</button>
+    <button class="tof-btn" onclick="_q.tof(this,39,'F')">False</button>
+  </div>
+</div>
+
+<!-- T10 -->
+<div class="q-card">
+  <div class="q-meta"><span class="q-num">40</span><span class="q-type-badge qt-tof">T/F</span></div>
+  <div class="q-stem">When using Incognito Mode in claude.ai, conversations are still used to update Memory and are saved to chat history — they are simply hidden from the main sidebar view.</div>
+  <div class="tof-opts">
+    <button class="tof-btn" onclick="_q.tof(this,40,'T')">True</button>
+    <button class="tof-btn" onclick="_q.tof(this,40,'F')">False</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════ -->
+<!-- PART IV — ENUMERATION (5 items)           -->
+<!-- ══════════════════════════════════════════ -->
+<div class="qz-section">Part IV — Enumeration (5 items)<div class="qz-section-rule"></div></div>
+
+<!-- E1 -->
+<div class="q-card">
+  <div class="q-meta"><span class="q-num">41</span><span class="q-type-badge qt-enum">Enum</span></div>
+  <div class="q-stem">Enumerate the five common Claude Code mistakes identified in the course material. State each mistake clearly — you do not need to include the fix.</div>
+  <div class="enum-list">
+    <input class="enum-input" id="e41a" placeholder="Mistake 1">
+    <input class="enum-input" id="e41b" placeholder="Mistake 2">
+    <input class="enum-input" id="e41c" placeholder="Mistake 3">
+    <input class="enum-input" id="e41d" placeholder="Mistake 4">
+    <input class="enum-input" id="e41e" placeholder="Mistake 5">
+  </div>
+</div>
+
+<!-- E2 -->
+<div class="q-card">
+  <div class="q-meta"><span class="q-num">42</span><span class="q-type-badge qt-enum">Enum</span></div>
+  <div class="q-stem">Enumerate the three context files that must be placed inside the context/ subfolder of a Cowork Station, and briefly state what each file contains.</div>
+  <div class="enum-list">
+    <input class="enum-input" id="e42a" placeholder="File 1 — name and contents">
+    <input class="enum-input" id="e42b" placeholder="File 2 — name and contents">
+    <input class="enum-input" id="e42c" placeholder="File 3 — name and contents">
+  </div>
+</div>
+
+<!-- E3 -->
+<div class="q-card">
+  <div class="q-meta"><span class="q-num">43</span><span class="q-type-badge qt-enum">Enum</span></div>
+  <div class="q-stem">Enumerate all four Adaptive Thinking trigger phrases that activate deep reasoning in Opus 4.7.</div>
+  <div class="enum-list">
+    <input class="enum-input" id="e43a" placeholder="Trigger 1">
+    <input class="enum-input" id="e43b" placeholder="Trigger 2">
+    <input class="enum-input" id="e43c" placeholder="Trigger 3">
+    <input class="enum-input" id="e43d" placeholder="Trigger 4">
+  </div>
+</div>
+
+<!-- E4 -->
+<div class="q-card">
+  <div class="q-meta"><span class="q-num">44</span><span class="q-type-badge qt-enum">Enum</span></div>
+  <div class="q-stem">Enumerate the three documents that should be included in every Project's knowledge base. State the purpose of each, not just its name.</div>
+  <div class="enum-list">
+    <input class="enum-input" id="e44a" placeholder="Document 1 — name and purpose">
+    <input class="enum-input" id="e44b" placeholder="Document 2 — name and purpose">
+    <input class="enum-input" id="e44c" placeholder="Document 3 — name and purpose">
+  </div>
+</div>
+
+<!-- E5 -->
+<div class="q-card">
+  <div class="q-meta"><span class="q-num">45</span><span class="q-type-badge qt-enum">Enum</span></div>
+  <div class="q-stem">Enumerate the five components of the structured prompt framework in order, with a one-phrase description of what each component contributes to the prompt.</div>
+  <div class="enum-list">
+    <input class="enum-input" id="e45a" placeholder="Component 1">
+    <input class="enum-input" id="e45b" placeholder="Component 2">
+    <input class="enum-input" id="e45c" placeholder="Component 3">
+    <input class="enum-input" id="e45d" placeholder="Component 4">
+    <input class="enum-input" id="e45e" placeholder="Component 5">
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════ -->
+<!-- PART V — CONNECT / MATCHING (5 items)     -->
+<!-- ══════════════════════════════════════════ -->
+<div class="qz-section">Part V — Connect / Matching (5 items)<div class="qz-section-rule"></div></div>
+
+<!-- C1 -->
+<div class="q-card">
+  <div class="q-meta"><span class="q-num">46</span><span class="q-type-badge qt-conn">Connect</span></div>
+  <div class="q-stem">Match each Claude feature to its most accurate one-line description.</div>
+  <div class="connect-wrap">
+    <div>
+      <div class="connect-col-label">Feature</div>
+      <div class="connect-item"><strong>A.</strong> Incognito Mode</div>
+      <div class="connect-item" style="margin-top:6px"><strong>B.</strong> Custom Styles</div>
+      <div class="connect-item" style="margin-top:6px"><strong>C.</strong> Context Compaction</div>
+      <div class="connect-item" style="margin-top:6px"><strong>D.</strong> Past Chats Search</div>
+    </div>
+    <div>
+      <div class="connect-col-label">Description</div>
+      <select class="connect-select" id="c46a"><option value="">— Match A —</option><option>1. Turns chat history into a queryable knowledge base accessible on demand</option><option>2. Auto-summarizes old conversation turns to preserve session quality</option><option>3. Shapes how Claude writes by capturing voice and tone from uploaded writing samples</option><option>4. Prevents history saving, memory updates, and search indexing for the session</option></select>
+      <select class="connect-select" id="c46b" style="margin-top:6px"><option value="">— Match B —</option><option>1. Turns chat history into a queryable knowledge base accessible on demand</option><option>2. Auto-summarizes old conversation turns to preserve session quality</option><option>3. Shapes how Claude writes by capturing voice and tone from uploaded writing samples</option><option>4. Prevents history saving, memory updates, and search indexing for the session</option></select>
+      <select class="connect-select" id="c46c" style="margin-top:6px"><option value="">— Match C —</option><option>1. Turns chat history into a queryable knowledge base accessible on demand</option><option>2. Auto-summarizes old conversation turns to preserve session quality</option><option>3. Shapes how Claude writes by capturing voice and tone from uploaded writing samples</option><option>4. Prevents history saving, memory updates, and search indexing for the session</option></select>
+      <select class="connect-select" id="c46d" style="margin-top:6px"><option value="">— Match D —</option><option>1. Turns chat history into a queryable knowledge base accessible on demand</option><option>2. Auto-summarizes old conversation turns to preserve session quality</option><option>3. Shapes how Claude writes by capturing voice and tone from uploaded writing samples</option><option>4. Prevents history saving, memory updates, and search indexing for the session</option></select>
+    </div>
+  </div>
+</div>
+
+<!-- C2 -->
+<div class="q-card">
+  <div class="q-meta"><span class="q-num">47</span><span class="q-type-badge qt-conn">Connect</span></div>
+  <div class="q-stem">Match each model to its primary use case in the Claude ecosystem.</div>
+  <div class="connect-wrap">
+    <div>
+      <div class="connect-col-label">Model</div>
+      <div class="connect-item"><strong>A.</strong> Haiku 4.5</div>
+      <div class="connect-item" style="margin-top:6px"><strong>B.</strong> Sonnet 4.6</div>
+      <div class="connect-item" style="margin-top:6px"><strong>C.</strong> Opus 4.6</div>
+      <div class="connect-item" style="margin-top:6px"><strong>D.</strong> Opus 4.7</div>
+    </div>
+    <div>
+      <div class="connect-col-label">Primary Use Case</div>
+      <select class="connect-select" id="c47a"><option value="">— Match A —</option><option>1. Default for writing, coding, analysis; 5× cheaper than the flagship model</option><option>2. Adaptive Thinking (phrase-triggered); highest image resolution at 2,576px</option><option>3. Multi-agent coordination, architectural decisions, complex cross-concept reasoning</option><option>4. High-volume, low-complexity tasks where speed and low cost are the priority</option></select>
+      <select class="connect-select" id="c47b" style="margin-top:6px"><option value="">— Match B —</option><option>1. Default for writing, coding, analysis; 5× cheaper than the flagship model</option><option>2. Adaptive Thinking (phrase-triggered); highest image resolution at 2,576px</option><option>3. Multi-agent coordination, architectural decisions, complex cross-concept reasoning</option><option>4. High-volume, low-complexity tasks where speed and low cost are the priority</option></select>
+      <select class="connect-select" id="c47c" style="margin-top:6px"><option value="">— Match C —</option><option>1. Default for writing, coding, analysis; 5× cheaper than the flagship model</option><option>2. Adaptive Thinking (phrase-triggered); highest image resolution at 2,576px</option><option>3. Multi-agent coordination, architectural decisions, complex cross-concept reasoning</option><option>4. High-volume, low-complexity tasks where speed and low cost are the priority</option></select>
+      <select class="connect-select" id="c47d" style="margin-top:6px"><option value="">— Match D —</option><option>1. Default for writing, coding, analysis; 5× cheaper than the flagship model</option><option>2. Adaptive Thinking (phrase-triggered); highest image resolution at 2,576px</option><option>3. Multi-agent coordination, architectural decisions, complex cross-concept reasoning</option><option>4. High-volume, low-complexity tasks where speed and low cost are the priority</option></select>
+    </div>
+  </div>
+</div>
+
+<!-- C3 -->
+<div class="q-card">
+  <div class="q-meta"><span class="q-num">48</span><span class="q-type-badge qt-conn">Connect</span></div>
+  <div class="q-stem">Match each Claude Code command or trigger to its function.</div>
+  <div class="connect-wrap">
+    <div>
+      <div class="connect-col-label">Command / Trigger</div>
+      <div class="connect-item"><strong>A.</strong> /init</div>
+      <div class="connect-item" style="margin-top:6px"><strong>B.</strong> /compact</div>
+      <div class="connect-item" style="margin-top:6px"><strong>C.</strong> /plan</div>
+      <div class="connect-item" style="margin-top:6px"><strong>D.</strong> /model sonnet</div>
+    </div>
+    <div>
+      <div class="connect-col-label">Function</div>
+      <select class="connect-select" id="c48a"><option value="">— Match A —</option><option>1. Switches the active model to the execution-phase workhorse after planning is complete</option><option>2. Generates a session memory file by reading the project and creating claude.md</option><option>3. Shows all intended file changes before any file is touched, awaiting approval</option><option>4. Summarizes key session decisions while discarding accumulated context noise</option></select>
+      <select class="connect-select" id="c48b" style="margin-top:6px"><option value="">— Match B —</option><option>1. Switches the active model to the execution-phase workhorse after planning is complete</option><option>2. Generates a session memory file by reading the project and creating claude.md</option><option>3. Shows all intended file changes before any file is touched, awaiting approval</option><option>4. Summarizes key session decisions while discarding accumulated context noise</option></select>
+      <select class="connect-select" id="c48c" style="margin-top:6px"><option value="">— Match C —</option><option>1. Switches the active model to the execution-phase workhorse after planning is complete</option><option>2. Generates a session memory file by reading the project and creating claude.md</option><option>3. Shows all intended file changes before any file is touched, awaiting approval</option><option>4. Summarizes key session decisions while discarding accumulated context noise</option></select>
+      <select class="connect-select" id="c48d" style="margin-top:6px"><option value="">— Match D —</option><option>1. Switches the active model to the execution-phase workhorse after planning is complete</option><option>2. Generates a session memory file by reading the project and creating claude.md</option><option>3. Shows all intended file changes before any file is touched, awaiting approval</option><option>4. Summarizes key session decisions while discarding accumulated context noise</option></select>
+    </div>
+  </div>
+</div>
+
+<!-- C4 -->
+<div class="q-card">
+  <div class="q-meta"><span class="q-num">49</span><span class="q-type-badge qt-conn">Connect</span></div>
+  <div class="q-stem">Match each prompt engineering technique to its defining characteristic.</div>
+  <div class="connect-wrap">
+    <div>
+      <div class="connect-col-label">Technique</div>
+      <div class="connect-item"><strong>A.</strong> XML Tags</div>
+      <div class="connect-item" style="margin-top:6px"><strong>B.</strong> Meta-Prompting</div>
+      <div class="connect-item" style="margin-top:6px"><strong>C.</strong> Interview-First</div>
+      <div class="connect-item" style="margin-top:6px"><strong>D.</strong> Five-Part Framework</div>
+    </div>
+    <div>
+      <div class="connect-col-label">Defining Characteristic</div>
+      <select class="connect-select" id="c49a"><option value="">— Match A —</option><option>1. Structures prompts with Role · Task · Context · Constraints · Format for high-stakes tasks</option><option>2. Flips the interaction by asking Claude to gather context before generating anything</option><option>3. Uses Claude itself to rewrite and optimize a rough prompt before running it</option><option>4. Separates instructions from data to prevent Claude treating context as a request</option></select>
+      <select class="connect-select" id="c49b" style="margin-top:6px"><option value="">— Match B —</option><option>1. Structures prompts with Role · Task · Context · Constraints · Format for high-stakes tasks</option><option>2. Flips the interaction by asking Claude to gather context before generating anything</option><option>3. Uses Claude itself to rewrite and optimize a rough prompt before running it</option><option>4. Separates instructions from data to prevent Claude treating context as a request</option></select>
+      <select class="connect-select" id="c49c" style="margin-top:6px"><option value="">— Match C —</option><option>1. Structures prompts with Role · Task · Context · Constraints · Format for high-stakes tasks</option><option>2. Flips the interaction by asking Claude to gather context before generating anything</option><option>3. Uses Claude itself to rewrite and optimize a rough prompt before running it</option><option>4. Separates instructions from data to prevent Claude treating context as a request</option></select>
+      <select class="connect-select" id="c49d" style="margin-top:6px"><option value="">— Match D —</option><option>1. Structures prompts with Role · Task · Context · Constraints · Format for high-stakes tasks</option><option>2. Flips the interaction by asking Claude to gather context before generating anything</option><option>3. Uses Claude itself to rewrite and optimize a rough prompt before running it</option><option>4. Separates instructions from data to prevent Claude treating context as a request</option></select>
+    </div>
+  </div>
+</div>
+
+<!-- C5 -->
+<div class="q-card">
+  <div class="q-meta"><span class="q-num">50</span><span class="q-type-badge qt-conn">Connect</span></div>
+  <div class="q-stem">Match each Claude deployment mode to its correct capability boundary.</div>
+  <div class="connect-wrap">
+    <div>
+      <div class="connect-col-label">Mode</div>
+      <div class="connect-item"><strong>A.</strong> Chat</div>
+      <div class="connect-item" style="margin-top:6px"><strong>B.</strong> Cowork</div>
+      <div class="connect-item" style="margin-top:6px"><strong>C.</strong> Claude Code</div>
+      <div class="connect-item" style="margin-top:6px"><strong>D.</strong> Claude for Chrome</div>
+    </div>
+    <div>
+      <div class="connect-col-label">Capability Boundary</div>
+      <select class="connect-select" id="c50a"><option value="">— Match A —</option><option>1. Direct file system access to a chosen folder; reads, edits, and runs real local files</option><option>2. Completes full multi-step workflows autonomously; reads/writes/deletes local files; parallel sub-agents</option><option>3. Browser extension with access to real authenticated sessions; can navigate, click, and fill forms</option><option>4. Answers questions and generates content in a conversational interface; no autonomous file operations</option></select>
+      <select class="connect-select" id="c50b" style="margin-top:6px"><option value="">— Match B —</option><option>1. Direct file system access to a chosen folder; reads, edits, and runs real local files</option><option>2. Completes full multi-step workflows autonomously; reads/writes/deletes local files; parallel sub-agents</option><option>3. Browser extension with access to real authenticated sessions; can navigate, click, and fill forms</option><option>4. Answers questions and generates content in a conversational interface; no autonomous file operations</option></select>
+      <select class="connect-select" id="c50c" style="margin-top:6px"><option value="">— Match C —</option><option>1. Direct file system access to a chosen folder; reads, edits, and runs real local files</option><option>2. Completes full multi-step workflows autonomously; reads/writes/deletes local files; parallel sub-agents</option><option>3. Browser extension with access to real authenticated sessions; can navigate, click, and fill forms</option><option>4. Answers questions and generates content in a conversational interface; no autonomous file operations</option></select>
+      <select class="connect-select" id="c50d" style="margin-top:6px"><option value="">— Match D —</option><option>1. Direct file system access to a chosen folder; reads, edits, and runs real local files</option><option>2. Completes full multi-step workflows autonomously; reads/writes/deletes local files; parallel sub-agents</option><option>3. Browser extension with access to real authenticated sessions; can navigate, click, and fill forms</option><option>4. Answers questions and generates content in a conversational interface; no autonomous file operations</option></select>
+    </div>
+  </div>
+</div>
+
+<!-- SUBMIT -->
+<div class="qz-submit-wrap">
+  <button class="qz-submit" id="qz-submit-btn" onclick="_q.submit()">Submit Quiz</button>
+</div>
+
+<!-- RESULTS PANEL -->
+<div class="qz-results" id="qz-results">
+  <div class="qz-score-row">
+    <div><div class="qz-score-big" id="res-pct">—%</div><div class="qz-score-sub" id="res-sub">— / 50 items · hard</div></div>
+  </div>
+  <div class="sec-breakdown" id="res-breakdown"></div>
+  <div class="eval-panel">
+    <div class="eval-label">Supreme Allied Headquarters — Campaign Evaluation</div>
+    <div class="eval-body" id="eval-body">Awaiting score data...</div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════ -->
+<!-- ANSWER KEY                                -->
+<!-- ══════════════════════════════════════════ -->
+<div class="key-section">
+  <div class="key-hdr">Answer Key — visible after submission</div>
+  <div class="key-body" id="answer-key" style="display:none">
+
+    <div style="font-family:var(--mono);font-size:10px;font-weight:600;color:var(--orange);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px;">Part I — Multiple Choice</div>
+    <div class="key-item"><span class="key-num">1</span><span class="key-ans">B</span><span class="key-topic">Model cascade: Sonnet default → Opus when insufficient → Haiku for bulk</span></div>
+    <div class="key-item"><span class="key-num">2</span><span class="key-ans">B</span><span class="key-topic">Extended Thinking costs more tokens and time; unnecessary on simple queries</span></div>
+    <div class="key-item"><span class="key-num">3</span><span class="key-ans">B</span><span class="key-topic">Custom Instructions (authored) + Memory (auto-synthesized) work simultaneously</span></div>
+    <div class="key-item"><span class="key-num">4</span><span class="key-ans">B</span><span class="key-topic">window.claude.complete handles auth server-side; no viewer credentials required</span></div>
+    <div class="key-item"><span class="key-num">5</span><span class="key-ans">B</span><span class="key-topic">Extended Thinking = UI toggle; Adaptive Thinking = phrase-triggered in Opus 4.7</span></div>
+    <div class="key-item"><span class="key-num">6</span><span class="key-ans">B</span><span class="key-topic">One-project-per-workflow-type rule prevents context pollution</span></div>
+    <div class="key-item"><span class="key-num">7</span><span class="key-ans">B</span><span class="key-topic">Negative constraints set hard boundaries; positive instructions can be ambiguous in context</span></div>
+    <div class="key-item"><span class="key-num">8</span><span class="key-ans">B</span><span class="key-topic">Connectors (MCP integrations) — Settings → Connectors — enable multi-service coordination</span></div>
+    <div class="key-item"><span class="key-num">9</span><span class="key-ans">B</span><span class="key-topic">Both local; Cowork = general file+research workflows; Code Routines = code-specific tasks</span></div>
+    <div class="key-item"><span class="key-num">10</span><span class="key-ans">B</span><span class="key-topic">Claude Code has simultaneous screenshot + live codebase access — finds file autonomously</span></div>
+    <div class="key-item"><span class="key-num">11</span><span class="key-ans">B</span><span class="key-topic">Chrome extension accesses real authenticated sessions — including banking and medical portals</span></div>
+    <div class="key-item"><span class="key-num">12</span><span class="key-ans">B</span><span class="key-topic">Prior models: 18% edge accuracy; improvement makes long-document analysis reliable</span></div>
+    <div class="key-item"><span class="key-num">13</span><span class="key-ans">B</span><span class="key-topic">/compact runs mid-session when looping/inconsistency signals context window is full</span></div>
+    <div class="key-item"><span class="key-num">14</span><span class="key-ans">B</span><span class="key-topic">Styles = how Claude writes; Instructions = what Claude knows; both active simultaneously</span></div>
+    <div class="key-item"><span class="key-num">15</span><span class="key-ans">C</span><span class="key-topic">Reformatting a list is low-ambiguity; interview-first adds overhead with no quality gain</span></div>
+    <div class="key-item"><span class="key-num">16</span><span class="key-ans">B</span><span class="key-topic">Cowork parallelizes sub-workflows; multiple files processed simultaneously → fraction of time</span></div>
+    <div class="key-item"><span class="key-num">17</span><span class="key-ans">B</span><span class="key-topic">Higher resolution unlocks fine-text reading on screenshots, dense spreadsheets, drawings</span></div>
+    <div class="key-item"><span class="key-num">18</span><span class="key-ans">B</span><span class="key-topic">Global rules → ~/.claude/claude.md; project-specific rules → project claude.md under 200 lines</span></div>
+    <div class="key-item"><span class="key-num">19</span><span class="key-ans">B</span><span class="key-topic">Explanation teaches what variables improve prompts — makes the user a better prompt writer</span></div>
+    <div class="key-item"><span class="key-num">20</span><span class="key-ans">B</span><span class="key-topic">Three failed corrections = poisoned context; fresh session + clean description = fix</span></div>
+
+    <div style="font-family:var(--mono);font-size:10px;font-weight:600;color:var(--orange);text-transform:uppercase;letter-spacing:0.08em;margin:14px 0 8px;">Part II — Fill in the Blank</div>
+    <div class="key-item"><span class="key-num">21</span><span class="key-ans">XML</span><span class="key-topic">XML tags (&lt;task&gt;, &lt;context&gt;, &lt;instructions&gt;, etc.) separate instructions from data</span></div>
+    <div class="key-item"><span class="key-num">22</span><span class="key-ans">/model sonnet</span><span class="key-topic">Command to switch from Opus planning phase to Sonnet build phase in Claude Code</span></div>
+    <div class="key-item"><span class="key-num">23</span><span class="key-ans">summarizes</span><span class="key-topic">Context compaction auto-summarizes old turns; "compresses" also accepted</span></div>
+    <div class="key-item"><span class="key-num">24</span><span class="key-ans">context/</span><span class="key-topic">Three subfolders: context/ · projects/ · output/</span></div>
+    <div class="key-item"><span class="key-num">25</span><span class="key-ans">skill.md</span><span class="key-topic">Plain-text instruction file that Claude auto-activates on matching tasks</span></div>
+    <div class="key-item"><span class="key-num">26</span><span class="key-ans">2,576</span><span class="key-topic">2,576 pixels / ≈3.75 megapixels in Opus 4.7</span></div>
+    <div class="key-item"><span class="key-num">27</span><span class="key-ans">Format</span><span class="key-topic">Five parts: Role · Task · Context · Constraints · Format</span></div>
+    <div class="key-item"><span class="key-num">28</span><span class="key-ans">/compact</span><span class="key-topic">Summarizes key decisions, discards noise — fixes looping caused by context overflow</span></div>
+    <div class="key-item"><span class="key-num">29</span><span class="key-ans">20</span><span class="key-topic">20 MB per artifact; publish-gated; inactive in dev mode</span></div>
+    <div class="key-item"><span class="key-num">30</span><span class="key-ans">Dispatch</span><span class="key-topic">Dispatch: phone sends task → desktop executes → push notification on completion</span></div>
+
+    <div style="font-family:var(--mono);font-size:10px;font-weight:600;color:var(--orange);text-transform:uppercase;letter-spacing:0.08em;margin:14px 0 8px;">Part III — True or False</div>
+    <div class="key-item"><span class="key-num">31</span><span class="key-ans">F</span><span class="key-topic">Claude for Chrome supports Chrome and Edge only — not Brave, Arc, or mobile</span></div>
+    <div class="key-item"><span class="key-num">32</span><span class="key-ans">T</span><span class="key-topic">Custom Instructions (authored) and Memory (auto-synthesized) serve different roles; both active</span></div>
+    <div class="key-item"><span class="key-num">33</span><span class="key-ans">F</span><span class="key-topic">Cowork scheduled tasks are local-only; machine must be awake and Claude desktop open</span></div>
+    <div class="key-item"><span class="key-num">34</span><span class="key-ans">T</span><span class="key-topic">Connectors: read access + explicit confirmation before any action (send, delete, create)</span></div>
+    <div class="key-item"><span class="key-num">35</span><span class="key-ans">F</span><span class="key-topic">Memory generation is available on the free tier</span></div>
+    <div class="key-item"><span class="key-num">36</span><span class="key-ans">T</span><span class="key-topic">Plan Mode shows all intended changes and waits for approval before touching any file</span></div>
+    <div class="key-item"><span class="key-num">37</span><span class="key-ans">F</span><span class="key-topic">Sonnet is 5× CHEAPER than Opus, not more expensive — Opus costs 5× more per token</span></div>
+    <div class="key-item"><span class="key-num">38</span><span class="key-ans">F</span><span class="key-topic">Deep Research is Pro/Max/Team/Enterprise only — not available on the free tier</span></div>
+    <div class="key-item"><span class="key-num">39</span><span class="key-ans">T</span><span class="key-topic">/init generates claude.md; Claude reads it at the start of every subsequent session</span></div>
+    <div class="key-item"><span class="key-num">40</span><span class="key-ans">F</span><span class="key-topic">Incognito Mode saves nothing — no history, no memory update, no search indexing</span></div>
+
+    <div style="font-family:var(--mono);font-size:10px;font-weight:600;color:var(--orange);text-transform:uppercase;letter-spacing:0.08em;margin:14px 0 8px;">Part IV — Enumeration</div>
+    <div class="key-item"><span class="key-num">41</span><span class="key-ans">—</span><span class="key-topic">1. No claude.md (stateless sessions) · 2. Vague prompts · 3. Skipping Plan Mode on multi-file tasks · 4. Never using /compact · 5. Three failed corrections in the same session (poisoned context)</span></div>
+    <div class="key-item"><span class="key-num">42</span><span class="key-ans">—</span><span class="key-topic">aboutme.md (role, business, audience) · brandvoice.md (tone, style, words to use/avoid) · workingpreferences.md (document structure, ambiguity handling)</span></div>
+    <div class="key-item"><span class="key-num">43</span><span class="key-ans">—</span><span class="key-topic">"think carefully" · "think harder" · "ultra think" · "think this through deeply"</span></div>
+    <div class="key-item"><span class="key-num">44</span><span class="key-ans">—</span><span class="key-topic">Project brief (goal + audience) · Examples of good work (3–4 pieces for tone/quality calibration) · Constraints list (always/never rules)</span></div>
+    <div class="key-item"><span class="key-num">45</span><span class="key-ans">—</span><span class="key-topic">Role (specific expert) · Task (exactly what's needed) · Context (background/audience) · Constraints (guardrails: length, tone, exclusions) · Format (output structure)</span></div>
+
+    <div style="font-family:var(--mono);font-size:10px;font-weight:600;color:var(--orange);text-transform:uppercase;letter-spacing:0.08em;margin:14px 0 8px;">Part V — Connect / Matching</div>
+    <div class="key-item"><span class="key-num">46</span><span class="key-ans">A→4 B→3 C→2 D→1</span><span class="key-topic">Incognito→no trace · Custom Styles→voice capture · Compaction→auto-summarize · Past Chats→queryable history</span></div>
+    <div class="key-item"><span class="key-num">47</span><span class="key-ans">A→4 B→1 C→3 D→2</span><span class="key-topic">Haiku→bulk/speed · Sonnet→default workhorse · Opus 4.6→complex reasoning · Opus 4.7→Adaptive Thinking + highest res</span></div>
+    <div class="key-item"><span class="key-num">48</span><span class="key-ans">A→2 B→4 C→3 D→1</span><span class="key-topic">/init→generates claude.md · /compact→context noise reduction · /plan→show changes before execution · /model sonnet→switch to build model</span></div>
+    <div class="key-item"><span class="key-num">49</span><span class="key-ans">A→4 B→3 C→2 D→1</span><span class="key-topic">XML→instruction/data separation · Meta-prompting→Claude optimizes the prompt · Interview-first→gather context first · Five-Part→RTCCF structure</span></div>
+    <div class="key-item"><span class="key-num">50</span><span class="key-ans">A→4 B→2 C→1 D→3</span><span class="key-topic">Chat→conversational only · Cowork→autonomous full workflows · Claude Code→file system access · Chrome→authenticated browser sessions</span></div>
+
+  </div>
+</div>
+
+</div><!-- /doc-body -->
+
+
+</div>
+
+<footer class="snx-footer">
+
+  <!-- Meta bar -->
+  <div class="snx-footer-meta">
+    <span class="snx-footer-course">Claude MasterClass</span>
+    <span class="snx-footer-divider">·</span>
+    <span class="snx-footer-module">Module 01 · Complete Practical Guide: Interface, Features, Claude Code &amp; Cowork</span>
+  </div>
+
+  <!-- Nav row -->
+  <nav class="snx-footer-nav" aria-label="Artifact navigation">
+
+    <!-- Left: Previous -->
+    <a class="snx-nav-prev" href="#">
+      <span class="snx-nav-chevron">‹</span>
+      Previous
+    </a>
+
+    <!-- Center: Hub -->
+    <div class="snx-nav-hub">
+      <a class="snx-hub-btn snx-hub-btn-recall"  href="../recalls/01_claude-masterclass-recall.html">Recall</a>
+      <a class="snx-hub-btn snx-hub-btn-tree"    href="../trees/01_claude-masterclass-tree.html">Tree</a>
+      <a class="snx-hub-btn snx-hub-btn-compact" href="../compact/01_claude-masterclass-compact.html">Compact</a>
+      <a class="snx-hub-btn snx-hub-btn-quiz"    href="#" aria-current="page">Quiz</a>
+      <a class="snx-hub-btn snx-hub-btn-module"  href="../modules/01_claude-masterclass-reviewer.html">Module</a>
+    </div>
+
+    <!-- Right: Next -->
+    <a class="snx-nav-next" href="#">
+      Next
+      <span class="snx-nav-chevron">›</span>
+    </a>
+
+  </nav>
+
+</footer>
+
+<script>
+function sendPrompt(t){if(window.parent&&window.parent.postMessage){window.parent.postMessage({type:'user_message',message:t},'*');}}
+function recallQuick(){sendPrompt('/recall mixed(15) hard');}
+function exportMd(){sendPrompt('/export -md');}
+
+var _q = {
+  mc:  {1:'B',2:'B',3:'B',4:'B',5:'B',6:'B',7:'B',8:'B',9:'B',10:'B',11:'B',12:'B',13:'B',14:'B',15:'C',16:'B',17:'B',18:'B',19:'B',20:'B'},
+  tof: {31:'F',32:'T',33:'F',34:'T',35:'F',36:'T',37:'F',38:'F',39:'T',40:'F'},
+  conn:{
+    46:{a:'4',b:'3',c:'2',d:'1'},
+    47:{a:'4',b:'1',c:'3',d:'2'},
+    48:{a:'2',b:'4',c:'3',d:'1'},
+    49:{a:'4',b:'3',c:'2',d:'1'},
+    50:{a:'4',b:'2',c:'1',d:'3'}
+  },
+  answers:{},
+
+  select: function(el,n,letter){
+    el.closest('.q-options').querySelectorAll('.q-opt').forEach(function(o){o.classList.remove('selected');});
+    el.classList.add('selected');
+    this.answers['mc'+n]=letter;
+    this.updateProgress();
+  },
+
+  tof: function(el,n,val){
+    el.parentNode.querySelectorAll('.tof-btn').forEach(function(b){b.className='tof-btn';});
+    el.classList.add(val==='T'?'sel-true':'sel-false');
+    this.answers['tof'+n]=val;
+    this.updateProgress();
+  },
+
+  updateProgress: function(){
+    var total=50;
+    var done=Object.keys(this.answers).length;
+    document.getElementById('qz-prog-bar').style.width=Math.min(100,Math.round(done/total*100*0.5))+'%';
+  },
+
+  submit: function(){
+    var correct=0;
+    var secScore={A:0,B:0,C:0,D:0,E:0,F:0};
+    var secTotal={A:0,B:0,C:0,D:0,E:0,F:0};
+
+    // MC scoring — map to sections
+    var mcSec={1:'A',2:'B',3:'B',4:'C',5:'B',6:'C',7:'E',8:'C',9:'F',10:'E',11:'F',12:'B',13:'E',14:'B',15:'D',16:'F',17:'C',18:'E',19:'D',20:'E'};
+    for(var i=1;i<=20;i++){
+      secTotal[mcSec[i]]++;
+      var ans=this.answers['mc'+i];
+      var el=document.querySelector('[onclick*="_q.select(this,'+i+'"]')
+      if(ans===this.mc[i]){correct++;secScore[mcSec[i]]++;}
+    }
+    // Fill — manual check placeholder (treat as attempted, credit 1 per answer for demo)
+    var fillAnswers={21:'xml',22:'/model sonnet',23:'summarizes',24:'context',25:'skill.md',26:'2,576',27:'format',28:'/compact',29:'20',30:'dispatch'};
+    var fillSec={21:'D',22:'E',23:'B',24:'F',25:'C',26:'C',27:'D',28:'E',29:'C',30:'F'};
+    for(var j=21;j<=30;j++){
+      secTotal[fillSec[j]]++;
+      var fval=(document.getElementById('f'+j)||{value:''}).value.toLowerCase().trim();
+      var fkey=fillAnswers[j].toLowerCase();
+      if(fval&&(fval===fkey||fval.indexOf(fkey)>=0||fkey.indexOf(fval)>=0)){correct++;secScore[fillSec[j]]++;}
+    }
+    // TOF scoring
+    var tofSec={31:'F',32:'B',33:'F',34:'C',35:'B',36:'E',37:'A',38:'C',39:'E',40:'B'};
+    for(var k=31;k<=40;k++){
+      secTotal[tofSec[k]]++;
+      if(this.answers['tof'+k]===this.tof[k]){correct++;secScore[tofSec[k]]++;}
+    }
+    // Enum — self-graded; count as 0 for auto-score but show answer key
+    var enumSec={41:'E',42:'F',43:'B',44:'C',45:'D'};
+    for(var m=41;m<=45;m++){secTotal[enumSec[m]]+=1;}
+    // Connect scoring
+    var connSec={46:'B',47:'A',48:'E',49:'D',50:'F'};
+    for(var c=46;c<=50;c++){
+      secTotal[connSec[c]]++;
+      var ckey=this.conn[c];
+      var ca=document.getElementById('c'+c+'a');
+      var cb=document.getElementById('c'+c+'b');
+      var cc=document.getElementById('c'+c+'c');
+      var cd=document.getElementById('c'+c+'d');
+      var selA=ca?ca.value.charAt(0):'';
+      var selB=cb?cb.value.charAt(0):'';
+      var selC=cc?cc.value.charAt(0):'';
+      var selD=cd?cd.value.charAt(0):'';
+      var pts=0;
+      if(selA===ckey.a)pts++;
+      if(selB===ckey.b)pts++;
+      if(selC===ckey.c)pts++;
+      if(selD===ckey.d)pts++;
+      if(pts===4){correct++;secScore[connSec[c]]++;}
+    }
+
+    // Note: enum are self-graded — add dialog
+    var enumNote = ' (enum self-graded; check key below)';
+
+    var total=50;
+    var pct=Math.round(correct/total*100);
+
+    // Show results
+    document.getElementById('qz-results').style.display='block';
+    document.getElementById('res-pct').textContent=pct+'%';
+    document.getElementById('res-sub').textContent=correct+' / '+total+' auto-graded items · hard'+enumNote;
+    document.getElementById('answer-key').style.display='block';
+    document.getElementById('qz-prog-bar').style.width='100%';
+
+    // Section breakdown
+    var secs=['A','B','C','D','E','F'];
+    var secNames={A:'Getting Started',B:'Core Features',C:'Adv. Workflows',D:'Prompting',E:'Claude Code',F:'Cowork'};
+    var bd='';
+    for(var s=0;s<secs.length;s++){
+      var sv=secs[s];
+      var sp=secTotal[sv]>0?Math.round(secScore[sv]/secTotal[sv]*100):0;
+      var col=sp>=85?'var(--green)':sp>=70?'var(--amber)':'var(--red)';
+      bd+='<div class="sec-item"><div class="sec-label">Sec '+sv+' · '+secNames[sv]+'</div><div class="sec-pct" style="color:'+col+'">'+sp+'%</div></div>';
+    }
+    document.getElementById('res-breakdown').innerHTML=bd;
+
+    // Imperial evaluator
+    var weak=[]; var strong=[];
+    for(var es=0;es<secs.length;es++){
+      var ev=secs[es];
+      var ep=secTotal[ev]>0?Math.round(secScore[ev]/secTotal[ev]*100):0;
+      if(ep<70)weak.push(ev+' ('+secNames[ev]+')');
+      if(ep>=85)strong.push(ev+' ('+secNames[ev]+')');
+    }
+    var evalHtml=_q.imperial(pct,correct,total,weak,strong);
+    document.getElementById('eval-body').innerHTML=evalHtml;
+
+    // Scroll to results
+    document.getElementById('qz-results').scrollIntoView({behavior:'smooth',block:'start'});
+  },
+
+  imperial: function(pct, correct, total, weak, strong){
+    if(pct>=90){
+      return '<h1>🏆 CAMPAIGN CHRONICLE</h1>'+
+        '<p>The banners of the Empire now fly over every strategic objective in the Claude MasterClass theater. Lord High Commander Denard has demonstrated not merely competence, but command. '+pct+'% — the War Council has suspended contingency planning. None appear necessary.</p>'+
+        '<p>Supreme Allied Headquarters confirms: this campaign shall be entered into the Imperial Chronicles. Future commanders will study it. Future students will merely read it.</p>'+
+        '<h1>🗺️ ALLIED INTELLIGENCE REPORT</h1>'+
+        '<p><strong>Secured Territories (85%+):</strong> '+(strong.length?strong.join(', '):'All fronts secured')+'</p>'+
+        '<p><strong>Contested Territories (&lt;70%):</strong> '+(weak.length?weak.join(', '):'None — total dominion achieved')+'</p>'+
+        '<h1>⚔️ RECOMMENDED OPERATIONS</h1>'+
+        '<p>Maintain operational readiness. Advance to Quiz B for continued supremacy. Consider scenario exercises to stress-test applied judgment at the frontiers.</p>'+
+        '<h1>📜 WAR COUNCIL DECREE</h1>'+
+        '<p>By unanimous decree of the Imperial War Council: Lord High Commander Denard is hereby promoted to <strong>High Strategist of Artificial Intelligence</strong>. The campaign is complete. The Empire expands.</p>';
+    } else if(pct>=75){
+      return '<h1>🏆 CAMPAIGN CHRONICLE</h1>'+
+        '<p>Victory has been declared. The enthusiasm surrounding that declaration remains limited. '+pct+'% — the objectives were taken, Lord High Commander. The manner in which they were taken leaves something to be desired by the Imperial standard.</p>'+
+        '<p>Supreme Allied Headquarters expected '+(pct<80?'considerably':'somewhat')+' more. The enemy was defeated. Headquarters simply expected them to lose harder.</p>'+
+        '<h1>🗺️ ALLIED INTELLIGENCE REPORT</h1>'+
+        '<p><strong>Secured Territories (85%+):</strong> '+(strong.length?strong.join(', '):'None at the threshold of excellence')+'</p>'+
+        '<p><strong>Contested Territories (&lt;70%):</strong> '+(weak.length?weak.join(', '):'None below 70% — but excellence remains undemonstrated')+'</p>'+
+        '<h1>⚔️ RECOMMENDED OPERATIONS</h1>'+
+        '<p>Reinforce contested positions. Review '+(weak.length?weak.join(', '):'all sections below 80%')+' before advancing. A second campaign is strongly advised before requesting promotion.</p>'+
+        '<h1>📜 WAR COUNCIL DECREE</h1>'+
+        '<p>Promotion proceedings have been <strong>postponed pending evidence of greater ambition</strong>. The realm expands — slowly enough to generate concern at Headquarters. Return with a score that requires no diplomatic framing.</p>';
+    } else {
+      return '<h1>🏆 CAMPAIGN CHRONICLE</h1>'+
+        '<p>The frontiers have collapsed. The enemy now marches through territories once considered secured. '+pct+'% — Lord High Commander Denard, Supreme Allied Headquarters demands an explanation. None currently being offered have been accepted.</p>'+
+        '<p>The Court-Martial Board has been notified. The campaign shall be preserved in military academies as an example of what not to do with a 50-item assessment on material that was reviewed in three formats.</p>'+
+        '<h1>🗺️ ALLIED INTELLIGENCE REPORT</h1>'+
+        '<p><strong>Secured Territories (85%+):</strong> '+(strong.length?strong.join(', '):'None. The Empire holds nothing above threshold.')+'</p>'+
+        '<p><strong>Enemy-Controlled Territories (&lt;70%):</strong> '+(weak.length?weak.join(', '):'Multiple fronts in collapse')+'</p>'+
+        '<h1>⚔️ RECOMMENDED OPERATIONS</h1>'+
+        '<p>Operation Reviewer Reread: return to the Comprehensive reviewer immediately. Operation Recall Reinforcement: complete another recall card session before reattempting. Do not advance to Quiz B under any circumstances until this campaign is remediated.</p>'+
+        '<h1>📜 WAR COUNCIL DECREE</h1>'+
+        '<p>All promotions are <strong>frozen</strong>. The title of Lord High Commander remains technically in effect, pending the outcome of the Court-Martial inquiry. Headquarters allocated resources. The instructors allocated time. The reviewers were generated in three formats. The resulting '+pct+'% has generated questions that nobody wishes to answer — least of all you.</p>'+
+        '<p>The enemy no longer fears this campaign. They are studying it.</p>';
+    }
+  }
+};
+</script>
+</body>
+</html>
