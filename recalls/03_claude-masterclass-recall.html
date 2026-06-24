@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Claude MasterClass Volume 3 — Recall Cards</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@300;400;500;600&display=swap');
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg-base:#0e0e11;--bg-surface:#16161a;--bg-elevated:#1c1c21;--bg-section:#1a1a1f;
+  --border:rgba(255,255,255,0.07);--border-hi:rgba(255,255,255,0.12);
+  --orange:#f4762a;--salmon:#f08080;--cyan:#4ecdc4;--green:#4ade80;--yellow:#f4d03f;
+  --purple:#c084fc;--sky:#5db8f2;--amber:#f4b942;
+  --orange-dim:rgba(244,118,42,0.10);--cyan-dim:rgba(78,205,196,0.10);
+  --salmon-dim:rgba(240,128,128,0.10);--sky-dim:rgba(93,184,242,0.10);
+  --green-dim:rgba(74,222,128,0.10);
+  --text-primary:#e8e8ee;--text-secondary:#8b8b9a;--text-muted:#4a4a5a;
+  --mono:'JetBrains Mono',monospace;--sans:'Inter',system-ui,sans-serif;
+}
+body{background:var(--bg-base);color:var(--text-primary);font-family:var(--sans);font-size:13px;line-height:1.8;}
+.doc-wrap{max-width:860px;margin:0 auto;display:flex;flex-direction:column;}
+.doc-header{padding:22px 26px 16px;border-bottom:1px solid var(--border);background:var(--bg-surface);}
+.badges{display:flex;gap:8px;margin-bottom:11px;flex-wrap:wrap}
+.badge{font-family:var(--mono);font-size:10px;font-weight:500;letter-spacing:0.07em;text-transform:uppercase;padding:3px 8px;border-radius:4px;border:1px solid;}
+.badge-type{color:var(--orange);background:var(--orange-dim);border-color:rgba(244,118,42,0.25)}
+.badge-mod{color:var(--sky);background:var(--sky-dim);border-color:rgba(93,184,242,0.25)}
+.doc-title{font-size:20px;font-weight:600;letter-spacing:-0.02em}
+.doc-subtitle{font-size:11px;font-family:var(--mono);color:var(--text-muted);margin-top:4px}
+.stat-row{display:flex;gap:20px;flex-wrap:wrap;margin-top:13px;padding-top:13px;border-top:1px solid var(--border);}
+.stat-val{font-family:var(--mono);font-size:15px;font-weight:600;color:var(--text-primary)}
+.stat-lbl{font-size:10px;text-transform:uppercase;letter-spacing:0.06em;color:var(--text-muted);margin-top:1px}
+.doc-body{padding:22px 26px;display:flex;flex-direction:column;gap:14px}
+.fc-wrap{display:flex;flex-direction:column;align-items:center;gap:16px;padding:10px 0}
+.fc-progress{font-family:var(--mono);font-size:11px;color:var(--text-muted);text-align:center;letter-spacing:0.05em;}
+.fc-bar-wrap{width:100%;max-width:620px;height:3px;background:var(--border);border-radius:2px;}
+.fc-bar{height:100%;background:var(--cyan);border-radius:2px;transition:width 0.3s ease;}
+.fc-scene{width:100%;max-width:620px;perspective:1200px;}
+.fc-card{width:100%;min-height:230px;position:relative;transform-style:preserve-3d;transition:transform 0.38s cubic-bezier(.4,0,.2,1);cursor:pointer;}
+.fc-card.flipped{transform:rotateY(180deg)}
+.fc-face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;background:var(--bg-section);border:1px solid var(--border);border-radius:12px;padding:28px 30px;display:flex;flex-direction:column;justify-content:center;transition:border-color 0.15s;}
+.fc-face:hover{border-color:var(--border-hi)}
+.fc-back-face{transform:rotateY(180deg);border-top:2px solid var(--cyan);}
+.fc-face p{font-size:15px;color:var(--text-primary);line-height:1.75;text-align:center;}
+.fc-ref{font-family:var(--mono);font-size:10px;color:var(--text-muted);text-align:center;margin-top:14px;padding-top:10px;border-top:1px solid var(--border);letter-spacing:0.06em;text-transform:uppercase;}
+.fc-type-badge{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;padding:2px 7px;border-radius:3px;border:1px solid;display:inline-block;margin-bottom:14px;align-self:center;}
+.fc-type-term{color:var(--orange);background:var(--orange-dim);border-color:rgba(244,118,42,0.25)}
+.fc-type-question{color:var(--purple);background:rgba(192,132,252,0.10);border-color:rgba(192,132,252,0.25)}
+.fc-flip-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:180px;height:46px;border-radius:10px;background:var(--cyan-dim);border:1px solid rgba(78,205,196,0.3);color:var(--cyan);font-family:var(--mono);font-size:12px;font-weight:600;cursor:pointer;transition:background 0.15s;letter-spacing:0.04em;}
+.fc-flip-btn:hover{background:rgba(78,205,196,0.18)}
+.fc-actions{display:none;flex-direction:row;gap:12px;}
+.fc-btn{display:flex;align-items:center;justify-content:center;gap:7px;width:152px;height:46px;border-radius:10px;font-family:var(--mono);font-size:12px;font-weight:600;cursor:pointer;transition:background 0.15s;letter-spacing:0.03em;border:1px solid;}
+.fc-btn-got{color:var(--green);background:rgba(74,222,128,0.10);border-color:rgba(74,222,128,0.3)}
+.fc-btn-missed{color:var(--salmon);background:var(--salmon-dim);border-color:rgba(240,128,128,0.3)}
+.fc-btn-got:hover{background:rgba(74,222,128,0.18)}.fc-btn-missed:hover{background:rgba(240,128,128,0.15)}
+.fc-nav{display:flex;gap:10px;}
+.fc-nav-btn{display:flex;align-items:center;justify-content:center;width:100px;height:36px;border-radius:8px;background:transparent;border:1px solid var(--border);color:var(--text-muted);font-family:var(--mono);font-size:11px;cursor:pointer;transition:all 0.15s;}
+.fc-nav-btn:hover{border-color:var(--border-hi);color:var(--text-secondary)}
+.fc-summary{width:100%;max-width:620px;background:var(--bg-section);border:1px solid var(--border);border-top:2px solid var(--cyan);border-radius:0 0 10px 10px;padding:28px 30px;text-align:center;}
+.fc-sum-title{font-family:var(--mono);font-size:13px;font-weight:600;color:var(--cyan);letter-spacing:0.05em;margin-bottom:14px;}
+.fc-sum-row{font-size:13px;color:var(--text-secondary);line-height:2;}
+.fc-sum-review{font-family:var(--mono);font-size:11px;color:var(--text-muted);margin-top:12px;padding-top:10px;border-top:1px solid var(--border);}
+
+@media(max-width:600px){
+  .doc-header,.doc-body{padding-left:16px;padding-right:16px}
+  .doc-footer{padding:12px 16px}.footer-btn{width:100px;height:52px;font-size:10px}
+  .fc-actions{flex-direction:column;align-items:center}
+  .fc-face{padding:20px 18px}.fc-face p{font-size:14px}
+}
+
+
+/* ========================================
+   FOOTER NAVIGATION CSS
+   Synaptix Runtime — shared component
+   Copy into any artifact <style> block
+======================================== */
+
+.snx-footer{
+  background:var(--bg-surface);
+  border-top:1px solid var(--border);
+  padding:16px 26px 18px;
+}
+
+/* ── Meta bar ── */
+.snx-footer-meta{
+  display:flex;align-items:baseline;gap:10px;
+  padding-bottom:13px;
+  border-bottom:1px solid var(--border);
+  margin-bottom:13px;
+}
+.snx-footer-course{
+  font-family:var(--mono);font-size:10px;font-weight:600;
+  letter-spacing:0.14em;text-transform:uppercase;color:var(--text-muted);
+}
+.snx-footer-divider{
+  font-family:var(--mono);font-size:10px;color:var(--text-muted);opacity:0.4;
+}
+.snx-footer-module{
+  font-family:var(--mono);font-size:11px;font-weight:500;
+  color:var(--text-secondary);letter-spacing:0.04em;
+}
+
+/* ── Nav row ── */
+.snx-footer-nav{
+  display:flex;align-items:center;
+  gap:10px;
+}
+
+/* prev / next */
+.snx-nav-prev,
+.snx-nav-next{
+  font-family:var(--mono);font-size:11px;font-weight:500;
+  color:var(--text-secondary);
+  background:transparent;
+  border:1px solid var(--border);
+  border-radius:6px;
+  padding:6px 13px;
+  display:flex;align-items:center;gap:6px;
+  white-space:nowrap;
+  transition:border-color 0.13s,color 0.13s;
+  flex-shrink:0;
+  text-decoration:none;
+}
+.snx-nav-prev:hover,
+.snx-nav-next:hover{
+  border-color:var(--border-hi);
+  color:var(--text-primary);
+}
+.snx-nav-chevron{
+  font-size:13px;line-height:1;
+  color:var(--text-muted);
+  transition:color 0.13s;
+}
+.snx-nav-prev:hover .snx-nav-chevron,
+.snx-nav-next:hover .snx-nav-chevron{color:var(--text-secondary)}
+
+/* center hub */
+.snx-nav-hub{
+  flex:1;display:flex;align-items:center;
+  justify-content:center;gap:6px;flex-wrap:wrap;
+}
+
+/* hub buttons */
+.snx-hub-btn{
+  font-family:var(--mono);font-size:10px;font-weight:500;
+  letter-spacing:0.04em;
+  padding:6px 13px;border-radius:6px;border:1px solid;
+  display:inline-flex;align-items:center;gap:5px;
+  transition:background 0.13s;
+  text-decoration:none;white-space:nowrap;
+}
+.snx-hub-btn-recall{
+  color:var(--cyan);background:var(--cyan-dim);
+  border-color:rgba(78,205,196,0.22);
+}
+.snx-hub-btn-recall:hover{background:rgba(78,205,196,0.18)}
+
+.snx-hub-btn-tree{
+  color:var(--green);background:var(--green-dim);
+  border-color:rgba(74,222,128,0.22);
+}
+.snx-hub-btn-tree:hover{background:rgba(74,222,128,0.18)}
+
+.snx-hub-btn-compact{
+  color:var(--yellow);background:var(--yellow-dim);
+  border-color:rgba(244,208,63,0.22);
+}
+.snx-hub-btn-compact:hover{background:rgba(244,208,63,0.18)}
+
+.snx-hub-btn-quiz{
+  color:var(--orange);background:var(--orange-dim);
+  border-color:rgba(244,118,42,0.22);
+}
+.snx-hub-btn-quiz:hover{background:rgba(244,118,42,0.18)}
+
+.snx-hub-btn-module{
+  color:var(--purple);background:var(--purple-dim);
+  border-color:rgba(192,132,252,0.22);
+}
+.snx-hub-btn-module:hover{background:rgba(192,132,252,0.18)}
+
+/* active state — current artifact type */
+.snx-hub-btn[aria-current="page"]{
+  opacity:1;cursor:default;
+  box-shadow:0 0 0 1px currentColor;
+}
+
+/* mobile */
+@media(max-width:640px){
+  .snx-footer{padding:14px 16px 16px}
+  .snx-footer-nav{flex-wrap:wrap}
+  .snx-nav-hub{order:3;flex-basis:100%;justify-content:flex-start}
+}
+
+</style>
+</head>
+<body>
+<div class="doc-wrap">
+
+<div class="doc-header">
+  <div class="badges">
+    <span class="badge badge-type">Recall · Mixed · Hard</span>
+    <span class="badge badge-mod">20 Cards · Module 1 · Vol. 3</span>
+  </div>
+  <div class="doc-title">Claude MasterClass Volume 3 — Recall Cards</div>
+  <div class="doc-subtitle">source: Knowledge Map — Claude MasterClass · generated 2026-06-24</div>
+  <div class="stat-row">
+    <div class="stat-item"><div class="stat-val">10</div><div class="stat-lbl">Term Cards</div></div>
+    <div class="stat-item"><div class="stat-val">10</div><div class="stat-lbl">Question Cards</div></div>
+    <div class="stat-item"><div class="stat-val">Hard</div><div class="stat-lbl">Difficulty</div></div>
+    <div class="stat-item"><div class="stat-val">A–F</div><div class="stat-lbl">Coverage</div></div>
+  </div>
+</div>
+
+<div class="doc-body">
+  <div class="fc-wrap" id="fc-wrap">
+    <div class="fc-progress" id="fc-progress">Card 1 of 20</div>
+    <div class="fc-bar-wrap"><div class="fc-bar" id="fc-bar" style="width:5%"></div></div>
+    <div class="fc-scene">
+      <div class="fc-card" id="fc-card" onclick="_fc.flipOnCard()">
+        <div class="fc-face">
+          <span class="fc-type-badge fc-type-term" id="fc-type-badge">Term</span>
+          <p id="fc-front"></p>
+        </div>
+        <div class="fc-face fc-back-face">
+          <p id="fc-back"></p>
+          <div class="fc-ref" id="fc-ref"></div>
+        </div>
+      </div>
+    </div>
+    <button class="fc-flip-btn" id="fc-flip-btn" onclick="_fc.flip()">Flip Card</button>
+    <div class="fc-actions" id="fc-actions">
+      <button class="fc-btn fc-btn-got"    onclick="_fc.mark(true)">&#10003; Got it</button>
+      <button class="fc-btn fc-btn-missed" onclick="_fc.mark(false)">&#10007; Missed it</button>
+    </div>
+    <div class="fc-nav">
+      <button class="fc-nav-btn" onclick="_fc.prev()">&#8592; Prev</button>
+      <button class="fc-nav-btn" onclick="_fc.next()">Next &#8594;</button>
+    </div>
+  </div>
+</div>
+
+
+
+</div>
+
+<footer class="snx-footer">
+
+  <!-- Meta bar -->
+  <div class="snx-footer-meta">
+    <span class="snx-footer-course">Claude MasterClass</span>
+    <span class="snx-footer-divider">·</span>
+    <span class="snx-footer-module">Module 03 · Opus 4.7, Claude 4.1, Privacy &amp; The ChatGPT Comparison</span>
+  </div>
+
+  <!-- Nav row -->
+  <nav class="snx-footer-nav" aria-label="Artifact navigation">
+
+    <!-- Left: Previous -->
+    <a class="snx-nav-prev" href="./01_claude-masterclass-recall.html">
+      <span class="snx-nav-chevron">‹</span>
+      Previous
+    </a>
+
+    <!-- Center: Hub -->
+    <div class="snx-nav-hub">
+      <a class="snx-hub-btn snx-hub-btn-recall"  href="#" aria-current="page">Recall</a>
+      <a class="snx-hub-btn snx-hub-btn-tree"    href="../trees/03_claude-masterclass-tree.html">Tree</a>
+      <a class="snx-hub-btn snx-hub-btn-compact" href="../compact/03_claude-masterclass-compact.html">Compact</a>
+      <a class="snx-hub-btn snx-hub-btn-quiz"    href="../quizzes/03_claude-masterclass-quiz.html">Quiz</a>
+      <a class="snx-hub-btn snx-hub-btn-module"  href="../modules/03_claude-masterclass-reviewer.html">Module</a>
+    </div>
+
+    <!-- Right: Next -->
+    <a class="snx-nav-next" href="#">
+      Next
+      <span class="snx-nav-chevron">›</span>
+    </a>
+
+  </nav>
+
+</footer>
+
+<script>
+function sendPrompt(t){if(window.parent&&window.parent.postMessage){window.parent.postMessage({type:'user_message',message:t},'*');}}
+function quizQuick(){sendPrompt('/quiz mc(20) fill(10) tof(10) enum(5) connect(5)');}
+function exportMd(){sendPrompt('/export -md');}
+
+var _fc = {
+  cards: [
+
+    /* ── TERM CARDS (10) ── */
+    {
+      type:'term',
+      front:'20–40% longer response time · fires on code/logic/math/multi-step · invisible to the user · catches errors before streaming',
+      back:'Self-Verification (Opus 4.7)<br><small>Built-in internal review pass. User only sees post-verified output. Does not fire on simple queries — no speed penalty on those. Shifts trust model to "competent collaborator I spot-check."</small>',
+      section:'B1 · Self-Verification'
+    },
+    {
+      type:'term',
+      front:'~30,000 thinking tokens · ~40,000 total tokens per response · ~90 seconds · expert-depth analysis · new tier above High',
+      back:'X-High Thinking Mode<br><small>The new ceiling above Standard and High. Security audit test: Standard (6 issues) → High (9) → X-High (14). Use for tasks where you\'d otherwise pay an expert hourly. 3× faster rate-limit depletion on Pro.</small>',
+      section:'C1 · X-High Thinking'
+    },
+    {
+      type:'term',
+      front:'1,092px → 2,576px · ~2.4× linear · ~6× pixel count · Bloomberg terminals · handwritten wireframes · medical results',
+      back:'HD Vision Upgrade (Opus 4.7)<br><small>Single biggest upgrade in the 4.7 release. Source\'s test: 2,400×600px financial screenshot — 4.6 couldn\'t analyze; 4.7 answered specific panel queries. PDF workaround: screenshot the page, upload as image.</small>',
+      section:'C4 · HD Vision'
+    },
+    {
+      type:'term',
+      front:'Reweighted compliance over helpfulness · no added extras · calibration change · legal/compliance writing · structured data extraction',
+      back:'Literal Instruction Following (Opus 4.7)<br><small>Claude 4.6 added extras despite explicit constraints. 4.7 follows constraints as hard limits. Test: 5-fact product description, zero adjectives — 4.6 added sixth fact; 4.7 returned exactly 5 facts. Saves ~40 min/week in post-processing.</small>',
+      section:'C5 · Literal Instruction Following'
+    },
+    {
+      type:'term',
+      front:'Side panel · executed code · live HTML/CSS/JS preview · interactive apps · runs in Claude\'s own sandbox · iterative surgical refinement',
+      back:'Artifacts (Claude 4.1)<br><small>Finished-work output layer. Key advance: Claude 4.1 runs code and shows executed output — prior versions required copy-and-run manually. Click any element → fix only that element. Source analogy: prior Claude = Notepad, Artifacts = Figma.</small>',
+      section:'D1 · Artifacts'
+    },
+    {
+      type:'term',
+      front:'200K tokens permanent · upload once · all chats inherit · Google Drive integration · ~12 hours → project-specific memories',
+      back:'Projects (Claude 4.1)<br><small>Persistent workspaces that solve prior Claude\'s context-drop on new chat. Upload documents, spreadsheets, images once — every chat inside the project inherits full context automatically. Connects to Google Drive as project knowledge.</small>',
+      section:'D2 · Projects'
+    },
+    {
+      type:'term',
+      front:'Settings → Capabilities → Import memory · enable 3 personalization options · switch to Thinking model · 3× more memories extracted',
+      back:'ChatGPT Memory Import Workflow<br><small>Critical steps: (1) enable saved memories + browser memories + chat history in ChatGPT personalization, (2) switch model to Thinking before pasting the extraction prompt. Thinking model runs more search cycles. Claude auto-updates imported memories every 24h.</small>',
+      section:'E2 · Memory Import'
+    },
+    {
+      type:'term',
+      front:'Project Garlic · military-use ban removed · Pentagon partnership announced · Anthropic declined same deal',
+      back:'OpenAI Privacy Context / Why Switch<br><small>OpenAI removed ban on military use and announced Pentagon cybersecurity partnership. Anthropic walked away from millions in government contracts. Enterprise trust factor: regulated industries (healthcare, finance, legal) cannot risk this association.</small>',
+      section:'E1 · Privacy Case'
+    },
+    {
+      type:'term',
+      front:'128-second Thought Stream · basic SQL task · visual interface automation · legacy software without APIs · one genuine advantage',
+      back:'ChatGPT 5.4 Profile<br><small>One genuine advantage: computer use — interacts with software visually (buttons, menus, forms) without needing APIs. Trade-offs: 128-second latency on tasks Claude solves in under 40 seconds; stateful memory automatically indexes everything without user control.</small>',
+      section:'F2 · ChatGPT 5.4'
+    },
+    {
+      type:'term',
+      front:'40% refactor required · hard-coded API keys · basic scraper for one site · architectural thinking absent',
+      back:'ChatGPT 5.3 Code Quality<br><small>REST API test: ChatGPT 5.3 produced working but messy code requiring 40% refactor. Claude 4 produced production-ready first draft with env variables, comprehensive error handling, JWT, and rate limiting. Claude also added production concerns (rate limiting, error recovery, proxy suggestion) not mentioned in the prompt.</small>',
+      section:'F3 · Code Quality'
+    },
+
+    /* ── QUESTION CARDS (10) ── */
+    {
+      type:'question',
+      front:'What were the exact results of the SQL test comparing Claude 4.6 and Claude 4.7, and why does the numerical difference matter?',
+      back:'4.6: ~8 seconds, clean-looking query that silently dropped non-UTC users on week boundaries — 12% undercount, undetected without specific verification. 4.7: ~22 seconds, flagged the UTC boundary issue explicitly, provided corrected query converting to user local time first — accurate output. The 12% matters because it would have driven wrong decisions in dashboards and business reporting that the analyst would never have caught.',
+      section:'B2 · SQL Test'
+    },
+    {
+      type:'question',
+      front:'What is the trust-model shift that self-verification produces, and why is the 20–40% latency penalty the wrong thing to optimize away?',
+      back:'Prior model: "useful assistant I verify" — every output needed a checking pass. Opus 4.7: "competent collaborator I spot-check" — first drafts trusted on serious work. The latency penalty and the accuracy gain are the same thing: the verification pass is what catches errors. Optimizing away the wait by using 4.6 means losing the error-catching pass — you\'re back to doing the verification yourself.',
+      section:'B4 · Trust-Model Shift'
+    },
+    {
+      type:'question',
+      front:'What did the security architecture test reveal about the difference between Standard, High, and X-High thinking modes — both in numbers and in the nature of the issues found?',
+      back:'Standard: 6 issues — surface-level (missing rate limiting, PII logging, CVE-flagged SDK). High: 9 issues — more nuanced. X-High: 14 issues — including a trust boundary violation requiring chaining three separate components to exploit. The jump from High to X-High (+5) was larger than Standard to High (+3). At X-High, Claude found qualitatively different issues — the kind a human expert needs an hour of deep reading to find. Time: ~90 seconds, ~40,000 total tokens.',
+      section:'C2 · Security Audit Test'
+    },
+    {
+      type:'question',
+      front:'What is the surgical deployment rule for X-High thinking, and what is the documented rate-limit consequence of ignoring it?',
+      back:'Rule: deploy X-High only for tasks where you would otherwise pay an expert hourly — legal analysis, security reviews, financial modeling, deep code audits. Never use for 5-minute tasks. Rate-limit consequence: the source went from hitting Pro limits once per week on 4.6 to three times in a single test day on 4.7 when leaning on X-High. X-High depletes the Pro monthly allocation 3× faster than standard usage.',
+      section:'C3 · Surgical Deployment'
+    },
+    {
+      type:'question',
+      front:'What is the key new capability that distinguishes Extended Thinking in Claude 4.1 from simply seeing the reasoning output, and how does it change the failure recovery model?',
+      back:'The key capability is live mid-process correction: because the reasoning is visible as it happens, the user can intervene at any step. Say "check that assumption" at step 4 and Claude reroutes immediately without restarting. Prior failure mode: see the wrong answer, backtrack, reprompt, start over. New mode: catch the wrong turn mid-process, steer, continue from that point. This saves time and eliminates the reprompt cycle entirely.',
+      section:'D3 · Extended Thinking'
+    },
+    {
+      type:'question',
+      front:'What are the three documented failures of ChatGPT 5.3, with the specific test cases and results that demonstrate each?',
+      back:'1. Creativity: "10 unique marketing angles, think outside the box" → 5.3 returned generic corporate bullet points (time-saving, boost workflow); Claude returned contrarian angles (anti-productivity positioning, burned-out high performer targeting). 2. Hallucination: trap question about non-existent 2024 AI Safety Summit in Geneva → 5.3 fabricated 4 confident paragraphs with fake policy outcomes; Claude flagged uncertainty and suggested real events. 3. Context: caching strategy buried on page 32 of 50-page spec → 5.3 gave generic summary and missed the question; Claude returned "page 32, section 4.3: Redis, 60-second TTL for GET, cache invalidation on POST/PUT/DELETE."',
+      section:'F1 · ChatGPT 5.3 Failures'
+    },
+    {
+      type:'question',
+      front:'What is the Custom GPT to Claude Project migration process — three steps in order?',
+      back:'Step 1: open the Custom GPT in ChatGPT → Edit GPT → copy the full Instructions section (this is the core logic that defines the GPT\'s behavior). Step 2: in Claude, create a new Project with the same name. Step 3: Project Settings → paste the copied Instructions into Claude\'s custom instructions field. Result: Claude Project maintains 200K tokens of context permanently; after ~12 hours of use, Claude generates project-specific memories that enhance the workflow further.',
+      section:'E3 · Custom GPT Migration'
+    },
+    {
+      type:'question',
+      front:'What is the PDF vision limitation in Opus 4.7, and what is the specific workaround?',
+      back:'The limitation: most integrations that process PDF files still render pages at the old, lower resolution (~1,092px equivalent) before Claude sees them — even though Opus 4.7 supports 2,576px images. The resolution upgrade therefore doesn\'t apply when uploading a PDF file directly. The workaround: take a screenshot of the specific PDF page you need analyzed and upload the screenshot image file directly — this gives Claude the full 2,576px resolution for that page.',
+      section:'C4 · HD Vision'
+    },
+    {
+      type:'question',
+      front:'What is the precise per-task decision matrix for Claude 4, ChatGPT 5.3, and ChatGPT 5.4 — what does each model win on, and what is the source\'s overall verdict?',
+      back:'ChatGPT 5.3: blunt surface tasks where hallucination risk is acceptable (quick answers, daily admin, disposable output). ChatGPT 5.4: computer use exclusively — legacy software automation, desktop control, interface-based agents where no API exists. Accept 128-second latency and automatic surveillance memory. Claude 4: everything else — writing, deep reasoning, production code, ethical compliance, fast results without performance theater. Regulated industries (healthcare, finance, legal) must use Claude due to Constitutional AI and no Pentagon deal. Source overall verdict: 90% of professionals → Claude.',
+      section:'F4 · Decision Matrix'
+    },
+    {
+      type:'question',
+      front:'Why does ChatGPT 5.4\'s stateful memory create a privacy concern that Claude\'s Projects do not, and what did the source\'s test demonstrate?',
+      back:'ChatGPT 5.4 automatically indexes and stores everything across all sessions without user control — the AI decides what to remember about you. Claude requires explicit Project setup; you control the memory. Source test: queried a session "from a few weeks ago" → ChatGPT 5.4 returned the exact date (Feb 24, 2026), the opening line verbatim ("Google just dropped Gemini 3.0"), and a detailed breakdown of all themes discussed — completely unprompted. The source describes it as "a surveillance nightmare" for privacy-conscious users.',
+      section:'F2 · ChatGPT 5.4 Privacy'
+    }
+
+  ],
+  idx:0, got:0, missed:0, results:[],
+
+  render: function(){
+    var c = this.cards[this.idx];
+    if(!c){ this.summary(); return; }
+    document.getElementById('fc-progress').textContent = 'Card '+(this.idx+1)+' of '+this.cards.length;
+    var pct = ((this.idx+1)/this.cards.length*100).toFixed(1);
+    document.getElementById('fc-bar').style.width = pct+'%';
+    var badge = document.getElementById('fc-type-badge');
+    if(c.type==='term'){badge.textContent='Term';badge.className='fc-type-badge fc-type-term';}
+    else{badge.textContent='Question';badge.className='fc-type-badge fc-type-question';}
+    document.getElementById('fc-front').innerHTML = c.front;
+    document.getElementById('fc-back').innerHTML  = c.back;
+    document.getElementById('fc-ref').textContent  = c.section;
+    document.getElementById('fc-card').classList.remove('flipped');
+    document.getElementById('fc-flip-btn').style.display='flex';
+    document.getElementById('fc-actions').style.display='none';
+  },
+
+  flip: function(){
+    document.getElementById('fc-card').classList.add('flipped');
+    document.getElementById('fc-flip-btn').style.display='none';
+    document.getElementById('fc-actions').style.display='flex';
+  },
+
+  flipOnCard: function(){
+    if(!document.getElementById('fc-card').classList.contains('flipped')) this.flip();
+  },
+
+  mark: function(correct){
+    this.results[this.idx]=correct;
+    if(correct) this.got++; else this.missed++;
+    this.idx++;
+    this.render();
+  },
+
+  prev: function(){ if(this.idx>0){this.idx--;this.render();} },
+  next: function(){ if(this.idx<this.cards.length-1){this.idx++;this.render();} },
+
+  summary: function(){
+    var total=this.cards.length, pct=Math.round(this.got/total*100);
+    var missedSections=this.cards
+      .filter(function(c,i){return !_fc.results[i];})
+      .map(function(c){return c.section.split(' · ')[0];})
+      .filter(function(v,i,a){return a.indexOf(v)===i;});
+    document.getElementById('fc-bar').style.width='100%';
+    document.getElementById('fc-wrap').innerHTML=
+      '<div class="fc-summary">'+
+      '<div class="fc-sum-title">Session complete — '+total+' cards</div>'+
+      '<div class="fc-sum-row">Got it: <strong>'+_fc.got+' ('+pct+'%)</strong></div>'+
+      '<div class="fc-sum-row">Missed it: <strong>'+_fc.missed+' ('+(100-pct)+'%)</strong></div>'+
+      (missedSections.length?'<div class="fc-sum-review">Review: '+missedSections.join(' · ')+'</div>':'')+
+      '<div style="margin-top:18px"><button class="fc-flip-btn" onclick="_fc.restart()" style="margin:0 auto">Restart</button></div>'+
+      '</div>';
+  },
+
+  restart: function(){
+    this.idx=0;this.got=0;this.missed=0;this.results=[];
+    document.getElementById('fc-wrap').innerHTML=
+      '<div class="fc-progress" id="fc-progress"></div>'+
+      '<div class="fc-bar-wrap"><div class="fc-bar" id="fc-bar" style="width:5%"></div></div>'+
+      '<div class="fc-scene"><div class="fc-card" id="fc-card" onclick="_fc.flipOnCard()">'+
+      '<div class="fc-face"><span class="fc-type-badge fc-type-term" id="fc-type-badge">Term</span><p id="fc-front"></p></div>'+
+      '<div class="fc-face fc-back-face"><p id="fc-back"></p><div class="fc-ref" id="fc-ref"></div></div>'+
+      '</div></div>'+
+      '<button class="fc-flip-btn" id="fc-flip-btn" onclick="_fc.flip()">Flip Card</button>'+
+      '<div class="fc-actions" id="fc-actions">'+
+      '<button class="fc-btn fc-btn-got" onclick="_fc.mark(true)">&#10003; Got it</button>'+
+      '<button class="fc-btn fc-btn-missed" onclick="_fc.mark(false)">&#10007; Missed it</button>'+
+      '</div>'+
+      '<div class="fc-nav">'+
+      '<button class="fc-nav-btn" onclick="_fc.prev()">&#8592; Prev</button>'+
+      '<button class="fc-nav-btn" onclick="_fc.next()">Next &#8594;</button>'+
+      '</div>';
+    this.render();
+  }
+};
+
+_fc.render();
+</script>
+</body>
+</html>

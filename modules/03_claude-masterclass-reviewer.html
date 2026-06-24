@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Claude MasterClass Volume 3 — Comprehensive Reviewer</title>
+<style>
+/* synaptix-runtime v1.0 */
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@300;400;500;600&display=swap');
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg-base:#0e0e11;--bg-surface:#16161a;--bg-elevated:#1c1c21;--bg-section:#1a1a1f;--code-bg:#0c0c0f;
+  --border:rgba(255,255,255,0.07);--border-hi:rgba(255,255,255,0.12);
+  --orange:#f4762a;--salmon:#f08080;--cyan:#4ecdc4;--green:#4ade80;--yellow:#f4d03f;
+  --purple:#c084fc;--sky:#5db8f2;--amber:#f4b942;--red:#f87171;
+  --orange-dim:rgba(244,118,42,0.10);--orange-glow:rgba(244,118,42,0.05);
+  --cyan-dim:rgba(78,205,196,0.10);--salmon-dim:rgba(240,128,128,0.10);
+  --yellow-dim:rgba(244,208,63,0.10);--green-dim:rgba(74,222,128,0.10);
+  --purple-dim:rgba(192,132,252,0.10);--sky-dim:rgba(93,184,242,0.10);
+  --text-primary:#e8e8ee;--text-secondary:#8b8b9a;--text-muted:#4a4a5a;
+  --mono:'JetBrains Mono',monospace;--sans:'Inter',system-ui,sans-serif;
+}
+body{background:var(--bg-base);color:var(--text-primary);font-family:var(--sans);font-size:13px;line-height:1.8;}
+.b-orange{color:var(--orange);font-weight:600}.b-salmon{color:var(--salmon);font-weight:600}
+.b-cyan{color:var(--cyan);font-weight:600}.b-green{color:var(--green);font-weight:600}
+.b-yellow{color:var(--yellow);font-weight:600}
+.kw-orange{font-family:var(--mono);font-size:12px;color:var(--orange);background:var(--orange-dim);border:1px solid rgba(244,118,42,0.2);border-radius:3px;padding:1px 5px;}
+.kw-cyan{font-family:var(--mono);font-size:12px;color:var(--cyan);background:var(--cyan-dim);border:1px solid rgba(78,205,196,0.2);border-radius:3px;padding:1px 5px;}
+.box-salmon{font-size:13px;color:var(--salmon);background:var(--salmon-dim);border:1px solid rgba(240,128,128,0.2);border-radius:3px;padding:1px 6px;}
+.enrich-plus{font-family:var(--mono);font-size:9px;font-weight:600;color:var(--green);background:var(--green-dim);border:1px solid rgba(74,222,128,0.2);padding:1px 4px;border-radius:3px;margin-left:4px;vertical-align:middle;}
+.doc-wrap{max-width:860px;margin:0 auto;display:flex;flex-direction:column;}
+.doc-header{padding:22px 26px 16px;border-bottom:1px solid var(--border);background:var(--bg-surface);}
+.badges{display:flex;gap:8px;margin-bottom:11px;flex-wrap:wrap}
+.badge{font-family:var(--mono);font-size:10px;font-weight:500;letter-spacing:0.07em;text-transform:uppercase;padding:3px 8px;border-radius:4px;border:1px solid;}
+.badge-type{color:var(--orange);background:var(--orange-dim);border-color:rgba(244,118,42,0.25)}
+.badge-mod{color:var(--sky);background:var(--sky-dim);border-color:rgba(93,184,242,0.25)}
+.doc-title{font-size:20px;font-weight:600;letter-spacing:-0.02em}
+.doc-subtitle{font-size:11px;font-family:var(--mono);color:var(--text-muted);margin-top:4px}
+.stat-row{display:flex;gap:20px;flex-wrap:wrap;margin-top:13px;padding-top:13px;border-top:1px solid var(--border);}
+.stat-val{font-family:var(--mono);font-size:15px;font-weight:600;color:var(--text-primary)}
+.stat-lbl{font-size:10px;text-transform:uppercase;letter-spacing:0.06em;color:var(--text-muted);margin-top:1px}
+.doc-body{padding:22px 26px;display:flex;flex-direction:column;gap:10px}
+.module-label{display:flex;align-items:center;gap:10px}
+.module-num{font-family:var(--mono);font-size:10px;font-weight:600;color:var(--orange);letter-spacing:0.1em;text-transform:uppercase;}
+.module-rule{flex:1;height:1px;background:linear-gradient(to right,rgba(244,118,42,0.25),transparent);}
+.module-title{font-size:17px;font-weight:600;margin-bottom:10px}
+.overview{background:var(--bg-surface);border-top:2px solid var(--sky);border-radius:0 0 8px 8px;padding:14px 18px;}
+.overview-label{font-family:var(--mono);font-size:10px;font-weight:600;color:var(--sky);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:10px;}
+.overview-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
+.overview-item{background:var(--bg-elevated);border:1px solid var(--border);border-radius:6px;padding:8px 10px;display:flex;align-items:flex-start;gap:8px;}
+.ov-letter{font-family:var(--mono);font-size:10px;font-weight:600;color:var(--sky);background:var(--sky-dim);border:1px solid rgba(93,184,242,0.2);border-radius:3px;padding:2px 5px;flex-shrink:0;}
+.ov-title{font-size:12px;font-weight:500;color:var(--text-primary)}
+.ov-desc{font-size:11px;color:var(--text-secondary);margin-top:2px}
+.overview-divider{height:1px;background:var(--border);margin:10px 0}
+.meta-row{display:flex;gap:20px;flex-wrap:wrap}
+.meta-lbl{font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:0.07em;color:var(--text-muted)}
+.meta-val{font-size:12px;color:var(--text-secondary);margin-top:2px}
+.intro{background:var(--bg-surface);border-left:3px solid var(--purple);border-radius:0 8px 8px 0;padding:14px 18px;}
+.intro-label{font-family:var(--mono);font-size:10px;font-weight:600;color:var(--purple);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:8px;}
+.intro p{font-size:13px;color:var(--text-secondary);line-height:1.8}
+.intro p+p{margin-top:8px}
+.section-card{background:var(--bg-section);border:1px solid var(--border);border-radius:10px;overflow:hidden;transition:border-color 0.15s;}
+.section-card:hover{border-color:var(--border-hi)}
+.section-hdr{padding:12px 17px 10px;border-bottom:1px solid var(--border);position:relative;overflow:hidden;display:flex;align-items:center;gap:10px;}
+.section-letter{font-family:var(--mono);font-size:12px;font-weight:600;width:25px;height:25px;border-radius:5px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.section-title{font-size:13px;font-weight:500;flex:1}
+.ghost-glyph{position:absolute;right:13px;top:50%;transform:translateY(-50%);font-family:var(--mono);font-size:58px;font-weight:700;color:rgba(255,255,255,0.025);pointer-events:none;user-select:none;line-height:1;}
+.section-body{padding:15px 17px;display:flex;flex-direction:column;gap:13px}
+.subsection{display:flex;flex-direction:column;gap:8px}
+.subsection+.subsection{padding-top:13px;border-top:1px solid var(--border)}
+.sub-hdr{display:flex;align-items:center;gap:8px}
+.sub-num{font-family:var(--mono);font-size:10px;font-weight:500;color:var(--cyan);background:var(--cyan-dim);border:1px solid rgba(78,205,196,0.2);padding:2px 6px;border-radius:4px;}
+.sub-title{font-size:13px;font-weight:500}
+.sub-body{display:flex;flex-direction:column;gap:8px}
+.sub-body p{font-size:13px;color:var(--text-secondary);line-height:1.8}
+.keypoints{background:var(--orange-glow);border:1px solid rgba(244,118,42,0.12);border-left:3px solid var(--orange);border-radius:0 6px 6px 0;padding:10px 14px;}
+.kp-label{font-family:var(--mono);font-size:10px;font-weight:600;color:var(--orange);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:7px;}
+.kp-list{list-style:none;display:flex;flex-direction:column;gap:5px}
+.kp-list li{font-size:12px;color:var(--text-secondary);line-height:1.6;display:flex;gap:7px}
+.kp-list li::before{content:'›';color:var(--orange);font-weight:700;font-size:14px;flex-shrink:0}
+.code-block{background:var(--code-bg);border:1px solid rgba(255,255,255,0.06);border-radius:8px;overflow:hidden;}
+.code-topbar{display:flex;justify-content:space-between;align-items:center;padding:7px 12px;background:rgba(255,255,255,0.025);border-bottom:1px solid rgba(255,255,255,0.05);}
+.code-lang{font-family:var(--mono);font-size:10px;color:var(--text-muted);letter-spacing:0.06em;text-transform:uppercase;}
+.code-dots{display:flex;gap:5px}
+.code-dot{width:7px;height:7px;border-radius:50%}
+.code-pre{padding:13px 16px;font-family:var(--mono);font-size:12px;line-height:1.85;color:#c9d1d9;overflow-x:auto;white-space:pre;}
+.cc{color:#6272a4;font-style:italic}.cs{color:#f1fa8c}.ct{color:#8be9fd}.cf{color:#50fa7b}
+.summary-block{background:var(--bg-surface);border:1px solid var(--border);border-bottom:2px solid var(--orange);border-radius:8px 8px 0 0;padding:14px 18px;}
+.summary-label{font-family:var(--mono);font-size:10px;font-weight:600;color:var(--orange);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:8px;}
+.summary-list{list-style:none;display:flex;flex-direction:column;gap:5px}
+.summary-list li{font-size:13px;color:var(--text-secondary);line-height:1.7;display:flex;gap:7px;}
+.summary-list li::before{content:'›';color:var(--orange);font-weight:700;font-size:14px;flex-shrink:0}
+
+@media(max-width:600px){.doc-header,.doc-body{padding-left:16px;padding-right:16px}.doc-footer{padding:12px 16px}.overview-grid{grid-template-columns:1fr}.footer-btn{width:100px;height:52px;font-size:10px}}
+
+
+/* ========================================
+   FOOTER NAVIGATION CSS
+   Synaptix Runtime — shared component
+   Copy into any artifact <style> block
+======================================== */
+
+.snx-footer{
+  background:var(--bg-surface);
+  border-top:1px solid var(--border);
+  padding:16px 26px 18px;
+}
+
+/* ── Meta bar ── */
+.snx-footer-meta{
+  display:flex;align-items:baseline;gap:10px;
+  padding-bottom:13px;
+  border-bottom:1px solid var(--border);
+  margin-bottom:13px;
+}
+.snx-footer-course{
+  font-family:var(--mono);font-size:10px;font-weight:600;
+  letter-spacing:0.14em;text-transform:uppercase;color:var(--text-muted);
+}
+.snx-footer-divider{
+  font-family:var(--mono);font-size:10px;color:var(--text-muted);opacity:0.4;
+}
+.snx-footer-module{
+  font-family:var(--mono);font-size:11px;font-weight:500;
+  color:var(--text-secondary);letter-spacing:0.04em;
+}
+
+/* ── Nav row ── */
+.snx-footer-nav{
+  display:flex;align-items:center;
+  gap:10px;
+}
+
+/* prev / next */
+.snx-nav-prev,
+.snx-nav-next{
+  font-family:var(--mono);font-size:11px;font-weight:500;
+  color:var(--text-secondary);
+  background:transparent;
+  border:1px solid var(--border);
+  border-radius:6px;
+  padding:6px 13px;
+  display:flex;align-items:center;gap:6px;
+  white-space:nowrap;
+  transition:border-color 0.13s,color 0.13s;
+  flex-shrink:0;
+  text-decoration:none;
+}
+.snx-nav-prev:hover,
+.snx-nav-next:hover{
+  border-color:var(--border-hi);
+  color:var(--text-primary);
+}
+.snx-nav-chevron{
+  font-size:13px;line-height:1;
+  color:var(--text-muted);
+  transition:color 0.13s;
+}
+.snx-nav-prev:hover .snx-nav-chevron,
+.snx-nav-next:hover .snx-nav-chevron{color:var(--text-secondary)}
+
+/* center hub */
+.snx-nav-hub{
+  flex:1;display:flex;align-items:center;
+  justify-content:center;gap:6px;flex-wrap:wrap;
+}
+
+/* hub buttons */
+.snx-hub-btn{
+  font-family:var(--mono);font-size:10px;font-weight:500;
+  letter-spacing:0.04em;
+  padding:6px 13px;border-radius:6px;border:1px solid;
+  display:inline-flex;align-items:center;gap:5px;
+  transition:background 0.13s;
+  text-decoration:none;white-space:nowrap;
+}
+.snx-hub-btn-recall{
+  color:var(--cyan);background:var(--cyan-dim);
+  border-color:rgba(78,205,196,0.22);
+}
+.snx-hub-btn-recall:hover{background:rgba(78,205,196,0.18)}
+
+.snx-hub-btn-tree{
+  color:var(--green);background:var(--green-dim);
+  border-color:rgba(74,222,128,0.22);
+}
+.snx-hub-btn-tree:hover{background:rgba(74,222,128,0.18)}
+
+.snx-hub-btn-compact{
+  color:var(--yellow);background:var(--yellow-dim);
+  border-color:rgba(244,208,63,0.22);
+}
+.snx-hub-btn-compact:hover{background:rgba(244,208,63,0.18)}
+
+.snx-hub-btn-quiz{
+  color:var(--orange);background:var(--orange-dim);
+  border-color:rgba(244,118,42,0.22);
+}
+.snx-hub-btn-quiz:hover{background:rgba(244,118,42,0.18)}
+
+.snx-hub-btn-module{
+  color:var(--purple);background:var(--purple-dim);
+  border-color:rgba(192,132,252,0.22);
+}
+.snx-hub-btn-module:hover{background:rgba(192,132,252,0.18)}
+
+/* active state — current artifact type */
+.snx-hub-btn[aria-current="page"]{
+  opacity:1;cursor:default;
+  box-shadow:0 0 0 1px currentColor;
+}
+
+/* mobile */
+@media(max-width:640px){
+  .snx-footer{padding:14px 16px 16px}
+  .snx-footer-nav{flex-wrap:wrap}
+  .snx-nav-hub{order:3;flex-basis:100%;justify-content:flex-start}
+}
+
+</style>
+</head>
+<body>
+<div class="doc-wrap">
+
+<!-- HEADER -->
+<div class="doc-header">
+  <div class="badges">
+    <span class="badge badge-type">Comprehensive · High</span>
+    <span class="badge badge-mod">Module 1 of 1 · Merged · 4 Lessons</span>
+  </div>
+  <div class="doc-title">Claude MasterClass Volume 3 — Opus 4.7, Claude 4.1, Privacy &amp; The ChatGPT Comparison</div>
+  <div class="doc-subtitle">source: Claude_MasterClass_-_Volume_3.html · generated 2026-06-24 · subject: Claude MasterClass</div>
+  <div class="stat-row">
+    <div class="stat-item"><div class="stat-val">6</div><div class="stat-lbl">Sections</div></div>
+    <div class="stat-item"><div class="stat-val">30</div><div class="stat-lbl">Subsections</div></div>
+    <div class="stat-item"><div class="stat-val">3</div><div class="stat-lbl">Code Blocks</div></div>
+    <div class="stat-item"><div class="stat-val">4</div><div class="stat-lbl">Enriched</div></div>
+  </div>
+</div>
+
+<div class="doc-body">
+<div class="module-label"><span class="module-num">Module 1</span><div class="module-rule"></div></div>
+<div class="module-title">Claude MasterClass Volume 3 — Opus 4.7, Claude 4.1, Privacy &amp; The ChatGPT Comparison</div>
+
+<!-- OVERVIEW -->
+<div class="overview">
+  <div class="overview-label">Module Overview</div>
+  <div class="overview-grid">
+    <div class="overview-item"><span class="ov-letter">A</span><div><div class="ov-title">Claude Opus 4.7 — Four Capabilities</div><div class="ov-desc">Self-verification, X-High thinking, HD vision upgrade, and literal instruction following — what each does and the honest trade-offs.</div></div></div>
+    <div class="overview-item"><span class="ov-letter">B</span><div><div class="ov-title">Self-Verification Deep Dive</div><div class="ov-desc">How the built-in second pass works, when it fires, and the real-world test results that make the latency trade-off worth accepting.</div></div></div>
+    <div class="overview-item"><span class="ov-letter">C</span><div><div class="ov-title">X-High Thinking</div><div class="ov-desc">The three-tier thinking ladder, the 30K token budget, the security-audit test, and the surgical deployment rule.</div></div></div>
+    <div class="overview-item"><span class="ov-letter">D</span><div><div class="ov-title">Claude 4.1 — Core Features</div><div class="ov-desc">Artifacts (interactive workbench), Projects (persistent context), Extended Thinking (live steering), Data Analysis, and Custom Styles.</div></div></div>
+    <div class="overview-item"><span class="ov-letter">E</span><div><div class="ov-title">Migrating from ChatGPT</div><div class="ov-desc">Memory import workflow, full data export, Custom GPT → Project migration, and the privacy case for switching.</div></div></div>
+    <div class="overview-item"><span class="ov-letter">F</span><div><div class="ov-title">Claude vs ChatGPT 5.3 / 5.4</div><div class="ov-desc">Head-to-head on creativity, factual accuracy, context retention, code quality, and computer use — with a clear per-task verdict.</div></div></div>
+  </div>
+  <div class="overview-divider"></div>
+  <div class="meta-row">
+    <div class="meta-item"><div class="meta-lbl">Prerequisites</div><div class="meta-val">Volumes 1 & 2 concepts recommended; model selection and prompting basics</div></div>
+    <div class="meta-item"><div class="meta-lbl">Leads to</div><div class="meta-val">Model selection mastery, production deployment decisions, multi-model stack design</div></div>
+  </div>
+</div>
+
+<!-- INTRO -->
+<div class="intro">
+  <div class="intro-label">Module Introduction</div>
+  <p>Volume 3 covers two themes running in parallel. The first is capability depth: what Opus 4.7 and Claude 4.1 actually do differently — not at the marketing level but at the mechanism level, with real tests and real failure modes documented. The second is context: where Claude sits relative to ChatGPT 5.3 and 5.4, why thousands of professionals migrated, and what the honest trade-offs are when you decide between them for specific task types.</p>
+  <p>The lessons here are more practitioner-oriented than Volume 2. Self-verification is not just a feature to know about — it is a workflow shift that changes how you treat first drafts. X-High thinking is not a setting to always enable — it is a surgical tool with a real cost. The ChatGPT comparison is not an argument for brand loyalty — it is a task-by-task decision framework for when each model earns its keep.</p>
+</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- SECTION A: Opus 4.7 — Four Capabilities       -->
+<!-- ═══════════════════════════════════════════════ -->
+<div class="section-card">
+  <div class="section-hdr">
+    <span class="section-letter" style="color:var(--sky);background:var(--sky-dim);border:1px solid rgba(93,184,242,0.2)">A</span>
+    <span class="section-title">A. Claude Opus 4.7 — Four Capabilities Overview</span>
+    <span class="ghost-glyph">A</span>
+  </div>
+  <div class="section-body">
+
+    <div class="subsection">
+      <div class="sub-hdr"><span class="sub-num">A1</span><span class="sub-title">Where Opus 4.7 Sits in the Landscape</span></div>
+      <div class="sub-body">
+        <p><span class="kw-orange">Claude Opus 4.7</span> is the new flagship tier — the current frontier of Anthropic's released models as of the time of the source. The model lineup remained Haiku (fast, low-cost), Sonnet (general purpose), and Opus (the flagship), but 4.7 represents a targeted rather than across-the-board upgrade. The four headline capabilities — <span class="b-orange">self-verification</span>, <span class="b-cyan">X-High thinking</span>, <span class="b-green">HD vision</span>, and <span class="b-yellow">literal instruction following</span> — are exclusive to Opus 4.7; Sonnet users will notice incremental gains but the top-tier features require Opus. Access: Pro or Team plan for claude.ai; API access at approximately <span class="b-salmon">15% more per output token</span> than the previous Opus version with higher token consumption per response due to self-verification.</p>
+        <div class="keypoints">
+          <div class="kp-label">Key Points</div>
+          <ul class="kp-list">
+            <li>Opus 4.7 is a targeted upgrade — four specific capabilities, not an across-the-board step change.</li>
+            <li>Four exclusive features: self-verification · X-High thinking · 2,576px HD vision · literal instruction following.</li>
+            <li>Cost: ~15% more per output token than prior Opus. Higher token consumption per response due to verification pass.</li>
+            <li>Access: Pro or Team on claude.ai; API via claude-opus-4-7 model string.</li>
+            <li>Benchmark position: trading punches with GPT-5.4 on coding; ahead of Gemini 3 Ultra on vision; roughly tied on raw reasoning.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <div class="sub-hdr"><span class="sub-num">A2</span><span class="sub-title">The Four Features at a Glance</span></div>
+      <div class="sub-body">
+        <p><span class="b-orange">Self-verification</span> is a built-in second pass: the model reviews its own output for consistency, edge cases, and prompt compliance before streaming a response to the user. <span class="b-cyan">X-High thinking</span> is a new tier above the previous maximum reasoning budget — up to 30,000 internal thinking tokens per response, reserved for expert-depth analysis tasks. <span class="b-green">HD vision</span> doubles the accepted image resolution from approximately 1,092px to <span class="b-green">2,576px</span> on the long edge (~6× the pixel count), unlocking dense dashboards, medical results, and handwritten diagrams. <span class="b-yellow">Literal instruction following</span> is a calibration change that weights explicit user constraints more heavily against the model's default tendency to be helpful by adding — Claude 4.7 follows the letter and spirit of constraints without embellishing.</p>
+        <div class="keypoints">
+          <div class="kp-label">Key Points</div>
+          <ul class="kp-list">
+            <li>Self-verification: internal review pass before response streams. Catches its own errors.</li>
+            <li>X-High thinking: up to 30,000 thinking tokens — expert-level depth on complex problems.</li>
+            <li>HD vision: 2,576px / ~6× pixel count vs prior Opus. Practical for dense visual data.</li>
+            <li>Literal instruction following: fewer additions, embellishments, or inferences. What you ask is what you get.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- SECTION B: Self-Verification Deep Dive         -->
+<!-- ═══════════════════════════════════════════════ -->
+<div class="section-card">
+  <div class="section-hdr">
+    <span class="section-letter" style="color:var(--cyan);background:var(--cyan-dim);border:1px solid rgba(78,205,196,0.2)">B</span>
+    <span class="section-title">B. Self-Verification Deep Dive</span>
+    <span class="ghost-glyph">B</span>
+  </div>
+  <div class="section-body">
+
+    <div class="subsection">
+      <div class="sub-hdr"><span class="sub-num">B1</span><span class="sub-title">How Self-Verification Works</span></div>
+      <div class="sub-body">
+        <p><span class="kw-orange">Self-verification</span> — what Anthropic calls internally — is a built-in review loop. When Claude receives a prompt involving code, logic, math, or multi-step reasoning, it generates a response internally, then runs a verification pass checking for: consistency between parts of the response, edge cases that the initial generation missed, and whether the output actually matches what was asked. If the verifier finds issues, the model revises before streaming. The user only ever sees the post-verification version. <span class="enrich-plus">[+]</span> Anthropic has not published the full internal mechanism, but from their documentation the verifier is a distinct reasoning step rather than a second model call — it uses the same weights but in a reviewing role, analogous to a writer re-reading their own draft before sending.</p>
+        <div class="keypoints">
+          <div class="kp-label">Key Points</div>
+          <ul class="kp-list">
+            <li>Trigger conditions: code, logic, math, multi-step reasoning. Simple questions (capital of a country) don't trigger it.</li>
+            <li>The user sees the post-verification version only — the revision is invisible.</li>
+            <li>Anthropic hasn't published the full mechanism; testing confirms it fires on substantive prompts.</li>
+            <li>Cost: 20–40% longer response times on triggers. Not a global speed penalty.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <div class="sub-hdr"><span class="sub-num">B2</span><span class="sub-title">The SQL Test: 4.6 vs 4.7</span></div>
+      <div class="sub-body">
+        <p>The source's first documented test uses a SQL query for weekly active users — intentionally messily worded, the way a real product manager would ask. The prompt required handling users who signed up mid-week, soft-deleted users, and time zone differences across a global user base. <span class="b-salmon">Claude 4.6's result</span>: delivered in ~8 seconds. The query looked clean but silently dropped every user in a non-UTC time zone whose signup timestamp fell on a week boundary. The error was a 12% undercount — missed entirely unless the tester was specifically watching for it. <span class="b-green">Claude 4.7's result</span>: delivered in ~22 seconds. The response explicitly noted: <em>"I initially wrote this using DATE_TRUNC on signup_at but that misses users whose local time signup crosses the UTC week boundary. The revised query converts to user local time first."</em> The corrected query ran accurately on the same test data. The source frames this precisely: <span class="b-orange">4.6 is confident and wrong. 4.7 is slower and right.</span></p>
+        <div class="keypoints">
+          <div class="kp-label">Key Points</div>
+          <ul class="kp-list">
+            <li>4.6: ~8 seconds, 12% error rate (silent), no flag. Would have been shipped without verification.</li>
+            <li>4.7: ~22 seconds, caught the UTC boundary error, explained the fix, correct output.</li>
+            <li>The 12% difference is the entire point. It is the number that would have driven wrong decisions in dashboards.</li>
+            <li>Self-verification changes the trust model: from "useful assistant I verify" to "competent collaborator I spot-check."</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <div class="sub-hdr"><span class="sub-num">B3</span><span class="sub-title">The Code Review Test: Hallucination Elimination</span></div>
+      <div class="sub-body">
+        <p>The second test: code review across 20 TypeScript files in a real repository, both models asked to find bugs. <span class="b-salmon">Claude 4.6</span>: found 7 real issues, hallucinated 3 false positives. <span class="b-green">Claude 4.7</span>: found 11 real issues, hallucinated zero. The source notes that eliminating false positives is more valuable than finding additional real bugs in the code-review context — each false positive costs 10 minutes of a developer's time chasing a non-existent problem. Zero false positives means code review output can be trusted and acted on directly. This is the practical consequence of self-verification in a code-review workflow: the output is reliable enough to skip the secondary verification step that was previously necessary with 4.6.</p>
+        <div class="keypoints">
+          <div class="kp-label">Key Points</div>
+          <ul class="kp-list">
+            <li>4.6: 7 real bugs found, 3 hallucinated. 4.7: 11 real bugs found, 0 hallucinated.</li>
+            <li>Eliminating false positives is more valuable than finding extra real bugs in review workflows.</li>
+            <li>Each false positive = 10 minutes chasing a ghost. Zero hallucinations = output trusted directly.</li>
+            <li>Practical workflow shift: code review output no longer requires secondary verification pass.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <div class="sub-hdr"><span class="sub-num">B4</span><span class="sub-title">When Self-Verification Fires (and When It Doesn't)</span></div>
+      <div class="sub-body">
+        <p>Self-verification is not a universal slow-mode. It fires selectively — on code, logic, math, and substantive multi-step reasoning — and leaves simple queries unaffected. The practical implication: for casual questions, conversational use, or simple writing, users will not notice any speed change. The latency cost (20–40% longer) only appears on the prompts where accuracy matters most. The source recommends leaning into this asymmetry rather than treating the latency penalty as a uniform tax: ask harder questions of 4.7 knowing it will catch its own errors, rather than asking easier questions to avoid the wait.</p>
+        <div class="keypoints">
+          <div class="kp-label">Key Points</div>
+          <ul class="kp-list">
+            <li>Fires on: code · logic · math · multi-step reasoning. Does not fire on: simple facts, conversational chat, basic writing.</li>
+            <li>Speed penalty: 20–40% longer on triggers. Zero penalty on non-triggers.</li>
+            <li>Correct strategy: use 4.7 for the hard tasks where the penalty is also the accuracy dividend.</li>
+            <li>Source's one-line: "The first model where I trust the first draft on serious work."</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- SECTION C: X-High Thinking                    -->
+<!-- ═══════════════════════════════════════════════ -->
+<div class="section-card">
+  <div class="section-hdr">
+    <span class="section-letter" style="color:var(--purple);background:var(--purple-dim);border:1px solid rgba(192,132,252,0.2)">C</span>
+    <span class="section-title">C. X-High Thinking &amp; HD Vision</span>
+    <span class="ghost-glyph">C</span>
+  </div>
+  <div class="section-body">
+
+    <div class="subsection">
+      <div class="sub-hdr"><span class="sub-num">C1</span><span class="sub-title">The Three-Tier Thinking Ladder</span></div>
+      <div class="sub-body">
+        <p>Claude 4.7 introduces a three-tier reasoning budget that builds on the Extended Thinking toggle from prior versions. <span class="b-orange">Standard mode</span>: small reasoning budget, a few hundred internal thinking tokens — fast responses for everyday tasks. <span class="b-cyan">High mode</span>: expands to several thousand thinking tokens — the previous maximum, suitable for moderately complex analysis. <span class="b-green">X-High mode</span>: up to approximately 30,000 thinking tokens per response — the new tier above the previous ceiling. X-High is the mode the source describes as matching expert-level analysis: finding things that take a human expert an hour of deep reading to find, in about 90 seconds, at the cost of roughly 40,000 total tokens (thinking + response).</p>
+        <div class="keypoints">
+          <div class="kp-label">Key Points</div>
+          <ul class="kp-list">
+            <li>Standard: hundreds of thinking tokens. Fast, everyday tasks.</li>
+            <li>High: thousands of thinking tokens. Previous maximum, moderately complex tasks.</li>
+            <li>X-High: ~30,000 thinking tokens. New ceiling. Expert-depth analysis in ~90 seconds, ~40,000 total tokens consumed.</li>
+            <li>The new tier is not a toggle in the UI — it is a thinking-budget setting. Check Anthropic docs for current activation method.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <div class="sub-hdr"><span class="sub-num">C2</span><span class="sub-title">The Security Architecture Test</span></div>
+      <div class="sub-body">
+        <p>The source's X-High test: a security architecture review of a mid-sized fintech system — 6 microservices, a shared auth service, two databases, and an external payment provider integration. Both models asked to identify vulnerabilities ranked by severity, across three thinking modes. <span class="b-orange">Standard thinking</span>: 6 issues found — surface-level (missing rate limiting on auth endpoints, logging config leaking PII, third-party SDK with known CVEs). <span class="b-cyan">High thinking</span>: 9 issues — added more nuanced findings. <span class="b-green">X-High thinking</span>: 14 issues — the new ones at this tier included a trust boundary violation between two services that required chaining three separate components to exploit. The source notes: "That's the value prop. X-High finds the things that take a human expert an hour of deep reading to find." Total time for X-High run: ~90 seconds.</p>
+        <div class="keypoints">
+          <div class="kp-label">Key Points</div>
+          <ul class="kp-list">
+            <li>Standard: 6 issues (surface). High: 9 (nuanced). X-High: 14 (expert-level, including multi-component chain exploits).</li>
+            <li>Time: ~90 seconds. Token cost: ~40,000 total. Time a human expert would need: ~1 hour.</li>
+            <li>The marginal issues found at X-High were not minor — they were the hardest ones to find.</li>
+            <li>The jump from High to X-High (9 → 14) is bigger than Standard to High (6 → 9).</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <div class="sub-hdr"><span class="sub-num">C3</span><span class="sub-title">When to Use X-High — The Surgical Rule</span></div>
+      <div class="sub-body">
+        <p>X-High thinking is powerful and expensive. The source's deployment rule: <span class="b-orange">use X-High for tasks where you would otherwise pay an expert hourly.</span> That means: legal analysis, security reviews, complex financial modeling, deep code audits. The operational constraint is rate limits — on claude.ai Pro, X-High burns limits significantly faster than standard mode. The source reports going from hitting the weekly rate limit once on 4.6 to three times in a single test day on 4.7 when leaning on X-High. The correct approach is surgical deployment: standard mode for everything you'd normally complete in five minutes; X-High reserved for the problems that genuinely warrant expert-level depth. Never use X-High for tasks you'd normally handle quickly — the marginal accuracy gain does not justify the rate-limit cost.</p>
+        <div class="keypoints">
+          <div class="kp-label">Key Points</div>
+          <ul class="kp-list">
+            <li>Deployment rule: X-High for tasks where you'd otherwise pay an expert hourly.</li>
+            <li>Best use cases: legal analysis · security reviews · financial modeling · deep code audits.</li>
+            <li>Rate limit impact: 3× faster limit consumption vs 4.6 when leaning on X-High. Monitor actively.</li>
+            <li>Never use X-High for 5-minute tasks. The marginal gain doesn't cover the cost.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <div class="sub-hdr"><span class="sub-num">C4</span><span class="sub-title">HD Vision Upgrade</span></div>
+      <div class="sub-body">
+        <p>Claude 4.7 raised the accepted image resolution from approximately 1,092px to <span class="b-green">2,576px on the long edge</span> — roughly 2.4× the linear resolution, which translates to approximately 6× the pixel count. This is the source's pick for the single biggest upgrade in the release. The practical difference: at 1,092px, dense dashboards, dense tables, and handwritten annotations were effectively blurred before Claude saw them. At 2,576px, a Bloomberg Terminal-style screenshot with nine panels, tiny tables, and small text is readable and queryable. The source's test: a 2,400×600px screenshot of a dense financial dashboard. Claude 4.6 could extract information but couldn't analyze it at chart detail. Claude 4.7 answered a specific question about a copper futures value in the bottom-right panel of the dashboard accurately and without difficulty. One practical limitation: PDF ingestion through most integrations still renders pages at the old resolution. The workaround is to screenshot a PDF page and upload the image directly rather than uploading the PDF file.</p>
+        <div class="keypoints">
+          <div class="kp-label">Key Points</div>
+          <ul class="kp-list">
+            <li>Resolution: 1,092px (4.6) → 2,576px (4.7). ~2.4× linear, ~6× pixel count.</li>
+            <li>Now readable: Bloomberg-style dashboards · dense financial tables · handwritten wireframes · medical results.</li>
+            <li>Source's test: 2,400×600px financial screenshot — 4.6 read but couldn't analyze; 4.7 answered specific panel queries.</li>
+            <li>Workflow enabled: screenshot any dashboard your team uses → ask Claude to extract structured data → trust the output.</li>
+            <li>PDF limitation: most integrations still downscale PDF pages. Workaround: screenshot the page, upload the image.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <div class="sub-hdr"><span class="sub-num">C5</span><span class="sub-title">Literal Instruction Following</span></div>
+      <div class="sub-body">
+        <p>The fourth capability is a calibration change rather than a new feature. Claude 4.6 had a well-documented problem: it would follow most instructions but quietly add helpful extras — an extra data point, a paragraph of framing the user didn't ask for, an inferred feature in a product description. The model meant well; it was also wrong. <span class="kw-orange">Literal instruction following</span> in 4.7 reweights the model's compliance against its default helpfulness instinct. The source's test: a 150-word product description for a coffee grinder using only five specified facts (conical burr, 40 grind settings, stainless steel, 2-year warranty, $180 price), with no adjectives and no unmentioned features. Claude 4.6 added adjectives and a sixth feature. Claude 4.7 returned exactly five facts, zero adjectives, nothing invented. The practical value: <span class="b-green">legal and compliance writing</span> (every added word is liability), <span class="b-cyan">structured data extraction</span> (return exactly the schema specified), and <span class="b-yellow">prompt chaining</span> (passing Claude's output into a system that expects a fixed format). The source rebuilt three production prompts for 4.7 and eliminated the post-processing cleanup step entirely — saving approximately 40 minutes per week.</p>
+        <div class="keypoints">
+          <div class="kp-label">Key Points</div>
+          <ul class="kp-list">
+            <li>Claude 4.6 problem: quietly added extras (data points, framing, inferred features) despite explicit constraints.</li>
+            <li>Claude 4.7 fix: reweighted compliance over helpfulness. What you ask is what you get.</li>
+            <li>Test: 5-fact product description, no adjectives. 4.6 added extras. 4.7 followed exactly.</li>
+            <li>Best use cases: legal/compliance writing · structured data extraction · prompt chaining with fixed output format.</li>
+            <li>Productivity saving: eliminates post-processing cleanup step on constrained outputs (~40 min/week in the source's workflows).</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- SECTION D: Claude 4.1 Core Features           -->
+<!-- ═══════════════════════════════════════════════ -->
+<div class="section-card">
+  <div class="section-hdr">
+    <span class="section-letter" style="color:var(--orange);background:var(--orange-dim);border:1px solid rgba(244,118,42,0.2)">D</span>
+    <span class="section-title">D. Claude 4.1 — Core Features</span>
+    <span class="ghost-glyph">D</span>
+  </div>
+  <div class="section-body">
+
+    <div class="subsection">
+      <div class="sub-hdr"><span class="sub-num">D1</span><span class="sub-title">Artifacts — The Interactive Workbench</span></div>
+      <div class="sub-body">
+        <p><span class="kw-orange">Artifacts</span> are Claude 4.1's output layer — a side panel where structured outputs render and live rather than appearing as text in the chat flow. Instead of pasting code into a chat message, Claude creates a real artifact: code that executes in a sandbox, HTML/CSS/JS that previews immediately, formatted documents, interactive apps. The workflow for any task producing structured output: give Claude the task → if Claude generates qualifying output, an artifact panel appears automatically. Alternatively, create a blank artifact manually via the Artifacts tab → New Artifact, then paste code or direct Claude to build in that space. The key shift from prior versions: Claude 4.1 runs code inside its own sandbox and shows the executed output immediately. A drag-and-drop calendar app prompt produces an actually interactive calendar in the artifact preview without leaving the chat. The source's comparison: prior Claude = scribbling in Notepad; artifacts = working in Figma. The iterative refinement loop — click any element, tell Claude what to fix, see the update — is real-time and surgical, not full-regeneration.</p>
+        <div class="keypoints">
+          <div class="kp-label">Key Points</div>
+          <ul class="kp-list">
+            <li>Artifacts = a side panel where Claude's finished work lives — not text in chat.</li>
+            <li>Supports: executable code · HTML/CSS/JS previews · formatted documents · interactive apps.</li>
+            <li>Claude 4.1 runs code in its own sandbox and shows executed output — prior versions required user to copy and run.</li>
+            <li>Iterative refinement: click element → tell Claude what to fix → only that element updates. Not full-regeneration.</li>
+            <li>Manual creation: Artifacts tab → New Artifact → blank canvas for paste-in or guided build.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <div class="sub-hdr"><span class="sub-num">D2</span><span class="sub-title">Projects — Persistent Context Workspaces</span></div>
+      <div class="sub-body">
+        <p><span class="kw-orange">Projects</span> in Claude 4.1 are persistent workspaces that carry context across every chat within them. Upload documents, spreadsheets, images, and notes to a project once; every subsequent chat inside the project inherits that context automatically. This solves the prior version's behavior of dropping all context the moment a new chat was opened. The source's workflow example: a client project with brand guidelines, marketing materials, and analytics spreadsheets uploaded once. Asking "draft me a newsletter with last quarter stats" returns a newsletter referencing the actual uploaded numbers — no copy-paste required. Projects connect to Google Drive: instead of uploading files one by one, point Claude to a Drive folder and it treats those files as part of the project's knowledge. The 200,000-token context window means all project documents, instructions, and conversation history stay in memory permanently across that workspace. After approximately 12 hours of use, Claude generates project-specific memories that further enhance workflow continuity.</p>
+        <div class="keypoints">
+          <div class="kp-label">Key Points</div>
+          <ul class="kp-list">
+            <li>Projects = persistent workspaces. Upload once; every chat inside the project inherits the full context.</li>
+            <li>Solves context-drop: prior Claude forgot everything on new chat open. Projects persist indefinitely.</li>
+            <li>Google Drive integration: point Claude at a Drive folder → treated as project knowledge.</li>
+            <li>200K tokens of context maintained permanently across all project chats.</li>
+            <li>After ~12 hours of use: Claude generates project-specific memories that enhance workflows further.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <div class="sub-hdr"><span class="sub-num">D3</span><span class="sub-title">Extended Thinking — Live Mid-Process Steering</span></div>
+      <div class="sub-body">
+        <p>Extended Thinking in Claude 4.1 makes the reasoning process visible step-by-step — showing pseudo-code sketches, intermediate calculations, option-listing, and decision-making before committing to a final answer. The key new capability over prior versions is <span class="b-orange">live mid-process correction</span>: because the reasoning is visible as it happens, the user can intervene at any step. If Claude takes a wrong turn in step 4, the user can say "check that assumption" and Claude reroutes immediately rather than completing a wrong path and requiring restart with follow-up prompts. The source notes this changes the failure recovery model from backtrack-and-reprompt to steer-and-continue. Extended thinking is triggered via the toggle below the prompt bar before submitting. Expected time: 30 seconds to several minutes on complex tasks. The thinking log can be collapsed if not needed, but reading it is educational — it surfaces Claude's assumptions and reveals problem-solving patterns.</p>
+        <div class="keypoints">
+          <div class="kp-label">Key Points</div>
+          <ul class="kp-list">
+            <li>Trigger: toggle below the prompt bar before submitting. Not a post-hoc setting.</li>
+            <li>Key new capability: live mid-process correction — interrupt, redirect, and continue without restart.</li>
+            <li>Prior failure mode: see wrong answer, backtrack with follow-up prompts. New: catch wrong turn mid-process, steer, continue.</li>
+            <li>Expected time: 30 seconds–several minutes. Use for debugging, data analysis, nuanced essays — not capital-of-France queries.</li>
+            <li>Reading the thinking log is educational — reveals assumptions and problem-solving patterns.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <div class="sub-hdr"><span class="sub-num">D4</span><span class="sub-title">Built-in Data Analysis</span></div>
+      <div class="sub-body">
+        <p>Claude 4.1's built-in analysis tool executes code inside the chat — no Excel, no Jupyter. The workflow: drag and drop a CSV into the chat → ask in plain English ("analyze this sales data, what are the top three products by revenue, and plot the revenue trend over the year") → Claude writes Python, loads the CSV, runs the math, and plots using Matplotlib — all inside the artifact panel. The critical advance over prior Claude: it doesn't just give you visuals, it interprets them. The source's description: Claude converts raw numbers into a story, the way a data analyst would present findings to a non-technical stakeholder rather than just printing a chart. The tool also cross-references multiple sources simultaneously — "summarize this report and check if any numbers contradict the spreadsheet I uploaded" returns a tight summary plus flagged discrepancies without a second prompt. No coding knowledge required.</p>
+        <div class="keypoints">
+          <div class="kp-label">Key Points</div>
+          <ul class="kp-list">
+            <li>Workflow: drag CSV into chat → plain-English request → Claude writes Python, executes, plots, interprets in artifact panel.</li>
+            <li>No Jupyter, no Excel required. No coding knowledge needed.</li>
+            <li>Key advance: interprets visuals, not just generates them. Turns raw numbers into a narrative.</li>
+            <li>Multi-source cross-reference: compare report + spreadsheet in one prompt, get summary + discrepancies. No second prompt.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <div class="sub-hdr"><span class="sub-num">D5</span><span class="sub-title">Persona Presets &amp; Custom Styles</span></div>
+      <div class="sub-body">
+        <p>Claude 4.1 ships with five built-in style presets: <span class="b-cyan">Normal</span> (default), <span class="b-green">Concise</span> (trimmed to essentials), <span class="b-orange">Explanatory</span> (teaching depth), <span class="b-yellow">Learning</span> (student-friendly new info), and <span class="b-salmon">Formal</span> (professional/business tone). The high-value layer is custom styles, created two ways: (1) describe the tone in a prompt ("speak with excitement, sound like an upbeat mentor") and save it as a named style; (2) upload writing samples and let Claude extract and save your voice. The second method is the more powerful one — uploading real samples from your own writing produces a style that mirrors your actual tone in drafts, including phrasing habits, sentence rhythm, and vocabulary choices. The source notes consistency depends on sample quality: large, consistent samples produce strong, reliable voices; mixed-tone samples produce confused output. A style created from your own blog posts produces drafts that sound like you; a style created from three different writers' work produces an averaged, voiceless result.</p>
+        <div class="keypoints">
+          <div class="kp-label">Key Points</div>
+          <ul class="kp-list">
+            <li>Five built-in presets: Normal · Concise · Explanatory · Learning · Formal.</li>
+            <li>Custom styles: describe tone (saved as named preset) or upload writing samples (Claude extracts your voice).</li>
+            <li>Sample quality = style quality. Large, consistent samples → strong voice. Mixed tones → averaged output.</li>
+            <li>Use case: one style for social media, another for client deliverables, another for technical docs — one-click switching.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- SECTION E: Migrating from ChatGPT             -->
+<!-- ═══════════════════════════════════════════════ -->
+<div class="section-card">
+  <div class="section-hdr">
+    <span class="section-letter" style="color:var(--sky);background:var(--sky-dim);border:1px solid rgba(93,184,242,0.2)">E</span>
+    <span class="section-title">E. Migrating from ChatGPT</span>
+    <span class="ghost-glyph">E</span>
+  </div>
+  <div class="section-body">
+
+    <div class="subsection">
+      <div class="sub-hdr"><span class="sub-num">E1</span><span class="sub-title">The Privacy Case for Switching</span></div>
+      <div class="sub-body">
+        <p>The source's argument for switching is grounded in OpenAI's removal of their ban on military use and announcement of a partnership with the Pentagon for cybersecurity tools. The source contrasts this with Anthropic declining the same deal and frames the distinction as structural: Anthropic was founded by former OpenAI researchers who left specifically over disagreement with OpenAI's direction, and the company has consistently chosen user privacy over government contracts. The practical concern: everything shared with ChatGPT — business strategies, personal struggles, creative projects, code — may now be accessible to defense contractors and intelligence agencies. <span class="enrich-plus">[+]</span> Whether this risk is material depends on the user's context; the source's framing is that even if the Pentagon connection doesn't concern you, the argument for Claude is performance-based — "why choose the inferior tool?" This section treats the privacy argument as the trigger for migration, not the entire case.</p>
+        <div class="keypoints">
+          <div class="kp-label">Key Points</div>
+          <ul class="kp-list">
+            <li>OpenAI removed military-use ban and announced Pentagon partnership. Anthropic declined the same deal.</li>
+            <li>Anthropic founded by ex-OpenAI researchers who left over disagreements with direction.</li>
+            <li>Source's framing: privacy concern is the trigger; performance advantage is the actual case.</li>
+            <li>Claude's Constitutional AI approach — helpfulness, harmlessness, honesty — is the stated alternative framework.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <div class="sub-hdr"><span class="sub-num">E2</span><span class="sub-title">Memory Import Workflow</span></div>
+      <div class="sub-body">
+        <p>Claude provides a built-in memory import tool for transferring ChatGPT memories. The workflow: Claude account → profile picture → Settings → Capabilities tab → <span class="kw-cyan">Import memory from other AI providers</span> → Start Import. Claude generates a prompt designed to extract your memories from ChatGPT. The source's pro tip for maximizing extraction: before pasting the prompt in ChatGPT, go to ChatGPT's Personalization tab and enable all three options — "reference saved memories," "reference browser memories," and "reference chat history." Then switch the ChatGPT model from Auto to <span class="b-orange">Thinking</span> before submitting. The Thinking model runs more cycles of searching through account history, extracting significantly more memories. The source reports 3× more memory extracted with this method versus pasting the prompt into the default model. Once ChatGPT generates the memory export code block, copy it, return to Claude, paste into the text field, and click <span class="kw-cyan">Add to Memory</span>. Claude formats the imported memories into clean categories and begins updating them every 24 hours from new conversations.</p>
+        <div class="keypoints">
+          <div class="kp-label">Key Points</div>
+          <ul class="kp-list">
+            <li>Access: Settings → Capabilities → Import memory from other AI providers → Start Import.</li>
+            <li>Pro tip: enable all three personalization options in ChatGPT before pasting the extraction prompt.</li>
+            <li>Switch ChatGPT to Thinking model for the extraction — 3× more memories extracted vs. default model.</li>
+            <li>After import: Claude categorizes memories and auto-updates every 24 hours from new conversations.</li>
+            <li>Claude's memory organization is described as more structured than ChatGPT's — categorized by type, directly editable.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <div class="sub-hdr"><span class="sub-num">E3</span><span class="sub-title">Full Data Export &amp; Custom GPT Migration</span></div>
+      <div class="sub-body">
+        <p>Beyond memories, ChatGPT has a complete data export. Access: ChatGPT Settings → Data Controls → <span class="kw-cyan">Export Data</span>. ChatGPT emails a .zip file with every conversation ever had. A useful pre-migration step: ask ChatGPT to analyze your most common request patterns and create a working style guide. Prompt: <em>"Based on our conversation history, create a detailed guide of my communication preferences, common tasks, and optimal ways to assist me."</em> This produces a personalized instruction set that can be pasted directly into Claude's custom instructions — giving Claude a manual on your working patterns derived from actual ChatGPT usage. For <span class="b-orange">Custom GPT migration</span>: open each Custom GPT → Edit GPT → copy the Instructions section (the core logic). In Claude, create a new Project with the same name → Project Settings → paste the instructions into Claude's custom instructions field. Claude projects maintain up to 200,000 tokens of context for all documents, instructions, and conversation history within that project.</p>
+        <div class="keypoints">
+          <div class="kp-label">Key Points</div>
+          <ul class="kp-list">
+            <li>Full export: ChatGPT Settings → Data Controls → Export Data → .zip file with all conversations.</li>
+            <li>Style guide trick: ask ChatGPT to analyze your history and generate a working preferences guide → paste into Claude custom instructions.</li>
+            <li>Custom GPT migration: copy Instructions from each GPT → create Claude Project → paste into Project custom instructions.</li>
+            <li>Claude project context: 200K tokens maintained permanently. After ~12 hours, project-specific memories enhance it further.</li>
+            <li>Post-deletion note: ChatGPT deletion takes 30 days. Some data may persist per OpenAI's privacy policy regardless.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- SECTION F: Claude vs ChatGPT 5.3 / 5.4       -->
+<!-- ═══════════════════════════════════════════════ -->
+<div class="section-card">
+  <div class="section-hdr">
+    <span class="section-letter" style="color:var(--cyan);background:var(--cyan-dim);border:1px solid rgba(78,205,196,0.2)">F</span>
+    <span class="section-title">F. Claude vs ChatGPT 5.3 / 5.4 — Head-to-Head</span>
+    <span class="ghost-glyph">F</span>
+  </div>
+  <div class="section-body">
+
+    <div class="subsection">
+      <div class="sub-hdr"><span class="sub-num">F1</span><span class="sub-title">ChatGPT 5.3 ("Project Garlic") — Three Failures</span></div>
+      <div class="sub-body">
+        <p><span class="kw-orange">ChatGPT 5.3</span> (internal codename "Project Garlic") was positioned as a stripped-down, direct model — no "as an AI language model" preamble, no disclaimers, blunt responses. The source identifies three failure modes. <span class="b-salmon">Failure 1 — Creativity</span>: given the prompt "give me 10 unique marketing angles for a productivity app launch, think outside the box," 5.3 returned generic corporate speak (time-saving features, boost your workflow, increase efficiency — bullet points, zero creativity). Claude returned genuinely contrarian angles: position the app as an anti-productivity tool for people tired of hustle culture; target burned-out high performers who need permission to slow down rather than more optimization pressure. <span class="b-salmon">Failure 2 — Factual accuracy</span>: given a trap question about a non-existent "2024 AI Safety Summit in Geneva," 5.3 confidently fabricated four paragraphs of detailed outcomes. Claude flagged the event as unverifiable, noted there was no such summit, and suggested real AI-related events from 2024 that the question might be referring to. <span class="b-salmon">Failure 3 — Context retention</span>: given a 50-page technical spec with a specific caching strategy answer buried on page 32, 5.3 returned a generic document summary and completely missed the question. Claude found the exact answer — Redis with 60-second TTL for GET requests, cache invalidation on POST/PUT/DELETE — with section number cited. The source's verdict on 5.3: fast and blunt, yes; lobotomized creativity, confident hallucinations, and context failures make it unreliable for serious work.</p>
+        <div class="keypoints">
+          <div class="kp-label">Key Points</div>
+          <ul class="kp-list">
+            <li>5.3 failure 1: creativity — returned generic corporate bullet points on a "think outside the box" prompt.</li>
+            <li>5.3 failure 2: hallucination — confidently fabricated 4 paragraphs about a non-existent AI summit. Claude flagged uncertainty.</li>
+            <li>5.3 failure 3: context — missed a specific answer buried on page 32 of a 50-page doc. Claude found it with section cite.</li>
+            <li>Claude differentiator on accuracy: admits uncertainty, flags when sources disagree, says what it doesn't know.</li>
+            <li>Source verdict: 5.3 is fast and blunt but unreliable for serious work due to hallucination and context failures.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <div class="sub-hdr"><span class="sub-num">F2</span><span class="sub-title">ChatGPT 5.4 — One Genuine Advantage and Its Trade-Offs</span></div>
+      <div class="sub-body">
+        <p><span class="kw-orange">ChatGPT 5.4</span> is OpenAI's flagship thinking model. The source identifies one genuine advantage over Claude 4: <span class="b-orange">computer use</span> — the ability to interact with software through the visual interface rather than APIs, navigating buttons, fields, menus, and browser steps like a human would. This makes it uniquely useful for legacy software, internal corporate dashboards, and desktop apps built before modern API integrations existed. However, the source documents two major trade-offs. First, <span class="b-salmon">speed</span>: 5.4's visible thought stream ("Thought Stream") showed Claude-comparable problems taking 128 seconds in 5.4's thinking sidebar; Claude 4 solved the same SQL problem in under 40 seconds. One user comment cited in the source: "Watching ChatGPT 5.4 think for two minutes about a simple email draft is exhausting. Thought Stream isn't transparency, it's theater that wastes your time." Second, <span class="b-salmon">privacy</span>: 5.4's stateful memory automatically tracks, indexes, and stores everything across sessions without user control. The source tested this: asking about a session from "a few weeks ago" returned the exact date, the opening line of the conversation verbatim, and a detailed breakdown of all themes discussed. For long-term project memory this is a feature; for privacy, it is described as "a surveillance nightmare."</p>
+        <div class="keypoints">
+          <div class="kp-label">Key Points</div>
+          <ul class="kp-list">
+            <li>5.4's genuine advantage: computer use — visual interface navigation for legacy software and desktop apps with no APIs.</li>
+            <li>Speed trade-off: 128-second thought stream on a basic SQL task vs. Claude 4's under 40-second clean result.</li>
+            <li>Privacy trade-off: stateful memory automatically indexes everything without user control. Claude requires explicit project setup.</li>
+            <li>Thought stream vs. Claude's zero-latency reasoning: 5.4 makes you watch it think; Claude delivers the result.</li>
+            <li>Security concern: computer use mode may screenshot any open tab — including authenticated financial or medical portals.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <div class="sub-hdr"><span class="sub-num">F3</span><span class="sub-title">Code Quality Comparison</span></div>
+      <div class="sub-body">
+        <p>The source's back-end development test: build a REST API endpoint for user registration with email verification, rate limiting, and proper error handling. <span class="b-salmon">ChatGPT 5.3 result</span>: working code, but with hard-coded API keys and minimal error handling. The source had to refactor 40% before it could be deployed. <span class="b-green">Claude 4 result</span>: production-ready from the first draft — environment variables configured, comprehensive error handling, JWT authentication, rate limiting already set up. The source's characterization: Claude demonstrates "architectural thinking" — it generates code structured the way production systems are actually maintained six months after initial deployment, not just code that works on day one. A second test — a web scraper for price monitoring across multiple e-commerce sites: ChatGPT 5.3 built a basic scraper for one site; Claude delivered a modular system with rate limiting to avoid blocks, error recovery for network issues, and a suggestion to implement rotating proxies for scale. Claude thought through production problems the prompt never mentioned.</p>
+        <div class="keypoints">
+          <div class="kp-label">Key Points</div>
+          <ul class="kp-list">
+            <li>REST API test: ChatGPT 5.3 required 40% refactor. Claude 4 was production-ready from first draft.</li>
+            <li>Claude code characteristic: architectural thinking — structured for maintenance 6 months out, not just working on day one.</li>
+            <li>Scraper test: ChatGPT built for one site. Claude built a modular system with rate limiting, error recovery, and proxy suggestion.</li>
+            <li>Pattern: Claude proactively handles production concerns (scale, failure modes) that weren't mentioned in the prompt.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <div class="sub-hdr"><span class="sub-num">F4</span><span class="sub-title">The Per-Task Decision Matrix</span></div>
+      <div class="sub-body">
+        <p>The source's final verdict structures the choice by task type rather than model loyalty. <span class="kw-cyan">Use ChatGPT 5.3</span> when you need fast, blunt responses for surface-level tasks — code snippets, quick answers, daily admin — and can tolerate the hallucination risk on non-critical content. <span class="kw-orange">Use ChatGPT 5.4</span> when you specifically need computer use: legacy software automation, desktop control, or autonomous agents operating across interfaces without APIs — accepting the 2-minute latency and privacy surveillance trade-off. <span class="kw-orange">Use Claude 4</span> for everything else: writing, deep reasoning, production-ready code, stable output, ethical compliance, and fast results without performance theater or surveillance. The source's summary: <span class="b-green">90% of professionals should use Claude</span>. ChatGPT 5.4 has one killer feature (computer use) — if you need it, it is your only option. If you don't need it, the 128-second thought streams, privacy indexing, and reliability issues make Claude the better daily driver.</p>
+        <div class="keypoints">
+          <div class="kp-label">Key Points</div>
+          <ul class="kp-list">
+            <li>ChatGPT 5.3: surface-level speed tasks. Tolerate hallucination risk. Not for serious/critical work.</li>
+            <li>ChatGPT 5.4: computer use only — legacy software, desktop automation, interface-based agents. Privacy cost is real.</li>
+            <li>Claude 4: everything else. Writing · deep reasoning · production code · ethical compliance · fast without theater.</li>
+            <li>Source verdict: 90% of professionals → Claude. 5.4 has one killer feature; if you don't need it, Claude wins.</li>
+            <li>Constitutional AI 2.0: Anthropic's stated framework. Explicitly refused Pentagon contract. Enterprise trust factor for regulated industries (healthcare, finance, legal).</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- MODULE SUMMARY -->
+<div class="summary-block">
+  <div class="summary-label">Module Summary</div>
+  <ul class="summary-list">
+    <li>Opus 4.7's four capabilities are not uniform improvements — they are targeted upgrades for specific failure modes: self-verification (first draft trust on code and logic), X-High thinking (expert-depth analysis on complex problems), HD vision (dense visual data extraction), and literal instruction following (eliminating post-processing on constrained output).</li>
+    <li>Self-verification is a workflow shift, not just a feature: Claude 4.7 moves from "useful assistant I verify" to "competent collaborator I spot-check." The 20–40% latency cost only appears on the prompts where accuracy matters most — it is the accuracy dividend, not a tax.</li>
+    <li>X-High thinking is surgical — deploy for tasks where you'd otherwise pay an expert hourly (legal, security, financial modeling). At ~40,000 tokens per run and 3× faster rate limit consumption, it is expensive; the 14-issue security audit (vs. 6 on standard) shows what that cost buys.</li>
+    <li>Claude 4.1's artifacts-and-projects stack changes the interaction model from text generation to interactive work: artifacts are the finished file layer (executable code, live previews, formatted documents).</li>
+  </ul>
+</div>
+
+
+</div><!-- /doc-body -->
+
+</div><!-- /doc-wrap -->
+
+<footer class="snx-footer">
+
+  <!-- Meta bar -->
+  <div class="snx-footer-meta">
+    <span class="snx-footer-course">Claude MasterClass</span>
+    <span class="snx-footer-divider">·</span>
+    <span class="snx-footer-module">Module 03 · Opus 4.7, Claude 4.1, Privacy &amp; The ChatGPT Comparison</span>
+  </div>
+
+  <!-- Nav row -->
+  <nav class="snx-footer-nav" aria-label="Artifact navigation">
+
+    <!-- Left: Previous -->
+    <a class="snx-nav-prev" href="./01_claude-masterclass-reviewer.html">
+      <span class="snx-nav-chevron">‹</span>
+      Previous
+    </a>
+
+    <!-- Center: Hub -->
+    <div class="snx-nav-hub">
+      <a class="snx-hub-btn snx-hub-btn-recall"  href="../recalls/03_claude-masterclass-recall.html">Recall</a>
+      <a class="snx-hub-btn snx-hub-btn-tree"    href="../trees/03_claude-masterclass-tree.html">Tree</a>
+      <a class="snx-hub-btn snx-hub-btn-compact" href="../compact/03_claude-masterclass-compact.html">Compact</a>
+      <a class="snx-hub-btn snx-hub-btn-quiz"    href="../quizzes/03_claude-masterclass-quiz.html">Quiz</a>
+      <a class="snx-hub-btn snx-hub-btn-module"  href="#" aria-current="page">Module</a>
+    </div>
+
+    <!-- Right: Next -->
+    <a class="snx-nav-next" href="#">
+      Next
+      <span class="snx-nav-chevron">›</span>
+    </a>
+
+  </nav>
+
+</footer>
+
+<script>
+function sendPrompt(t){if(window.parent&&window.parent.postMessage){window.parent.postMessage({type:'user_message',message:t},'*');}}
+function quizQuick()  { sendPrompt('/quiz mc(10) hard'); }
+function recallQuick(){ sendPrompt('/recall mixed(15) hard'); }
+function exportMd()   { sendPrompt('/export -md'); }
+</script>
+</body>
+</html>

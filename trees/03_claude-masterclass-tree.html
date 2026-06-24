@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Claude MasterClass Volume 3 — Tree Reviewer</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@300;400;500;600&display=swap');
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg-base:#0e0e11;--bg-surface:#16161a;--bg-elevated:#1c1c21;--bg-section:#1a1a1f;
+  --border:rgba(255,255,255,0.07);--border-hi:rgba(255,255,255,0.12);
+  --orange:#f4762a;--salmon:#f08080;--cyan:#4ecdc4;--green:#4ade80;--yellow:#f4d03f;
+  --purple:#c084fc;--sky:#5db8f2;--amber:#f4b942;
+  --orange-dim:rgba(244,118,42,0.10);--cyan-dim:rgba(78,205,196,0.10);
+  --salmon-dim:rgba(240,128,128,0.10);--sky-dim:rgba(93,184,242,0.10);
+  --text-primary:#e8e8ee;--text-secondary:#8b8b9a;--text-muted:#4a4a5a;
+  --mono:'JetBrains Mono',monospace;--sans:'Inter',system-ui,sans-serif;
+}
+body{background:var(--bg-base);color:var(--text-primary);font-family:var(--sans);font-size:13px;line-height:1.8;}
+.doc-wrap{max-width:860px;margin:0 auto;display:flex;flex-direction:column;}
+.doc-header{padding:22px 26px 16px;border-bottom:1px solid var(--border);background:var(--bg-surface);}
+.badges{display:flex;gap:8px;margin-bottom:11px;flex-wrap:wrap}
+.badge{font-family:var(--mono);font-size:10px;font-weight:500;letter-spacing:0.07em;text-transform:uppercase;padding:3px 8px;border-radius:4px;border:1px solid;}
+.badge-type{color:var(--orange);background:var(--orange-dim);border-color:rgba(244,118,42,0.25)}
+.badge-mod{color:var(--sky);background:var(--sky-dim);border-color:rgba(93,184,242,0.25)}
+.doc-title{font-size:20px;font-weight:600;letter-spacing:-0.02em}
+.doc-subtitle{font-size:11px;font-family:var(--mono);color:var(--text-muted);margin-top:4px}
+.stat-row{display:flex;gap:20px;flex-wrap:wrap;margin-top:13px;padding-top:13px;border-top:1px solid var(--border);}
+.stat-val{font-family:var(--mono);font-size:15px;font-weight:600;color:var(--text-primary)}
+.stat-lbl{font-size:10px;text-transform:uppercase;letter-spacing:0.06em;color:var(--text-muted);margin-top:1px}
+.doc-body{padding:22px 26px;display:flex;flex-direction:column;gap:10px}
+.module-label{display:flex;align-items:center;gap:10px}
+.module-num{font-family:var(--mono);font-size:10px;font-weight:600;color:var(--orange);letter-spacing:0.1em;text-transform:uppercase;}
+.module-rule{flex:1;height:1px;background:linear-gradient(to right,rgba(244,118,42,0.25),transparent);}
+.module-title{font-size:17px;font-weight:600;margin-bottom:10px}
+.tree-block{background:var(--bg-section);border:1px solid rgba(255,255,255,0.06);border-radius:8px;padding:18px 22px;font-family:var(--mono);font-size:12px;line-height:1.9;overflow-x:auto;white-space:pre;}
+.tm{color:var(--orange);font-weight:600}
+.ts{color:var(--sky);font-weight:500}
+.tb{color:var(--text-secondary)}
+.tl{color:var(--cyan)}
+.tc{color:var(--text-muted)}
+.summary-block{background:var(--bg-surface);border:1px solid var(--border);border-bottom:2px solid var(--orange);border-radius:8px 8px 0 0;padding:14px 18px;}
+.summary-label{font-family:var(--mono);font-size:10px;font-weight:600;color:var(--orange);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:8px;}
+.summary-list{list-style:none;display:flex;flex-direction:column;gap:5px}
+.summary-list li{font-size:13px;color:var(--text-secondary);line-height:1.7;display:flex;gap:7px;}
+.summary-list li::before{content:'›';color:var(--orange);font-weight:700;font-size:14px;flex-shrink:0}
+
+@media(max-width:600px){
+  .doc-header,.doc-body{padding-left:16px;padding-right:16px}
+  .doc-footer{padding:12px 16px}.footer-btn{width:100px;height:52px;font-size:10px}
+  .tree-block{font-size:11px;padding:14px 14px;}
+}
+
+
+/* ========================================
+   FOOTER NAVIGATION CSS
+   Synaptix Runtime — shared component
+   Copy into any artifact <style> block
+======================================== */
+
+.snx-footer{
+  background:var(--bg-surface);
+  border-top:1px solid var(--border);
+  padding:16px 26px 18px;
+}
+
+/* ── Meta bar ── */
+.snx-footer-meta{
+  display:flex;align-items:baseline;gap:10px;
+  padding-bottom:13px;
+  border-bottom:1px solid var(--border);
+  margin-bottom:13px;
+}
+.snx-footer-course{
+  font-family:var(--mono);font-size:10px;font-weight:600;
+  letter-spacing:0.14em;text-transform:uppercase;color:var(--text-muted);
+}
+.snx-footer-divider{
+  font-family:var(--mono);font-size:10px;color:var(--text-muted);opacity:0.4;
+}
+.snx-footer-module{
+  font-family:var(--mono);font-size:11px;font-weight:500;
+  color:var(--text-secondary);letter-spacing:0.04em;
+}
+
+/* ── Nav row ── */
+.snx-footer-nav{
+  display:flex;align-items:center;
+  gap:10px;
+}
+
+/* prev / next */
+.snx-nav-prev,
+.snx-nav-next{
+  font-family:var(--mono);font-size:11px;font-weight:500;
+  color:var(--text-secondary);
+  background:transparent;
+  border:1px solid var(--border);
+  border-radius:6px;
+  padding:6px 13px;
+  display:flex;align-items:center;gap:6px;
+  white-space:nowrap;
+  transition:border-color 0.13s,color 0.13s;
+  flex-shrink:0;
+  text-decoration:none;
+}
+.snx-nav-prev:hover,
+.snx-nav-next:hover{
+  border-color:var(--border-hi);
+  color:var(--text-primary);
+}
+.snx-nav-chevron{
+  font-size:13px;line-height:1;
+  color:var(--text-muted);
+  transition:color 0.13s;
+}
+.snx-nav-prev:hover .snx-nav-chevron,
+.snx-nav-next:hover .snx-nav-chevron{color:var(--text-secondary)}
+
+/* center hub */
+.snx-nav-hub{
+  flex:1;display:flex;align-items:center;
+  justify-content:center;gap:6px;flex-wrap:wrap;
+}
+
+/* hub buttons */
+.snx-hub-btn{
+  font-family:var(--mono);font-size:10px;font-weight:500;
+  letter-spacing:0.04em;
+  padding:6px 13px;border-radius:6px;border:1px solid;
+  display:inline-flex;align-items:center;gap:5px;
+  transition:background 0.13s;
+  text-decoration:none;white-space:nowrap;
+}
+.snx-hub-btn-recall{
+  color:var(--cyan);background:var(--cyan-dim);
+  border-color:rgba(78,205,196,0.22);
+}
+.snx-hub-btn-recall:hover{background:rgba(78,205,196,0.18)}
+
+.snx-hub-btn-tree{
+  color:var(--green);background:var(--green-dim);
+  border-color:rgba(74,222,128,0.22);
+}
+.snx-hub-btn-tree:hover{background:rgba(74,222,128,0.18)}
+
+.snx-hub-btn-compact{
+  color:var(--yellow);background:var(--yellow-dim);
+  border-color:rgba(244,208,63,0.22);
+}
+.snx-hub-btn-compact:hover{background:rgba(244,208,63,0.18)}
+
+.snx-hub-btn-quiz{
+  color:var(--orange);background:var(--orange-dim);
+  border-color:rgba(244,118,42,0.22);
+}
+.snx-hub-btn-quiz:hover{background:rgba(244,118,42,0.18)}
+
+.snx-hub-btn-module{
+  color:var(--purple);background:var(--purple-dim);
+  border-color:rgba(192,132,252,0.22);
+}
+.snx-hub-btn-module:hover{background:rgba(192,132,252,0.18)}
+
+/* active state — current artifact type */
+.snx-hub-btn[aria-current="page"]{
+  opacity:1;cursor:default;
+  box-shadow:0 0 0 1px currentColor;
+}
+
+/* mobile */
+@media(max-width:640px){
+  .snx-footer{padding:14px 16px 16px}
+  .snx-footer-nav{flex-wrap:wrap}
+  .snx-nav-hub{order:3;flex-basis:100%;justify-content:flex-start}
+}
+
+</style>
+</head>
+<body>
+<div class="doc-wrap">
+
+<div class="doc-header">
+  <div class="badges">
+    <span class="badge badge-type">Tree · Structure Only</span>
+    <span class="badge badge-mod">Module 1 of 1 · Merged · 4 Lessons</span>
+  </div>
+  <div class="doc-title">Claude MasterClass Volume 3 — Opus 4.7, Claude 4.1, Privacy &amp; The ChatGPT Comparison</div>
+  <div class="doc-subtitle">source: Claude_MasterClass_-_Volume_3.html · generated 2026-06-24 · subject: Claude MasterClass</div>
+  <div class="stat-row">
+    <div class="stat-item"><div class="stat-val">6</div><div class="stat-lbl">Sections</div></div>
+    <div class="stat-item"><div class="stat-val">30</div><div class="stat-lbl">Subsections</div></div>
+    <div class="stat-item"><div class="stat-val">130+</div><div class="stat-lbl">Leaf Items</div></div>
+  </div>
+</div>
+
+<div class="doc-body">
+<div class="module-label"><span class="module-num">Module 1</span><div class="module-rule"></div></div>
+<div class="module-title">Claude MasterClass Volume 3 — Opus 4.7, Claude 4.1, Privacy &amp; The ChatGPT Comparison</div>
+
+<div class="tree-block"><span class="tm">Module 1</span>  <span class="tb">Claude MasterClass Volume 3 — Opus 4.7, Claude 4.1, Privacy &amp; ChatGPT Comparison</span>
+<span class="tc">│</span>
+<span class="ts">├── A.  Claude Opus 4.7 — Four Capabilities Overview</span>
+<span class="tc">│   │</span>
+<span class="tb">│   ├── A1.  Landscape Position</span>
+<span class="tl">│   │   ├── Opus 4.7 = Anthropic's current flagship — targeted upgrade, not across-the-board step change</span>
+<span class="tl">│   │   ├── Model lineup unchanged: Haiku (fast/cheap) · Sonnet (general) · Opus (flagship)</span>
+<span class="tl">│   │   ├── Four capabilities exclusive to Opus 4.7 — Sonnet users see incremental gains only</span>
+<span class="tl">│   │   ├── Access: Pro or Team on claude.ai; API via claude-opus-4-7</span>
+<span class="tl">│   │   ├── Cost: ~15% more per output token than prior Opus + higher per-response token consumption</span>
+<span class="tl">│   │   └── Benchmarks: trading punches with GPT-5.4 on coding · ahead of Gemini 3 Ultra on vision · tied on reasoning</span>
+<span class="tc">│   │</span>
+<span class="tb">│   └── A2.  Four Features at a Glance</span>
+<span class="tl">│       ├── Self-verification: internal review pass before streaming — catches its own errors</span>
+<span class="tl">│       ├── X-High thinking: up to ~30,000 thinking tokens — expert-depth analysis tier</span>
+<span class="tl">│       ├── HD vision: 1,092px → 2,576px (~2.4× linear, ~6× pixel count)</span>
+<span class="tl">│       └── Literal instruction following: reweighted compliance vs. helpfulness — no added extras</span>
+<span class="tc">│</span>
+<span class="ts">├── B.  Self-Verification Deep Dive</span>
+<span class="tc">│   │</span>
+<span class="tb">│   ├── B1.  How Self-Verification Works</span>
+<span class="tl">│   │   ├── Trigger conditions: code · logic · math · multi-step reasoning</span>
+<span class="tl">│   │   ├── Non-trigger: simple facts · conversational chat · basic writing (no speed penalty)</span>
+<span class="tl">│   │   ├── Process: generate internally → verification pass → revise if issues found → stream post-verified version</span>
+<span class="tl">│   │   ├── User only ever sees the post-verification output — revision is invisible</span>
+<span class="tl">│   │   ├── Verification checks: consistency · edge cases · prompt compliance</span>
+<span class="tl">│   │   └── Cost on triggers: 20–40% longer response time</span>
+<span class="tc">│   │</span>
+<span class="tb">│   ├── B2.  The SQL Test (4.6 vs 4.7)</span>
+<span class="tl">│   │   ├── Task: SQL query for weekly active users — mid-week signups, soft-deleted users, global timezones</span>
+<span class="tl">│   │   ├── Claude 4.6 result</span>
+<span class="tl">│   │   │   ├── Response time: ~8 seconds</span>
+<span class="tl">│   │   │   ├── Appearance: clean query</span>
+<span class="tl">│   │   │   ├── Error: silently dropped non-UTC users on week boundaries</span>
+<span class="tl">│   │   │   └── Impact: 12% undercount — undetected without specific verification</span>
+<span class="tl">│   │   ├── Claude 4.7 result</span>
+<span class="tl">│   │   │   ├── Response time: ~22 seconds</span>
+<span class="tl">│   │   │   ├── Flagged: "initially wrote using DATE_TRUNC on signup_at but that misses UTC week boundary users"</span>
+<span class="tl">│   │   │   └── Fixed: revised query converts to user local time first → correct output</span>
+<span class="tl">│   │   └── Source framing: "4.6 is confident and wrong. 4.7 is slower and right."</span>
+<span class="tc">│   │</span>
+<span class="tb">│   ├── B3.  The Code Review Test</span>
+<span class="tl">│   │   ├── Task: code review across 20 TypeScript files in a real repo</span>
+<span class="tl">│   │   ├── Claude 4.6: 7 real bugs found · 3 hallucinated false positives</span>
+<span class="tl">│   │   ├── Claude 4.7: 11 real bugs found · 0 hallucinated false positives</span>
+<span class="tl">│   │   ├── Each false positive = 10 minutes chasing a non-existent problem</span>
+<span class="tl">│   │   ├── Zero hallucinations = output trusted and acted on directly</span>
+<span class="tl">│   │   └── Practical result: secondary verification step (previously required with 4.6) eliminated</span>
+<span class="tc">│   │</span>
+<span class="tb">│   └── B4.  The Trust-Model Shift</span>
+<span class="tl">│       ├── Prior model: "useful assistant I verify" → every output needed checking</span>
+<span class="tl">│       ├── Opus 4.7: "competent collaborator I spot-check" → first drafts trusted on serious work</span>
+<span class="tl">│       ├── Source one-line: "The first model where I trust the first draft on serious work"</span>
+<span class="tl">│       ├── Correct strategy: use 4.7 for hard tasks where latency = accuracy dividend</span>
+<span class="tl">│       └── Wrong strategy: avoid 4.7 on hard tasks to skip the wait (you're skipping the error-catching pass)</span>
+<span class="tc">│</span>
+<span class="ts">├── C.  X-High Thinking &amp; HD Vision</span>
+<span class="tc">│   │</span>
+<span class="tb">│   ├── C1.  Three-Tier Thinking Ladder</span>
+<span class="tl">│   │   ├── Standard: hundreds of thinking tokens · fast · everyday tasks</span>
+<span class="tl">│   │   ├── High: thousands of thinking tokens · prior maximum · moderate complexity</span>
+<span class="tl">│   │   └── X-High: ~30,000 thinking tokens · new ceiling · expert-depth analysis</span>
+<span class="tl">│   │       ├── Total token cost: ~40,000 per response (thinking + output)</span>
+<span class="tl">│   │       └── Time: ~90 seconds for expert-level complex tasks</span>
+<span class="tc">│   │</span>
+<span class="tb">│   ├── C2.  Security Architecture Test</span>
+<span class="tl">│   │   ├── System: fintech with 6 microservices · shared auth · 2 databases · external payment provider</span>
+<span class="tl">│   │   ├── Standard mode: 6 issues (missing rate limiting · PII logging · CVE-flagged SDK)</span>
+<span class="tl">│   │   ├── High mode: 9 issues (added nuanced findings)</span>
+<span class="tl">│   │   ├── X-High mode: 14 issues</span>
+<span class="tl">│   │   │   └── New issues: trust boundary violation requiring chaining 3 separate components to exploit</span>
+<span class="tl">│   │   ├── Jump analysis: Standard→High = +3 issues · High→X-High = +5 issues (larger jump)</span>
+<span class="tl">│   │   └── X-High finds qualitatively different, harder issues — not more of the same</span>
+<span class="tc">│   │</span>
+<span class="tb">│   ├── C3.  Surgical Deployment Rule</span>
+<span class="tl">│   │   ├── Rule: use X-High when you would otherwise pay an expert hourly</span>
+<span class="tl">│   │   ├── Best use cases: legal analysis · security reviews · financial modeling · deep code audits</span>
+<span class="tl">│   │   ├── Rate limit impact: 1× per week on 4.6 → 3× per day on 4.7 when leaning on X-High</span>
+<span class="tl">│   │   ├── Never use for 5-minute tasks — marginal gain doesn't justify cost</span>
+<span class="tl">│   │   └── Monitor rate limits actively — X-High depletes Pro allocation fast</span>
+<span class="tc">│   │</span>
+<span class="tb">│   ├── C4.  HD Vision Upgrade</span>
+<span class="tl">│   │   ├── Resolution: 1,092px (4.6) → 2,576px (4.7)</span>
+<span class="tl">│   │   ├── Linear increase: ~2.4× · Pixel count increase: ~6×</span>
+<span class="tl">│   │   ├── Now reliably readable: dense financial dashboards · Bloomberg-style panels</span>
+<span class="tl">│   │   │                          handwritten wireframes · medical results · whiteboard photos</span>
+<span class="tl">│   │   ├── Source test: 2,400×600px financial screenshot (9 panels, tiny tables, heat map)</span>
+<span class="tl">│   │   │   ├── 4.6: could read information but couldn't analyze specific panel details</span>
+<span class="tl">│   │   │   └── 4.7: answered specific copper futures question from bottom-right panel accurately</span>
+<span class="tl">│   │   ├── Practical unlock: screenshot any dashboard → ask Claude for structured data → trust output</span>
+<span class="tl">│   │   ├── UI generation: handdrawn mobile app photo → 4.7 reproduced exact layout, logical components</span>
+<span class="tl">│   │   └── PDF limitation: most integrations still render PDF pages at old resolution</span>
+<span class="tl">│   │       └── Workaround: screenshot the PDF page → upload the image (not the PDF file)</span>
+<span class="tc">│   │</span>
+<span class="tb">│   └── C5.  Literal Instruction Following</span>
+<span class="tl">│       ├── Claude 4.6 problem: added extras despite explicit constraints</span>
+<span class="tl">│       │   └── Examples: sixth data point, framing paragraph, inferred product features</span>
+<span class="tl">│       ├── Claude 4.7 fix: reweighted compliance over default helpfulness instinct</span>
+<span class="tl">│       ├── Test: 150-word product description · 5 specific facts · zero adjectives · no unmentioned features</span>
+<span class="tl">│       │   ├── 4.6: added adjectives and a sixth feature</span>
+<span class="tl">│       │   └── 4.7: exactly 5 facts, 0 adjectives, nothing invented</span>
+<span class="tl">│       ├── Best use cases:</span>
+<span class="tl">│       │   ├── Legal/compliance writing — every added word is liability</span>
+<span class="tl">│       │   ├── Structured data extraction — returns exact schema specified</span>
+<span class="tl">│       │   └── Prompt chaining — fixed output format for downstream systems</span>
+<span class="tl">│       └── Productivity impact: eliminated post-processing cleanup step entirely (~40 min/week saved)</span>
+<span class="tc">│</span>
+<span class="ts">├── D.  Claude 4.1 — Core Features</span>
+<span class="tc">│   │</span>
+<span class="tb">│   ├── D1.  Artifacts</span>
+<span class="tl">│   │   ├── Definition: side panel where Claude's finished work renders as an actual interactive output</span>
+<span class="tl">│   │   ├── Supported outputs: executable code · HTML/CSS/JS live previews · formatted documents · interactive apps</span>
+<span class="tl">│   │   ├── Key advance vs prior Claude: runs code in its own sandbox, shows executed output immediately</span>
+<span class="tl">│   │   │   └── Prior: copy code and run it yourself. 4.1: Claude runs, debugs, shows output</span>
+<span class="tl">│   │   ├── Iterative refinement: click any element → tell Claude what to fix → only that element updates</span>
+<span class="tl">│   │   ├── Manual creation: Artifacts tab → New Artifact → blank canvas → paste or build inside</span>
+<span class="tl">│   │   └── Source analogy: prior Claude = Notepad · Artifacts = Figma</span>
+<span class="tc">│   │</span>
+<span class="tb">│   ├── D2.  Projects</span>
+<span class="tl">│   │   ├── Definition: persistent workspaces where context lives permanently</span>
+<span class="tl">│   │   ├── Context: 200,000 tokens maintained across all chats within the project</span>
+<span class="tl">│   │   ├── Solves prior context-drop: Claude 3 forgot all context on new chat open; Projects persist indefinitely</span>
+<span class="tl">│   │   ├── Upload once: documents, spreadsheets, images, notes → all chats inside inherit automatically</span>
+<span class="tl">│   │   ├── Google Drive integration: point Claude at a Drive folder → treated as project knowledge</span>
+<span class="tl">│   │   └── After ~12 hours of use: Claude generates project-specific memories that enhance workflows further</span>
+<span class="tc">│   │</span>
+<span class="tb">│   ├── D3.  Extended Thinking — Live Mid-Process Steering</span>
+<span class="tl">│   │   ├── Trigger: toggle below the prompt bar before submitting</span>
+<span class="tl">│   │   ├── Output: step-by-step visible reasoning (pseudo-code, calculations, option-listing, decisions)</span>
+<span class="tl">│   │   ├── Key new capability: live mid-process correction</span>
+<span class="tl">│   │   │   ├── If Claude takes a wrong turn at step 4: say "check that assumption"</span>
+<span class="tl">│   │   │   └── Claude reroutes immediately — no restart required</span>
+<span class="tl">│   │   ├── Prior failure mode: see wrong answer → backtrack → reprompt → start over</span>
+<span class="tl">│   │   ├── New mode: catch wrong turn mid-process → steer → continue from that point</span>
+<span class="tl">│   │   ├── Time: 30 seconds–several minutes on complex tasks</span>
+<span class="tl">│   │   ├── When to use: debugging · data analysis · nuanced essays · complex logic</span>
+<span class="tl">│   │   ├── When not to use: simple factual queries ("capital of France" = overkill)</span>
+<span class="tl">│   │   └── Collapsible log: reading it educational — reveals assumptions and problem-solving patterns</span>
+<span class="tc">│   │</span>
+<span class="tb">│   ├── D4.  Built-in Data Analysis</span>
+<span class="tl">│   │   ├── Workflow: drag CSV into chat → plain-English request → Claude writes Python → executes → plots → interprets</span>
+<span class="tl">│   │   ├── All happens inside artifact panel — no external tool needed</span>
+<span class="tl">│   │   ├── No coding knowledge required</span>
+<span class="tl">│   │   ├── Key advance: interprets visuals (turns numbers into a narrative) not just generates charts</span>
+<span class="tl">│   │   ├── Multi-source: "summarize this report and check if any numbers contradict the spreadsheet"</span>
+<span class="tl">│   │   │   └── Returns summary + flagged discrepancies in one prompt — no follow-up required</span>
+<span class="tl">│   │   └── Libraries used: Matplotlib for plotting · Python for analysis</span>
+<span class="tc">│   │</span>
+<span class="tb">│   └── D5.  Custom Styles &amp; Persona Presets</span>
+<span class="tl">│       ├── Five built-in presets: Normal · Concise · Explanatory · Learning · Formal</span>
+<span class="tl">│       ├── Custom styles — two creation methods:</span>
+<span class="tl">│       │   ├── Method 1: describe tone in prompt → save as named style</span>
+<span class="tl">│       │   └── Method 2: upload writing samples → Claude extracts and saves your voice</span>
+<span class="tl">│       ├── Method 2 captures: vocabulary · sentence rhythm · paragraph length · phrasing habits</span>
+<span class="tl">│       ├── Sample quality rule: large consistent samples → strong voice · mixed tones → averaged output</span>
+<span class="tl">│       └── Use case: one style for social media · another for clients · another for technical docs</span>
+<span class="tc">│</span>
+<span class="ts">├── E.  Migrating from ChatGPT</span>
+<span class="tc">│   │</span>
+<span class="tb">│   ├── E1.  The Privacy Case</span>
+<span class="tl">│   │   ├── OpenAI: removed military-use ban, announced Pentagon cybersecurity partnership</span>
+<span class="tl">│   │   ├── Anthropic: declined the same deal — walked away from likely millions in government contracts</span>
+<span class="tl">│   │   ├── Anthropic founding story: ex-OpenAI researchers who left over direction disagreements</span>
+<span class="tl">│   │   ├── Constitutional AI: helpfulness · harmlessness · honesty — not helpfulness to defense contractors</span>
+<span class="tl">│   │   ├── Enterprise trust: regulated industries (healthcare, finance, legal) can't use AI built by defense contractor</span>
+<span class="tl">│   │   └── Source framing: privacy concern = trigger. Performance advantage = the actual case.</span>
+<span class="tc">│   │</span>
+<span class="tb">│   ├── E2.  Memory Import Workflow</span>
+<span class="tl">│   │   ├── Path: Claude Settings → Capabilities → Import memory from other AI providers → Start Import</span>
+<span class="tl">│   │   ├── Claude generates a ChatGPT extraction prompt</span>
+<span class="tl">│   │   ├── PRO TIP — Before pasting in ChatGPT:</span>
+<span class="tl">│   │   │   ├── Enable all 3 personalization options: saved memories · browser memories · chat history</span>
+<span class="tl">│   │   │   └── Switch ChatGPT model from Auto → Thinking</span>
+<span class="tl">│   │   ├── Why Thinking model: runs more search cycles, digs deeper → 3× more memories extracted</span>
+<span class="tl">│   │   ├── After ChatGPT generates export: copy code block → return to Claude → paste → Add to Memory</span>
+<span class="tl">│   │   ├── Claude's memory organization: categorized by type · directly editable · auto-updates every 24h</span>
+<span class="tl">│   │   └── Edit: click pen icon next to any memory → make corrections → optional but recommended</span>
+<span class="tc">│   │</span>
+<span class="tb">│   └── E3.  Full Export &amp; Custom GPT Migration</span>
+<span class="tl">│       ├── Full conversation export: ChatGPT Settings → Data Controls → Export Data → .zip (all conversations)</span>
+<span class="tl">│       ├── Style guide trick (pre-migration):</span>
+<span class="tl">│       │   ├── Prompt ChatGPT: "Based on our conversation history, create a detailed guide of my preferences, tasks, optimal assistance"</span>
+<span class="tl">│       │   └── Output: personalized instruction set → paste into Claude custom instructions</span>
+<span class="tl">│       ├── Custom GPT migration process:</span>
+<span class="tl">│       │   ├── Step 1: open Custom GPT → Edit GPT → copy Instructions section</span>
+<span class="tl">│       │   ├── Step 2: in Claude, create Project with same name</span>
+<span class="tl">│       │   └── Step 3: Project Settings → paste instructions into custom instructions field</span>
+<span class="tl">│       ├── Claude project context: 200K tokens maintained permanently + project-specific memories after ~12h</span>
+<span class="tl">│       └── Post-deletion note: takes 30 days · some data may persist per OpenAI privacy policy</span>
+<span class="tc">│</span>
+<span class="ts">└── F.  Claude vs ChatGPT 5.3 / 5.4 — Head-to-Head</span>
+<span class="tc">    │</span>
+<span class="tb">    ├── F1.  ChatGPT 5.3 — Three Failures</span>
+<span class="tl">    │   ├── Codename: "Project Garlic" — stripped preambles, blunt, direct</span>
+<span class="tl">    │   ├── Failure 1 — Creativity</span>
+<span class="tl">    │   │   ├── Prompt: "10 unique marketing angles, think outside the box"</span>
+<span class="tl">    │   │   ├── 5.3: generic corporate bullet points (time-saving features, boost workflow, increase efficiency)</span>
+<span class="tl">    │   │   └── Claude: contrarian angles (anti-productivity positioning, burned-out high performer targeting)</span>
+<span class="tl">    │   ├── Failure 2 — Hallucination</span>
+<span class="tl">    │   │   ├── Prompt: trap question about non-existent "2024 AI Safety Summit in Geneva"</span>
+<span class="tl">    │   │   ├── 5.3: confident 4-paragraph fabrication with named goals and policy outcomes</span>
+<span class="tl">    │   │   └── Claude: flagged uncertainty, said no such summit, suggested real 2024 AI events instead</span>
+<span class="tl">    │   ├── Failure 3 — Context Retention</span>
+<span class="tl">    │   │   ├── Prompt: specific caching strategy question, answer on page 32 of a 50-page spec</span>
+<span class="tl">    │   │   ├── 5.3: generic document summary, completely missed the question</span>
+<span class="tl">    │   │   └── Claude: "Per page 32, section 4.3: Redis with 60-second TTL for GET, cache invalidation on POST/PUT/DELETE"</span>
+<span class="tl">    │   └── Verdict: fast and blunt but unreliable — lobotomized creativity, confident hallucinations, context failures</span>
+<span class="tc">    │</span>
+<span class="tb">    ├── F2.  ChatGPT 5.4 — One Advantage &amp; Two Trade-offs</span>
+<span class="tl">    │   ├── Genuine advantage: Computer Use</span>
+<span class="tl">    │   │   ├── Interacts with software visually — buttons, menus, browser steps, form fields</span>
+<span class="tl">    │   │   ├── No API required — works with legacy software, internal dashboards, old desktop apps</span>
+<span class="tl">    │   │   └── Only option for interface-based automation of pre-API software</span>
+<span class="tl">    │   ├── Trade-off 1 — Speed</span>
+<span class="tl">    │   │   ├── Thought Stream (visible reasoning sidebar) took 128 seconds on a basic SQL task</span>
+<span class="tl">    │   │   ├── Claude 4 solved the same task in under 40 seconds</span>
+<span class="tl">    │   │   └── User comment: "Thought Stream isn't transparency, it's theater that wastes your time"</span>
+<span class="tl">    │   └── Trade-off 2 — Privacy</span>
+<span class="tl">    │       ├── Stateful memory automatically indexes everything across sessions without user control</span>
+<span class="tl">    │       ├── Source test: queried a session "from a few weeks ago" → returned exact date, opening line verbatim, all themes</span>
+<span class="tl">    │       ├── For long-term project work: powerful feature</span>
+<span class="tl">    │       ├── For privacy: "surveillance nightmare" — user does not control what is stored</span>
+<span class="tl">    │       └── Security concern: computer use mode may screenshot open tabs including financial/medical portals</span>
+<span class="tc">    │</span>
+<span class="tb">    ├── F3.  Code Quality Comparison</span>
+<span class="tl">    │   ├── REST API test (user registration, email verification, rate limiting, error handling)</span>
+<span class="tl">    │   │   ├── ChatGPT 5.3: working but messy — hard-coded API keys, minimal error handling</span>
+<span class="tl">    │   │   │             Source had to refactor 40% before deploying</span>
+<span class="tl">    │   │   └── Claude 4: production-ready first draft — env variables configured, comprehensive error handling,</span>
+<span class="tl">    │   │                JWT auth, rate limiting already set up</span>
+<span class="tl">    │   ├── Web scraper test (price monitoring across multiple e-commerce sites)</span>
+<span class="tl">    │   │   ├── ChatGPT 5.3: basic scraper for one site</span>
+<span class="tl">    │   │   └── Claude 4: modular system with rate limiting · error recovery · rotating proxy suggestion</span>
+<span class="tl">    │   │               (handled production concerns never mentioned in the prompt)</span>
+<span class="tl">    │   └── Claude code characteristic: architectural thinking — structured for 6-month maintenance, not day-one only</span>
+<span class="tc">    │</span>
+<span class="tb">    └── F4.  Per-Task Decision Matrix</span>
+<span class="tl">        ├── Use ChatGPT 5.3 when:</span>
+<span class="tl">        │   ├── Need fast, blunt surface-level output (code snippets, quick answers, daily admin)</span>
+<span class="tl">        │   └── Can tolerate hallucination risk and context failures on non-critical content</span>
+<span class="tl">        ├── Use ChatGPT 5.4 when:</span>
+<span class="tl">        │   ├── Specifically need computer use — legacy software, desktop control, interface-based agents</span>
+<span class="tl">        │   └── Accepting: 2-minute latency · automatic surveillance memory · privacy trade-off</span>
+<span class="tl">        ├── Use Claude 4 for:</span>
+<span class="tl">        │   ├── Writing · deep reasoning · production-ready code · ethical compliance</span>
+<span class="tl">        │   ├── Fast results without performance theater or surveillance</span>
+<span class="tl">        │   └── Any regulated industry requiring auditable output (healthcare, finance, legal)</span>
+<span class="tl">        ├── Source verdict: 90% of professionals → Claude</span>
+<span class="tl">        ├── ChatGPT 5.4's one killer feature (computer use): only option when you specifically need it</span>
+<span class="tl">        └── Constitutional AI 2.0: Anthropic declined Pentagon deal → enterprise trust for regulated industries</span></div>
+
+<div class="summary-block">
+  <div class="summary-label">Module Summary</div>
+  <ul class="summary-list">
+    <li>Opus 4.7's four features each solve a specific prior failure: self-verification (first-draft trust, 12% SQL error caught, 0 hallucinated bugs), X-High thinking (6→14 security issues across tiers), HD vision (1,092px→2,576px), literal instruction following (constraints followed as hard limits).</li>
+    <li>Self-verification fires on code/logic/math/multi-step only. 20–40% latency on triggers = the accuracy dividend. Trust model shifts to "competent collaborator I spot-check." Use 4.7 precisely where correctness outweighs speed.</li>
+    <li>X-High: ~30K thinking tokens, ~40K total tokens, ~90 seconds. Surgical deployment only — expert-hourly tasks. Monitor rate limits (3× faster depletion). PDF vision workaround: screenshot page, upload image.</li>
+    <li>Claude 4.1 stack: artifacts (side-panel executed outputs, iterative surgical refinement), projects (200K permanent context, Drive integration), extended thinking (live mid-process steering — redirect without restart), data analysis (CSV→Python→chart→narrative), custom styles (upload samples for voice extraction).</li>
+    <li>Migration workflow in order: memory import (enable 3 personalization options, switch to Thinking model for 3× extraction), full data export (zip), style guide from history, Custom GPT → Claude Project (copy Instructions).</li>
+    <li>Decision matrix: 5.3 for surface speed tasks; 5.4 for computer use only; Claude for 90% of professional work. Code architectural quality, context retention (Redis/60s TTL found on page 32), factual honesty, and Constitutional AI are Claude's consistent edges.</li>
+  </ul>
+</div>
+
+</div>
+
+</div>
+
+
+<footer class="snx-footer">
+
+  <!-- Meta bar -->
+  <div class="snx-footer-meta">
+    <span class="snx-footer-course">Claude MasterClass</span>
+    <span class="snx-footer-divider">·</span>
+    <span class="snx-footer-module">Module 03 · Opus 4.7, Claude 4.1, Privacy &amp; The ChatGPT Comparison</span>
+  </div>
+
+  <!-- Nav row -->
+  <nav class="snx-footer-nav" aria-label="Artifact navigation">
+
+    <!-- Left: Previous -->
+    <a class="snx-nav-prev" href="./01_claude-masterclass-tree.html">
+      <span class="snx-nav-chevron">‹</span>
+      Previous
+    </a>
+
+    <!-- Center: Hub -->
+    <div class="snx-nav-hub">
+      <a class="snx-hub-btn snx-hub-btn-recall"  href="../recalls/03_claude-masterclass-recall.html">Recall</a>
+      <a class="snx-hub-btn snx-hub-btn-tree"    href="#" aria-current="page">Tree</a>
+      <a class="snx-hub-btn snx-hub-btn-compact" href="../compact/03_claude-masterclass-compact.html">Compact</a>
+      <a class="snx-hub-btn snx-hub-btn-quiz"    href="../quizzes/03_claude-masterclass-quiz.html">Quiz</a>
+      <a class="snx-hub-btn snx-hub-btn-module"  href="../modules/03_claude-masterclass-reviewer.html">Module</a>
+    </div>
+
+    <!-- Right: Next -->
+    <a class="snx-nav-next" href="#">
+      Next
+      <span class="snx-nav-chevron">›</span>
+    </a>
+
+  </nav>
+
+</footer>
+
+<script>
+function sendPrompt(t){if(window.parent&&window.parent.postMessage){window.parent.postMessage({type:'user_message',message:t},'*');}}
+function quizQuick()  { sendPrompt('/quiz mc(10) hard'); }
+function recallQuick(){ sendPrompt('/recall mixed(15) hard'); }
+function exportMd()   { sendPrompt('/export -md'); }
+</script>
+</body>
+</html>

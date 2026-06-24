@@ -1,0 +1,1070 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Quiz B — Claude MasterClass Volume 2</title>
+<style>
+/* synaptix-runtime v1.0 */
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@300;400;500;600&display=swap');
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg-base:#0e0e11;--bg-surface:#16161a;--bg-elevated:#1c1c21;--bg-section:#1a1a1f;
+  --border:rgba(255,255,255,0.07);--border-hi:rgba(255,255,255,0.12);
+  --orange:#f4762a;--salmon:#f08080;--cyan:#4ecdc4;--green:#4ade80;--yellow:#f4d03f;
+  --purple:#c084fc;--sky:#5db8f2;--amber:#f4b942;--red:#f87171;
+  --orange-dim:rgba(244,118,42,0.10);--cyan-dim:rgba(78,205,196,0.10);
+  --salmon-dim:rgba(240,128,128,0.10);--sky-dim:rgba(93,184,242,0.10);
+  --purple-dim:rgba(192,132,252,0.10);--green-dim:rgba(74,222,128,0.10);
+  --text-primary:#e8e8ee;--text-secondary:#8b8b9a;--text-muted:#4a4a5a;
+  --mono:'JetBrains Mono',monospace;--sans:'Inter',system-ui,sans-serif;
+}
+body{background:var(--bg-base);color:var(--text-primary);font-family:var(--sans);font-size:13px;line-height:1.8;}
+.doc-wrap{max-width:860px;margin:0 auto;display:flex;flex-direction:column;}
+.doc-header{padding:22px 26px 16px;border-bottom:1px solid var(--border);background:var(--bg-surface);}
+.badges{display:flex;gap:8px;margin-bottom:11px;flex-wrap:wrap}
+.badge{font-family:var(--mono);font-size:10px;font-weight:500;letter-spacing:0.07em;text-transform:uppercase;padding:3px 8px;border-radius:4px;border:1px solid;}
+.badge-type{color:var(--orange);background:var(--orange-dim);border-color:rgba(244,118,42,0.25)}
+.badge-mod{color:var(--sky);background:var(--sky-dim);border-color:rgba(93,184,242,0.25)}
+.doc-title{font-size:20px;font-weight:600;letter-spacing:-0.02em}
+.doc-subtitle{font-size:11px;font-family:var(--mono);color:var(--text-muted);margin-top:4px}
+.stat-row{display:flex;gap:20px;flex-wrap:wrap;margin-top:13px;padding-top:13px;border-top:1px solid var(--border);}
+.stat-val{font-family:var(--mono);font-size:15px;font-weight:600;color:var(--text-primary)}
+.stat-lbl{font-size:10px;text-transform:uppercase;letter-spacing:0.06em;color:var(--text-muted);margin-top:1px}
+.doc-body{padding:22px 26px;display:flex;flex-direction:column;gap:10px}
+.qz-section{font-family:var(--mono);font-size:10px;font-weight:600;color:var(--sky);letter-spacing:0.1em;text-transform:uppercase;padding:6px 0 4px;border-bottom:1px solid var(--border);margin-bottom:4px;display:flex;align-items:center;gap:10px;}
+.qz-section-rule{flex:1;height:1px;background:linear-gradient(to right,rgba(93,184,242,0.2),transparent);}
+.q-card{background:var(--bg-section);border:1px solid var(--border);border-radius:10px;padding:16px 18px;display:flex;flex-direction:column;gap:10px;transition:border-color 0.15s;}
+.q-card:hover{border-color:var(--border-hi)}
+.q-meta{display:flex;align-items:center;gap:8px;}
+.q-num{font-family:var(--mono);font-size:10px;font-weight:600;color:var(--cyan);background:var(--cyan-dim);border:1px solid rgba(78,205,196,0.2);padding:2px 7px;border-radius:4px;}
+.q-type-badge{font-family:var(--mono);font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:0.07em;padding:2px 6px;border-radius:3px;border:1px solid;}
+.qt-mc{color:var(--orange);background:var(--orange-dim);border-color:rgba(244,118,42,0.2)}
+.qt-fill{color:var(--cyan);background:var(--cyan-dim);border-color:rgba(78,205,196,0.2)}
+.qt-tof{color:var(--yellow);background:rgba(244,208,63,0.08);border-color:rgba(244,208,63,0.2)}
+.qt-enum{color:var(--purple);background:var(--purple-dim);border-color:rgba(192,132,252,0.2)}
+.qt-conn{color:var(--sky);background:var(--sky-dim);border-color:rgba(93,184,242,0.2)}
+.q-stem{font-size:13px;color:var(--text-primary);line-height:1.75;}
+.q-options{display:flex;flex-direction:column;gap:6px;}
+.q-opt{display:flex;align-items:flex-start;gap:10px;padding:8px 11px;border:1px solid var(--border);border-radius:7px;cursor:pointer;transition:all 0.12s;}
+.q-opt:hover{border-color:var(--border-hi);background:rgba(255,255,255,0.02)}
+.q-opt.selected{border-color:rgba(78,205,196,0.4);background:var(--cyan-dim)}
+.q-opt-letter{font-family:var(--mono);font-size:10px;font-weight:600;color:var(--text-muted);width:16px;flex-shrink:0;padding-top:1px;}
+.q-opt-text{font-size:13px;color:var(--text-secondary);line-height:1.65;}
+.fill-blank{border:none;border-bottom:2px solid rgba(78,205,196,0.4);background:transparent;color:var(--text-primary);font-family:var(--sans);font-size:13px;padding:2px 6px;min-width:180px;outline:none;transition:border-color 0.15s;}
+.fill-blank:focus{border-color:var(--cyan)}
+.tof-opts{display:flex;gap:10px;margin-top:4px;}
+.tof-btn{display:flex;align-items:center;justify-content:center;width:90px;height:36px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--text-secondary);font-family:var(--mono);font-size:11px;cursor:pointer;transition:all 0.12s;font-weight:500;}
+.tof-btn:hover{border-color:var(--border-hi)}
+.tof-btn.sel-true{border-color:rgba(74,222,128,0.4);background:rgba(74,222,128,0.1);color:var(--green)}
+.tof-btn.sel-false{border-color:rgba(248,113,113,0.4);background:rgba(248,113,113,0.07);color:var(--red)}
+.enum-list{display:flex;flex-direction:column;gap:6px;margin-top:4px;}
+.enum-input{background:var(--bg-elevated);border:1px solid var(--border);border-radius:6px;padding:7px 10px;color:var(--text-primary);font-family:var(--sans);font-size:13px;outline:none;transition:border-color 0.15s;width:100%;}
+.enum-input:focus{border-color:var(--border-hi)}
+.connect-wrap{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:6px;}
+.connect-col-label{font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:0.07em;color:var(--text-muted);margin-bottom:6px;}
+.connect-item{background:var(--bg-elevated);border:1px solid var(--border);border-radius:6px;padding:8px 11px;font-size:12px;color:var(--text-secondary);line-height:1.55;}
+.connect-item strong{color:var(--orange);font-family:var(--mono);font-size:11px;}
+.connect-select{width:100%;background:var(--bg-elevated);border:1px solid var(--border);border-radius:6px;padding:7px 10px;color:var(--text-primary);font-family:var(--sans);font-size:13px;outline:none;cursor:pointer;margin-top:4px;}
+.connect-select:focus{border-color:var(--border-hi)}
+.qz-prog-bar-wrap{height:3px;background:var(--border);border-radius:2px;margin-bottom:14px;}
+.qz-prog-bar{height:100%;background:var(--orange);border-radius:2px;transition:width 0.3s ease;}
+.qz-submit-wrap{display:flex;justify-content:center;margin-top:6px;}
+.qz-submit{display:flex;align-items:center;justify-content:center;gap:8px;width:220px;height:50px;border-radius:12px;background:var(--orange-dim);border:1px solid rgba(244,118,42,0.35);color:var(--orange);font-family:var(--mono);font-size:12px;font-weight:600;cursor:pointer;transition:background 0.15s;letter-spacing:0.04em;}
+.qz-submit:hover{background:rgba(244,118,42,0.18)}
+.qz-results{display:none;background:var(--bg-surface);border:1px solid var(--border);border-top:2px solid var(--orange);border-radius:0 0 10px 10px;padding:22px 24px;margin-top:10px;}
+.qz-score-row{display:flex;align-items:center;gap:20px;margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid var(--border);}
+.qz-score-big{font-family:var(--mono);font-size:36px;font-weight:700;color:var(--orange);letter-spacing:-0.02em;}
+.qz-score-sub{font-size:12px;color:var(--text-muted);font-family:var(--mono);margin-top:3px;}
+.sec-breakdown{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px;margin-bottom:16px;}
+.sec-item{background:var(--bg-elevated);border:1px solid var(--border);border-radius:7px;padding:8px 11px;}
+.sec-label{font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:0.06em;color:var(--text-muted);margin-bottom:3px;}
+.sec-pct{font-family:var(--mono);font-size:16px;font-weight:600;}
+.eval-panel{background:var(--bg-section);border:1px solid var(--border);border-left:3px solid var(--amber);border-radius:0 8px 8px 0;padding:16px 18px;margin-top:14px;}
+.eval-label{font-family:var(--mono);font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:var(--amber);margin-bottom:10px;}
+.eval-body{font-size:13px;color:var(--text-secondary);line-height:1.85;}
+.eval-body h1{font-size:14px;font-weight:600;color:var(--text-primary);margin:14px 0 6px;font-family:var(--sans);}
+.eval-body strong{color:var(--amber)}
+.key-section{background:var(--bg-section);border:1px solid var(--border);border-radius:10px;overflow:hidden;}
+.key-hdr{padding:12px 16px;border-bottom:1px solid var(--border);font-family:var(--mono);font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-muted);}
+.key-body{padding:14px 16px;display:flex;flex-direction:column;gap:6px;}
+.key-item{display:flex;gap:12px;font-size:12px;color:var(--text-secondary);line-height:1.65;padding:5px 0;border-bottom:1px solid rgba(255,255,255,0.03);}
+.key-item:last-child{border-bottom:none;padding-bottom:0;}
+.key-num{font-family:var(--mono);font-size:11px;font-weight:600;color:var(--text-muted);width:26px;flex-shrink:0;}
+.key-ans{color:var(--cyan);font-family:var(--mono);font-size:11px;font-weight:600;min-width:36px;flex-shrink:0;}
+.key-topic{flex:1;}
+
+@media(max-width:600px){.doc-header,.doc-body{padding-left:16px;padding-right:16px}.connect-wrap{grid-template-columns:1fr}.footer-btn{width:100px;height:52px;font-size:10px}}
+
+
+/* ========================================
+   FOOTER NAVIGATION CSS
+   Synaptix Runtime — shared component
+   Copy into any artifact <style> block
+======================================== */
+
+.snx-footer{
+  background:var(--bg-surface);
+  border-top:1px solid var(--border);
+  padding:16px 26px 18px;
+}
+
+/* ── Meta bar ── */
+.snx-footer-meta{
+  display:flex;align-items:baseline;gap:10px;
+  padding-bottom:13px;
+  border-bottom:1px solid var(--border);
+  margin-bottom:13px;
+}
+.snx-footer-course{
+  font-family:var(--mono);font-size:10px;font-weight:600;
+  letter-spacing:0.14em;text-transform:uppercase;color:var(--text-muted);
+}
+.snx-footer-divider{
+  font-family:var(--mono);font-size:10px;color:var(--text-muted);opacity:0.4;
+}
+.snx-footer-module{
+  font-family:var(--mono);font-size:11px;font-weight:500;
+  color:var(--text-secondary);letter-spacing:0.04em;
+}
+
+/* ── Nav row ── */
+.snx-footer-nav{
+  display:flex;align-items:center;
+  gap:10px;
+}
+
+/* prev / next */
+.snx-nav-prev,
+.snx-nav-next{
+  font-family:var(--mono);font-size:11px;font-weight:500;
+  color:var(--text-secondary);
+  background:transparent;
+  border:1px solid var(--border);
+  border-radius:6px;
+  padding:6px 13px;
+  display:flex;align-items:center;gap:6px;
+  white-space:nowrap;
+  transition:border-color 0.13s,color 0.13s;
+  flex-shrink:0;
+  text-decoration:none;
+}
+.snx-nav-prev:hover,
+.snx-nav-next:hover{
+  border-color:var(--border-hi);
+  color:var(--text-primary);
+}
+.snx-nav-chevron{
+  font-size:13px;line-height:1;
+  color:var(--text-muted);
+  transition:color 0.13s;
+}
+.snx-nav-prev:hover .snx-nav-chevron,
+.snx-nav-next:hover .snx-nav-chevron{color:var(--text-secondary)}
+
+/* center hub */
+.snx-nav-hub{
+  flex:1;display:flex;align-items:center;
+  justify-content:center;gap:6px;flex-wrap:wrap;
+}
+
+/* hub buttons */
+.snx-hub-btn{
+  font-family:var(--mono);font-size:10px;font-weight:500;
+  letter-spacing:0.04em;
+  padding:6px 13px;border-radius:6px;border:1px solid;
+  display:inline-flex;align-items:center;gap:5px;
+  transition:background 0.13s;
+  text-decoration:none;white-space:nowrap;
+}
+.snx-hub-btn-recall{
+  color:var(--cyan);background:var(--cyan-dim);
+  border-color:rgba(78,205,196,0.22);
+}
+.snx-hub-btn-recall:hover{background:rgba(78,205,196,0.18)}
+
+.snx-hub-btn-tree{
+  color:var(--green);background:var(--green-dim);
+  border-color:rgba(74,222,128,0.22);
+}
+.snx-hub-btn-tree:hover{background:rgba(74,222,128,0.18)}
+
+.snx-hub-btn-compact{
+  color:var(--yellow);background:var(--yellow-dim);
+  border-color:rgba(244,208,63,0.22);
+}
+.snx-hub-btn-compact:hover{background:rgba(244,208,63,0.18)}
+
+.snx-hub-btn-quiz{
+  color:var(--orange);background:var(--orange-dim);
+  border-color:rgba(244,118,42,0.22);
+}
+.snx-hub-btn-quiz:hover{background:rgba(244,118,42,0.18)}
+
+.snx-hub-btn-module{
+  color:var(--purple);background:var(--purple-dim);
+  border-color:rgba(192,132,252,0.22);
+}
+.snx-hub-btn-module:hover{background:rgba(192,132,252,0.18)}
+
+/* active state — current artifact type */
+.snx-hub-btn[aria-current="page"]{
+  opacity:1;cursor:default;
+  box-shadow:0 0 0 1px currentColor;
+}
+
+/* mobile */
+@media(max-width:640px){
+  .snx-footer{padding:14px 16px 16px}
+  .snx-footer-nav{flex-wrap:wrap}
+  .snx-nav-hub{order:3;flex-basis:100%;justify-content:flex-start}
+}
+
+</style>
+</head>
+<body>
+<div class="doc-wrap">
+
+<div class="doc-header">
+  <div class="badges">
+    <span class="badge badge-type">Quiz B · Hard</span>
+    <span class="badge badge-mod">50 Items · MC 20 · Fill 10 · TOF 10 · Enum 5 · Connect 5</span>
+  </div>
+  <div class="doc-title">Quiz B — Claude MasterClass: Advanced Prompting, Routines, Design &amp; Model Mastery</div>
+  <div class="doc-subtitle">50 items · mc(20) fill(10) tof(10) enum(5) connect(5) · hard · explain off · Volume 2</div>
+  <div class="stat-row">
+    <div class="stat-item"><div class="stat-val">50</div><div class="stat-lbl">Total Items</div></div>
+    <div class="stat-item"><div class="stat-val">Hard</div><div class="stat-lbl">Difficulty</div></div>
+    <div class="stat-item"><div class="stat-val">A–F</div><div class="stat-lbl">Coverage</div></div>
+    <div class="stat-item"><div class="stat-val">5</div><div class="stat-lbl">Types</div></div>
+  </div>
+</div>
+
+<div class="doc-body">
+<div class="qz-prog-bar-wrap"><div class="qz-prog-bar" id="qz-prog-bar" style="width:0%"></div></div>
+
+<!-- ════════════════════════════════════════════ -->
+<!-- PART I — MULTIPLE CHOICE (20)               -->
+<!-- ════════════════════════════════════════════ -->
+<div class="qz-section">Part I — Multiple Choice (20 items)<div class="qz-section-rule"></div></div>
+
+<!-- MC1 -->
+<div class="q-card">
+  <div class="q-meta"><span class="q-num">1</span><span class="q-type-badge qt-mc">MC</span></div>
+  <div class="q-stem">A content writer submits a prompt: "Write a blog post about AI trends — make it friendly but professional, conversational yet authoritative, casual but credible." Which prompt failure does this represent, and what is the correct fix?</div>
+  <div class="q-options">
+    <div class="q-opt" onclick="_q.select(this,1,'A')"><span class="q-opt-letter">A</span><span class="q-opt-text">Mistake 3 (no role). Fix: assign a specific expert role and target audience before stating style preferences.</span></div>
+    <div class="q-opt" onclick="_q.select(this,1,'B')"><span class="q-opt-letter">B</span><span class="q-opt-text">Mistake 2 (wall of text). Fix: break the adjectives into separate labeled constraint sections using line breaks.</span></div>
+    <div class="q-opt" onclick="_q.select(this,1,'C')"><span class="q-opt-letter">C</span><span class="q-opt-text">Technique 6 failure (no style example). Fix: replace the contradictory adjectives with one concrete paragraph of writing in the target voice.</span></div>
+    <div class="q-opt" onclick="_q.select(this,1,'D')"><span class="q-opt-letter">D</span><span class="q-opt-text">Mistake 1 (searching). Fix: reframe as a brief with context about the intended platform and reader before listing tone preferences.</span></div>
+  </div>
+</div>
+
+<!-- MC2 -->
+<div class="q-card">
+  <div class="q-meta"><span class="q-num">2</span><span class="q-type-badge qt-mc">MC</span></div>
+  <div class="q-stem">The four-block formula states the Task block should contain "one clear deliverable." A user writes: "Task: Write a welcome email AND suggest three subject line variations AND provide a short A/B test rationale." What specific failure does this create?</div>
+  <div class="q-options">
+    <div class="q-opt" onclick="_q.select(this,2,'A')"><span class="q-opt-letter">A</span><span class="q-opt-text">Claude will refuse the request because the formula only allows single-sentence task specifications.</span></div>
+    <div class="q-opt" onclick="_q.select(this,2,'B')"><span class="q-opt-letter">B</span><span class="q-opt-text">Multiple asks in the Task block force Claude to prioritize between deliverables, often completing the first and giving diminishing quality to subsequent ones — reverting to averaging behavior.</span></div>
+    <div class="q-opt" onclick="_q.select(this,2,'C')"><span class="q-opt-letter">C</span><span class="q-opt-text">The formula requires each deliverable to have its own XML tag; the failure is structural, not conceptual — wrapping each in a tag resolves it without separating the tasks.</span></div>
+    <div class="q-opt" onclick="_q.select(this,2,'D')"><span class="q-opt-letter">D</span><span class="q-opt-text">Multiple deliverables only cause problems in wall-of-text prompts; when the four-block formula is used, Claude handles multiple task items reliably.</span></div>
+  </div>
+</div>
+
+<!-- MC3 -->
+<div class="q-card">
+  <div class="q-meta"><span class="q-num">3</span><span class="q-type-badge qt-mc">MC</span></div>
+  <div class="q-stem">A developer wants to generate 100 product descriptions in a consistent JSON format using Claude. They plan to use XML tags for structure. Which additional technique would most directly eliminate Claude's tendency to open with "I'll generate these product descriptions for you. Here's the format I'll follow:" before the actual output?</div>
+  <div class="q-options">
+    <div class="q-opt" onclick="_q.select(this,3,'A')"><span class="q-opt-letter">A</span><span class="q-opt-text">Constraint stacking — add a rule like "no preamble or explanation before the output."</span></div>
+    <div class="q-opt" onclick="_q.select(this,3,'B')"><span class="q-opt-letter">B</span><span class="q-opt-text">Prefill — begin Claude's response with the opening character of the JSON array, so Claude continues generating JSON from word one without any preamble.</span></div>
+    <div class="q-opt" onclick="_q.select(this,3,'C')"><span class="q-opt-letter">C</span><span class="q-opt-text">Motivated instructions — explain why preamble is unwanted, since understanding the reason prevents Claude from defaulting to it.</span></div>
+    <div class="q-opt" onclick="_q.select(this,3,'D')"><span class="q-opt-letter">D</span><span class="q-opt-text">Prompt chaining — separate the format definition from the generation task across two turns so Claude commits to the format before generating content.</span></div>
+  </div>
+</div>
+
+<!-- MC4 -->
+<div class="q-card">
+  <div class="q-meta"><span class="q-num">4</span><span class="q-type-badge qt-mc">MC</span></div>
+  <div class="q-stem">Prompt chaining's advantage over a single mega-prompt is strongest in Claude specifically because of a technical characteristic. Which characteristic, and why does it matter for chain coherence?</div>
+  <div class="q-options">
+    <div class="q-opt" onclick="_q.select(this,4,'A')"><span class="q-opt-letter">A</span><span class="q-opt-text">Claude's response speed is faster per token than competitors, so chains complete before the model's attention degrades across long sessions.</span></div>
+    <div class="q-opt" onclick="_q.select(this,4,'B')"><span class="q-opt-letter">B</span><span class="q-opt-text">Claude's 200K context window keeps the entire chain in one conversation — step-one instructions carry full weight at step five, whereas shorter-context models lose chain coherence as earlier turns fade.</span></div>
+    <div class="q-opt" onclick="_q.select(this,4,'C')"><span class="q-opt-letter">C</span><span class="q-opt-text">Claude's XML training means chained outputs in XML format are more precisely parsed between steps, reducing semantic drift across multi-step chains.</span></div>
+    <div class="q-opt" onclick="_q.select(this,4,'D')"><span class="q-opt-letter">D</span><span class="q-opt-text">Claude's Extended Thinking mode automatically activates between chain steps, silently improving inter-step reasoning quality without user intervention.</span></div>
+  </div>
+</div>
+
+<!-- MC5 -->
+<div class="q-card">
+  <div class="q-meta"><span class="q-num">5</span><span class="q-type-badge qt-mc">MC</span></div>
+  <div class="q-stem">An analyst writes: "Don't include speculative statements." Claude still includes some hedged claims. The analyst rewrites: "Don't include speculative statements because this report will be submitted to a regulatory body that requires all claims to be traceable to cited data." What technique is this, and why does the rewrite produce more compliant output?</div>
+  <div class="q-options">
+    <div class="q-opt" onclick="_q.select(this,5,'A')"><span class="q-opt-letter">A</span><span class="q-opt-text">Constraint stacking — stacking a regulatory context alongside the rule increases the severity weighting Claude assigns to that constraint, producing stricter compliance.</span></div>
+    <div class="q-opt" onclick="_q.select(this,5,'B')"><span class="q-opt-letter">B</span><span class="q-opt-text">Motivated instructions — adding the rationale enables Claude to apply the spirit of the rule in edge cases, catching hedged claims the command-only version didn't flag.</span></div>
+    <div class="q-opt" onclick="_q.select(this,5,'C')"><span class="q-opt-letter">C</span><span class="q-opt-text">Iterative refinement — the rewrite is effectively a second-pass revision prompt, triggering a self-critique loop that improves compliance.</span></div>
+    <div class="q-opt" onclick="_q.select(this,5,'D')"><span class="q-opt-letter">D</span><span class="q-opt-text">Four-block formula — the regulatory context belongs in the Context block, and moving it there prevents Claude from treating it as an instruction to respond to rather than background to apply.</span></div>
+  </div>
+</div>
+
+<!-- MC6 -->
+<div class="q-card">
+  <div class="q-meta"><span class="q-num">6</span><span class="q-type-badge qt-mc">MC</span></div>
+  <div class="q-stem">In the iterative refinement technique, what specific instruction triggers Step 2, and what makes it more effective than simply asking Claude to "improve" the draft?</div>
+  <div class="q-options">
+    <div class="q-opt" onclick="_q.select(this,6,'A')"><span class="q-opt-letter">A</span><span class="q-opt-text">"Improve this draft" — effective because it activates Extended Thinking mode automatically, producing a deeper revision than standard prompts.</span></div>
+    <div class="q-opt" onclick="_q.select(this,6,'B')"><span class="q-opt-letter">B</span><span class="q-opt-text">"Critically analyze your response. Find weak spots, redundancies, gaps, contradictions" — more effective because it assigns Claude the editor role explicitly, forcing systematic problem identification before rewriting rather than surface polishing.</span></div>
+    <div class="q-opt" onclick="_q.select(this,6,'C')"><span class="q-opt-letter">C</span><span class="q-opt-text">"Rewrite this with higher quality" — more effective because the open-ended instruction gives Claude latitude to apply its strongest revision strategies without constraint.</span></div>
+    <div class="q-opt" onclick="_q.select(this,6,'D')"><span class="q-opt-letter">D</span><span class="q-opt-text">"Apply the four-block formula to your own response" — restructures the draft's reasoning rather than polishing its surface, making it the most effective second-step trigger.</span></div>
+  </div>
+</div>
+
+<!-- MC7 -->
+<div class="q-card">
+  <div class="q-meta"><span class="q-num">7</span><span class="q-type-badge qt-mc">MC</span></div>
+  <div class="q-stem">A routine developer receives no output after their remote routine fires. The session log shows: "Environment variable OPENAI_API_KEY not found. Attempting to load from .env... File not found. Exiting." What is the root cause and the correct fix?</div>
+  <div class="q-options">
+    <div class="q-opt" onclick="_q.select(this,7,'A')"><span class="q-opt-letter">A</span><span class="q-opt-text">The GitHub repo is missing a .env template. Fix: add a .env.example to the repo and reference it in the setup script field of the cloud environment.</span></div>
+    <div class="q-opt" onclick="_q.select(this,7,'B')"><span class="q-opt-letter">B</span><span class="q-opt-text">The API key was stored in a .env file which is gitignored and never reaches the cloud environment. Fix: move the key to the Environment Variables panel in Cloud Environment, and add "do not look for a .env file" to the routine's instruction prompt.</span></div>
+    <div class="q-opt" onclick="_q.select(this,7,'C')"><span class="q-opt-letter">C</span><span class="q-opt-text">The cloud environment's network trust mode is blocking the API endpoint. Fix: switch from "trusted" to "custom" and allowlist the external API domain.</span></div>
+    <div class="q-opt" onclick="_q.select(this,7,'D')"><span class="q-opt-letter">D</span><span class="q-opt-text">The routine is set to "local" execution mode, which does not support environment variables. Fix: switch to remote mode so the cloud environment variables panel becomes available.</span></div>
+  </div>
+</div>
+
+<!-- MC8 -->
+<div class="q-card">
+  <div class="q-meta"><span class="q-num">8</span><span class="q-type-badge qt-mc">MC</span></div>
+  <div class="q-stem">A team builds a routine that automatically replies to client emails every morning. Three weeks later, a team member goes on vacation. Which of the seven gotchas is now most relevant, and what should have been designed differently?</div>
+  <div class="q-options">
+    <div class="q-opt" onclick="_q.select(this,8,'A')"><span class="q-opt-letter">A</span><span class="q-opt-text">Gotcha 4 (statelessness) — the routine loses its reply history between runs. Fix: push sent-reply metadata to a GitHub file to persist state across sessions.</span></div>
+    <div class="q-opt" onclick="_q.select(this,8,'B')"><span class="q-opt-letter">B</span><span class="q-opt-text">Gotcha 6 (identity scope) — all auto-replies send from the vacationing team member's account. The routine should have used a two-step architecture: Routine A drafts replies → human approves → Routine B sends.</span></div>
+    <div class="q-opt" onclick="_q.select(this,8,'C')"><span class="q-opt-letter">C</span><span class="q-opt-text">Gotcha 7 (no mid-run approval) — the routine cannot pause to handle unusual emails. Fix: add a confidence-score condition in the prompt that routes ambiguous emails to a Slack flagging step instead of sending directly.</span></div>
+    <div class="q-opt" onclick="_q.select(this,8,'D')"><span class="q-opt-letter">D</span><span class="q-opt-text">Gotcha 5 (claude/ branch guardrail) — the routine's email drafts are being pushed to the main branch, causing version conflicts with other team workflows.</span></div>
+  </div>
+</div>
+
+<!-- MC9 -->
+<div class="q-card">
+  <div class="q-meta"><span class="q-num">9</span><span class="q-type-badge qt-mc">MC</span></div>
+  <div class="q-stem">A developer needs a routine to fire every 20 minutes when a specific Slack channel receives a message. Which trigger architecture should they use, and why?</div>
+  <div class="q-options">
+    <div class="q-opt" onclick="_q.select(this,9,'A')"><span class="q-opt-letter">A</span><span class="q-opt-text">Schedule trigger set to "hourly" — the minimum supported interval is 20 minutes when using the Slack connector, making this the correct choice.</span></div>
+    <div class="q-opt" onclick="_q.select(this,9,'B')"><span class="q-opt-letter">B</span><span class="q-opt-text">GitHub Events trigger — configure it to fire on Slack channel messages, then filter by message content in the routine's instructions.</span></div>
+    <div class="q-opt" onclick="_q.select(this,9,'C')"><span class="q-opt-letter">C</span><span class="q-opt-text">API trigger — configure Slack to send a webhook to the routine's HTTPS endpoint on each message, and use an external tool like N8N or Zapier to handle the 20-minute debounce logic before posting to the endpoint.</span></div>
+    <div class="q-opt" onclick="_q.select(this,9,'D')"><span class="q-opt-letter">D</span><span class="q-opt-text">Schedule trigger with a custom cron expression for 20-minute intervals — cron expressions bypass the 1-hour minimum that applies only to the preset schedule options.</span></div>
+  </div>
+</div>
+
+<!-- MC10 -->
+<div class="q-card">
+  <div class="q-meta"><span class="q-num">10</span><span class="q-type-badge qt-mc">MC</span></div>
+  <div class="q-stem">A solo founder launches Claude Design without filling in the design system first, generates five landing pages, and finds they all look identical and generic. What is the root cause, and which single action would most improve all future generations?</div>
+  <div class="q-options">
+    <div class="q-opt" onclick="_q.select(this,10,'A')"><span class="q-opt-letter">A</span><span class="q-opt-text">The high-fidelity mode was not selected — switching to high-fidelity produces brand-consistent outputs because it uses the full design token set rather than defaults.</span></div>
+    <div class="q-opt" onclick="_q.select(this,10,'B')"><span class="q-opt-letter">B</span><span class="q-opt-text">No design system was defined — Claude defaulted to its generic aesthetic on every run. Defining a specific 200-word+ brand description, colors, fonts, and voice, then publishing it as default, ensures every future generation draws from the brand rather than Claude's defaults.</span></div>
+    <div class="q-opt" onclick="_q.select(this,10,'C')"><span class="q-opt-letter">C</span><span class="q-opt-text">The prompts were too short — longer prompts with detailed styling instructions per element override Claude Design's default aesthetic even without a design system.</span></div>
+    <div class="q-opt" onclick="_q.select(this,10,'D')"><span class="q-opt-letter">D</span><span class="q-opt-text">The Tweaks panel was not used after generation — running through all Tweaks options after each generation produces a distinct aesthetic even from a generic system.</span></div>
+  </div>
+</div>
+
+<!-- MC11 -->
+<div class="q-card">
+  <div class="q-meta"><span class="q-num">11</span><span class="q-type-badge qt-mc">MC</span></div>
+  <div class="q-stem">After reviewing a generated landing page in Claude Design, a user wants to change just the hero section's headline font weight and the CTA button color. What is the most token-efficient approach?</div>
+  <div class="q-options">
+    <div class="q-opt" onclick="_q.select(this,11,'A')"><span class="q-opt-letter">A</span><span class="q-opt-text">Regenerate the full page with an updated prompt that specifies the new font weight and button color — full-page regeneration ensures all elements update consistently.</span></div>
+    <div class="q-opt" onclick="_q.select(this,11,'B')"><span class="q-opt-letter">B</span><span class="q-opt-text">Use Markup to click the headline and give targeted font weight feedback, then use the Edit property panel to change the button color directly — zero-token Edit + minimal-cost Markup before any full regeneration.</span></div>
+    <div class="q-opt" onclick="_q.select(this,11,'C')"><span class="q-opt-letter">C</span><span class="q-opt-text">Use the Tweaks panel to adjust font weight and color — both properties are always available in Tweaks since it auto-generates controls for every design property.</span></div>
+    <div class="q-opt" onclick="_q.select(this,11,'D')"><span class="q-opt-letter">D</span><span class="q-opt-text">Export to Claude Code and make the changes there — code-level edits don't consume Claude Design tokens and allow precise property control.</span></div>
+  </div>
+</div>
+
+<!-- MC12 -->
+<div class="q-card">
+  <div class="q-meta"><span class="q-num">12</span><span class="q-type-badge qt-mc">MC</span></div>
+  <div class="q-stem">What is the specific operational significance of the claude/ branch guardrail in remote routines, and what risk does disabling it introduce?</div>
+  <div class="q-options">
+    <div class="q-opt" onclick="_q.select(this,12,'A')"><span class="q-opt-letter">A</span><span class="q-opt-text">The guardrail enforces that all routine-generated code passes a syntax check before committing. Disabling it allows malformed code to enter the repository without review.</span></div>
+    <div class="q-opt" onclick="_q.select(this,12,'B')"><span class="q-opt-letter">B</span><span class="q-opt-text">By default Claude can only push to branches prefixed with "claude/" and cannot touch main or release branches. Disabling it means a bad routine run could push directly to main — potentially shipping broken or unreviewed changes to production.</span></div>
+    <div class="q-opt" onclick="_q.select(this,12,'C')"><span class="q-opt-letter">C</span><span class="q-opt-text">The guardrail limits how many commits Claude can make per run. Disabling it allows unlimited commits per run, which can bloat repository history with incremental routine outputs.</span></div>
+    <div class="q-opt" onclick="_q.select(this,12,'D')"><span class="q-opt-letter">D</span><span class="q-opt-text">Without the guardrail, Claude merges its own branches automatically, removing the pull request step and bypassing required code reviews in team settings.</span></div>
+  </div>
+</div>
+
+<!-- MC13 -->
+<div class="q-card">
+  <div class="q-meta"><span class="q-num">13</span><span class="q-type-badge qt-mc">MC</span></div>
+  <div class="q-stem">Which of the following statements most accurately describes the relationship between Extended Thinking and prompt caching efficiency in Claude 4.5?</div>
+  <div class="q-options">
+    <div class="q-opt" onclick="_q.select(this,13,'A')"><span class="q-opt-letter">A</span><span class="q-opt-text">Extended Thinking improves caching efficiency because the thinking block is deterministic — the same prompt always produces the same thinking trace, which the cache reuses on subsequent calls.</span></div>
+    <div class="q-opt" onclick="_q.select(this,13,'B')"><span class="q-opt-letter">B</span><span class="q-opt-text">Extended Thinking reduces caching efficiency because the thinking block changes on every run, even for identical prompts — fewer cache hits means higher token costs for repetitive identical workflows.</span></div>
+    <div class="q-opt" onclick="_q.select(this,13,'C')"><span class="q-opt-letter">C</span><span class="q-opt-text">Extended Thinking has no effect on caching because thinking blocks are processed server-side and are excluded from the cache key computation entirely.</span></div>
+    <div class="q-opt" onclick="_q.select(this,13,'D')"><span class="q-opt-letter">D</span><span class="q-opt-text">Extended Thinking doubles caching efficiency for agentic tasks because interleaved thinking creates predictable reasoning patterns that the cache identifies and reuses across tool calls.</span></div>
+  </div>
+</div>
+
+<!-- MC14 -->
+<div class="q-card">
+  <div class="q-meta"><span class="q-num">14</span><span class="q-type-badge qt-mc">MC</span></div>
+  <div class="q-stem">A developer building a long-running code refactoring agent needs to choose between Sonnet 4.5 and Haiku 4.5 for the execution phase. The task involves 40+ tool calls and maintaining variable name consistency across a 200-file codebase. Which model and why?</div>
+  <div class="q-options">
+    <div class="q-opt" onclick="_q.select(this,14,'A')"><span class="q-opt-letter">A</span><span class="q-opt-text">Haiku 4.5 — its 4–5× speed advantage compensates for any context tracking issues, and the cost savings across 40+ tool calls are significant enough to justify the occasional consistency error.</span></div>
+    <div class="q-opt" onclick="_q.select(this,14,'B')"><span class="q-opt-letter">B</span><span class="q-opt-text">Sonnet 4.5 — Haiku loses track in long sessions and may forget variable names or change identifiers, which would be catastrophic in a cross-file refactoring task requiring consistency across 200 files.</span></div>
+    <div class="q-opt" onclick="_q.select(this,14,'C')"><span class="q-opt-letter">C</span><span class="q-opt-text">Haiku 4.5 — the sub-agent pattern (Sonnet orchestrates, Haiku executes) means context tracking is Sonnet's responsibility, not Haiku's, so Haiku's long-session weakness is not relevant.</span></div>
+    <div class="q-opt" onclick="_q.select(this,14,'D')"><span class="q-opt-letter">D</span><span class="q-opt-text">Sonnet 4.5 or Haiku 4.5 equally — the claude.md memory file in Claude Code persists variable names across all sessions and tool calls, eliminating both models' long-session context limitations.</span></div>
+  </div>
+</div>
+
+<!-- MC15 -->
+<div class="q-card">
+  <div class="q-meta"><span class="q-num">15</span><span class="q-type-badge qt-mc">MC</span></div>
+  <div class="q-stem">The effort parameter is exclusive to Opus 4.5. A financial analyst uses it set to "high effort" for quarterly reports and "low effort" for quick data lookups. What is the fundamental advantage of this approach over switching between Opus and Haiku for the same two task types?</div>
+  <div class="q-options">
+    <div class="q-opt" onclick="_q.select(this,15,'A')"><span class="q-opt-letter">A</span><span class="q-opt-text">The effort parameter is cheaper than Haiku at low effort settings, making Opus more cost-efficient than Haiku for quick lookups when effort is reduced.</span></div>
+    <div class="q-opt" onclick="_q.select(this,15,'B')"><span class="q-opt-letter">B</span><span class="q-opt-text">One model with variable thoroughness eliminates model-switching overhead and maintains a consistent reasoning baseline — Opus at low effort still brings Opus-level reliability, avoiding Haiku's long-session context-tracking weakness.</span></div>
+    <div class="q-opt" onclick="_q.select(this,15,'C')"><span class="q-opt-letter">C</span><span class="q-opt-text">The effort parameter enables Opus to access different pre-trained sub-models internally, each specialized for a thoroughness level — this specialization outperforms Haiku on speed at the low effort setting.</span></div>
+    <div class="q-opt" onclick="_q.select(this,15,'D')"><span class="q-opt-letter">D</span><span class="q-opt-text">Switching between Opus and Haiku mid-session resets the context window; the effort parameter preserves context continuity across task types within the same session.</span></div>
+  </div>
+</div>
+
+<!-- MC16 -->
+<div class="q-card">
+  <div class="q-meta"><span class="q-num">16</span><span class="q-type-badge qt-mc">MC</span></div>
+  <div class="q-stem">Step 3 of the prompt debug protocol states: "give the model permission for uncertainty." What specific failure mode does this instruction address, and what exact phrase is recommended?</div>
+  <div class="q-options">
+    <div class="q-opt" onclick="_q.select(this,16,'A')"><span class="q-opt-letter">A</span><span class="q-opt-text">It addresses over-refusal — Claude's tendency to decline tasks when it lacks full information. The phrase "you are permitted to use partial information to complete the task" unlocks responses Claude would otherwise refuse.</span></div>
+    <div class="q-opt" onclick="_q.select(this,16,'B')"><span class="q-opt-letter">B</span><span class="q-opt-text">It addresses hallucination — Claude defaults to fabricating plausible-sounding information rather than admitting gaps. The phrase "if data is insufficient, say so, don't guess" dramatically reduces hallucinations.</span></div>
+    <div class="q-opt" onclick="_q.select(this,16,'C')"><span class="q-opt-letter">C</span><span class="q-opt-text">It addresses verbosity — Claude over-explains when uncertain. The phrase "if you're not sure, keep it brief" reduces word count in uncertain sections without affecting confident sections.</span></div>
+    <div class="q-opt" onclick="_q.select(this,16,'D')"><span class="q-opt-letter">D</span><span class="q-opt-text">It addresses scope creep — Claude expands beyond the task when it finds related material. The phrase "if the task exceeds the context, stop and ask for clarification" prevents out-of-scope additions.</span></div>
+  </div>
+</div>
+
+<!-- MC17 -->
+<div class="q-card">
+  <div class="q-meta"><span class="q-num">17</span><span class="q-type-badge qt-mc">MC</span></div>
+  <div class="q-stem">A team is choosing between Claude 4.5 and Gemini 3 Pro for a mission-critical regulatory compliance platform that analyzes legal contracts for risk flags. The platform runs hundreds of document analyses per day and requires outputs auditors can trace. Which model fits, and on what grounds?</div>
+  <div class="q-options">
+    <div class="q-opt" onclick="_q.select(this,17,'A')"><span class="q-opt-letter">A</span><span class="q-opt-text">Gemini 3 Pro — its superior general reasoning benchmark (91.9% GPQA Diamond) makes it better suited for complex legal analysis requiring graduate-level reasoning across dense regulatory text.</span></div>
+    <div class="q-opt" onclick="_q.select(this,17,'B')"><span class="q-opt-letter">B</span><span class="q-opt-text">Claude 4.5 (Opus) — regulated industries, costly mistakes, and the need for auditable reasoning traces are the exact conditions where Claude's Extended Thinking transparency and dependability advantage over Gemini is most significant.</span></div>
+    <div class="q-opt" onclick="_q.select(this,17,'C')"><span class="q-opt-letter">C</span><span class="q-opt-text">Gemini 3 Pro — its lower per-token cost ($2/$12 vs. $5/$25) makes it more viable for hundreds of daily analyses without the budget implications of Opus, while maintaining sufficient accuracy for compliance work.</span></div>
+    <div class="q-opt" onclick="_q.select(this,17,'D')"><span class="q-opt-letter">D</span><span class="q-opt-text">Claude 4.5 (Haiku) — at the volume required, cost-efficiency is paramount and Haiku's 73.3% SWE-Bench accuracy is sufficient for document flag detection without the overhead of Opus.</span></div>
+  </div>
+</div>
+
+<!-- MC18 -->
+<div class="q-card">
+  <div class="q-meta"><span class="q-num">18</span><span class="q-type-badge qt-mc">MC</span></div>
+  <div class="q-stem">A user notices their Claude 4.5 session abandoned a complex data processing task mid-way with the message "I'm approaching my context limit and cannot continue." Which architecture change in Claude 4.5 was specifically designed to prevent this, and how does it work?</div>
+  <div class="q-options">
+    <div class="q-opt" onclick="_q.select(this,18,'A')"><span class="q-opt-letter">A</span><span class="q-opt-text">The memory tool — Claude externalizes processed data to a file mid-task, freeing context window space and allowing the task to continue without abandonment.</span></div>
+    <div class="q-opt" onclick="_q.select(this,18,'B')"><span class="q-opt-letter">B</span><span class="q-opt-text">Context awareness — Claude 4.5 models actively track remaining tokens after every tool call, preventing premature abandonment by knowing precisely how much space remains rather than conservatively estimating and giving up early.</span></div>
+    <div class="q-opt" onclick="_q.select(this,18,'C')"><span class="q-opt-letter">C</span><span class="q-opt-text">The 200K context expansion — prior models abandoned tasks because their smaller context windows genuinely ran out; Claude 4.5's larger window eliminates abandonment by providing sufficient space for any realistic task.</span></div>
+    <div class="q-opt" onclick="_q.select(this,18,'D')"><span class="q-opt-letter">D</span><span class="q-opt-text">Context compaction — Claude 4.5 automatically summarizes completed task steps into a compressed representation, freeing context window space to continue the remaining steps without abandonment.</span></div>
+  </div>
+</div>
+
+<!-- MC19 -->
+<div class="q-card">
+  <div class="q-meta"><span class="q-num">19</span><span class="q-type-badge qt-mc">MC</span></div>
+  <div class="q-stem">What does "interleaved thinking" mean in the context of Claude 4.5's Extended Thinking, and which Claude capability does it most directly power?</div>
+  <div class="q-options">
+    <div class="q-opt" onclick="_q.select(this,19,'A')"><span class="q-opt-letter">A</span><span class="q-opt-text">Claude alternates between thinking and generating output within a single response — producing a more conversational, less structured answer than standard extended thinking mode.</span></div>
+    <div class="q-opt" onclick="_q.select(this,19,'B')"><span class="q-opt-letter">B</span><span class="q-opt-text">Claude reasons between tool calls — run a command, see the result, think about what to do next, run another command — creating coherent multi-step agentic behavior powered by reasoning loops.</span></div>
+    <div class="q-opt" onclick="_q.select(this,19,'C')"><span class="q-opt-letter">C</span><span class="q-opt-text">Claude alternates between Extended Thinking mode and standard response mode across a conversation session, preserving caching efficiency while still applying deep reasoning to selected turns.</span></div>
+    <div class="q-opt" onclick="_q.select(this,19,'D')"><span class="q-opt-letter">D</span><span class="q-opt-text">Multiple Claude models think simultaneously on the same problem and their reasoning traces are merged — a multi-agent thinking architecture exclusive to the Claude 4.5 family.</span></div>
+  </div>
+</div>
+
+<!-- MC20 -->
+<div class="q-card">
+  <div class="q-meta"><span class="q-num">20</span><span class="q-type-badge qt-mc">MC</span></div>
+  <div class="q-stem">A startup uses Gemini 3 Pro for all tasks. Their AI engineer argues: "We should switch everything to Claude 4.5 — it outperforms Gemini on every benchmark." Which response most accurately evaluates this claim?</div>
+  <div class="q-options">
+    <div class="q-opt" onclick="_q.select(this,20,'A')"><span class="q-opt-letter">A</span><span class="q-opt-text">The engineer is correct — Claude 4.5 outperforms Gemini 3 Pro across all published benchmarks and should be the default for any production AI workflow.</span></div>
+    <div class="q-opt" onclick="_q.select(this,20,'B')"><span class="q-opt-letter">B</span><span class="q-opt-text">The claim is partially correct but overstated — Claude leads on code and agent reliability, but Gemini leads on general reasoning (GPQA Diamond), multimodal/video tasks, and cost per token. The optimal stack uses both for their respective strengths.</span></div>
+    <div class="q-opt" onclick="_q.select(this,20,'C')"><span class="q-opt-letter">C</span><span class="q-opt-text">The engineer is incorrect — Gemini 3 Pro outperforms Claude 4.5 on all benchmarks; the perception of Claude's superiority comes from subjective developer preference rather than objective metrics.</span></div>
+    <div class="q-opt" onclick="_q.select(this,20,'D')"><span class="q-opt-letter">D</span><span class="q-opt-text">The claim cannot be evaluated without knowing the startup's specific use case — benchmark results are irrelevant to production performance decisions and should not influence model selection.</span></div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════ -->
+<!-- PART II — FILL IN THE BLANK (10)           -->
+<!-- ════════════════════════════════════════════ -->
+<div class="qz-section">Part II — Fill in the Blank (10 items)<div class="qz-section-rule"></div></div>
+
+<!-- F1 -->
+<div class="q-card">
+  <div class="q-meta"><span class="q-num">21</span><span class="q-type-badge qt-fill">Fill</span></div>
+  <div class="q-stem">According to Anthropic's benchmark data, switching from search-style to brief-style prompts produced <input class="fill-blank" id="f21" placeholder="___"> better first drafts and <input class="fill-blank" id="f21b" placeholder="___"> fewer revisions across 50 test prompts.</div>
+</div>
+
+<!-- F2 -->
+<div class="q-card">
+  <div class="q-meta"><span class="q-num">22</span><span class="q-type-badge qt-fill">Fill</span></div>
+  <div class="q-stem">The XML tag benchmark showed <input class="fill-blank" id="f22" placeholder="___">% formatting compliance with XML tags versus <input class="fill-blank" id="f22b" placeholder="___">% without them — a 33 percentage-point improvement from adding angle brackets.</div>
+</div>
+
+<!-- F3 -->
+<div class="q-card">
+  <div class="q-meta"><span class="q-num">23</span><span class="q-type-badge qt-fill">Fill</span></div>
+  <div class="q-stem">The technique of writing the first words of Claude's response yourself so Claude continues without preamble is called <input class="fill-blank" id="f23" placeholder="___________">.</div>
+</div>
+
+<!-- F4 -->
+<div class="q-card">
+  <div class="q-meta"><span class="q-num">24</span><span class="q-type-badge qt-fill">Fill</span></div>
+  <div class="q-stem">Claude Routines were released on <input class="fill-blank" id="f24" placeholder="___________"> and are currently a research preview. The access URL is <input class="fill-blank" id="f24b" placeholder="___________">.</div>
+</div>
+
+<!-- F5 -->
+<div class="q-card">
+  <div class="q-meta"><span class="q-num">25</span><span class="q-type-badge qt-fill">Fill</span></div>
+  <div class="q-stem">In remote Claude Routines, the required HTTP header to include in API trigger POST requests is <input class="fill-blank" id="f25" placeholder="___________">.</div>
+</div>
+
+<!-- F6 -->
+<div class="q-card">
+  <div class="q-meta"><span class="q-num">26</span><span class="q-type-badge qt-fill">Fill</span></div>
+  <div class="q-stem">The Claude Design website where you access brand-consistent visual generation is <input class="fill-blank" id="f26" placeholder="___________">, and the pre-built brand system markdown file library is available at <input class="fill-blank" id="f26b" placeholder="___________">.</div>
+</div>
+
+<!-- F7 -->
+<div class="q-card">
+  <div class="q-meta"><span class="q-num">27</span><span class="q-type-badge qt-fill">Fill</span></div>
+  <div class="q-stem">Haiku 4.5 is approximately <input class="fill-blank" id="f27" placeholder="___"> times faster than Sonnet and costs <input class="fill-blank" id="f27b" placeholder="___"> of Sonnet's cost — making it the preferred model for sub-agent parallel execution.</div>
+</div>
+
+<!-- F8 -->
+<div class="q-card">
+  <div class="q-meta"><span class="q-num">28</span><span class="q-type-badge qt-fill">Fill</span></div>
+  <div class="q-stem">Opus 4.5 scored <input class="fill-blank" id="f28" placeholder="___">% on SWE-Bench Verified, making it the <input class="fill-blank" id="f28b" placeholder="___________"> to achieve that milestone on that benchmark.</div>
+</div>
+
+<!-- F9 -->
+<div class="q-card">
+  <div class="q-meta"><span class="q-num">29</span><span class="q-type-badge qt-fill">Fill</span></div>
+  <div class="q-stem">In Claude Design, regenerating a full page costs approximately <input class="fill-blank" id="f29" placeholder="___"> times more tokens than regenerating a single section, which is why the rule is to always iterate at the <input class="fill-blank" id="f29b" placeholder="___________"> level.</div>
+</div>
+
+<!-- F10 -->
+<div class="q-card">
+  <div class="q-meta"><span class="q-num">30</span><span class="q-type-badge qt-fill">Fill</span></div>
+  <div class="q-stem">Gemini 3 Pro scored <input class="fill-blank" id="f30" placeholder="___">% on GPQA Diamond (general reasoning) versus Claude Opus 4.5's approximately <input class="fill-blank" id="f30b" placeholder="___">%, while Claude edges out Gemini on SWE-Bench Verified for code reliability.</div>
+</div>
+
+<!-- ════════════════════════════════════════════ -->
+<!-- PART III — TRUE OR FALSE (10)              -->
+<!-- ════════════════════════════════════════════ -->
+<div class="qz-section">Part III — True or False (10 items)<div class="qz-section-rule"></div></div>
+
+<!-- T1 -->
+<div class="q-card">
+  <div class="q-meta"><span class="q-num">31</span><span class="q-type-badge qt-tof">T/F</span></div>
+  <div class="q-stem">Adding more constraints to a Claude prompt restricts its creative output, making responses shorter and more formulaic than unconstrained prompts.</div>
+  <div class="tof-opts"><button class="tof-btn" onclick="_q.tof(this,31,'T')">True</button><button class="tof-btn" onclick="_q.tof(this,31,'F')">False</button></div>
+</div>
+
+<!-- T2 -->
+<div class="q-card">
+  <div class="q-meta"><span class="q-num">32</span><span class="q-type-badge qt-tof">T/F</span></div>
+  <div class="q-stem">Anthropic's documentation states that expecting a perfect first response is the correct approach and that requiring revision indicates a poorly constructed prompt.</div>
+  <div class="tof-opts"><button class="tof-btn" onclick="_q.tof(this,32,'T')">True</button><button class="tof-btn" onclick="_q.tof(this,32,'F')">False</button></div>
+</div>
+
+<!-- T3 -->
+<div class="q-card">
+  <div class="q-meta"><span class="q-num">33</span><span class="q-type-badge qt-tof">T/F</span></div>
+  <div class="q-stem">Remote Claude Routines running in Anthropic's cloud can access local MCP servers running on the developer's laptop via the connector directory.</div>
+  <div class="tof-opts"><button class="tof-btn" onclick="_q.tof(this,33,'T')">True</button><button class="tof-btn" onclick="_q.tof(this,33,'F')">False</button></div>
+</div>
+
+<!-- T4 -->
+<div class="q-card">
+  <div class="q-meta"><span class="q-num">34</span><span class="q-type-badge qt-tof">T/F</span></div>
+  <div class="q-stem">In remote Claude Routines, each run starts from a completely clean state — no files, cookies, or browser sessions persist from previous runs unless explicitly written to GitHub or a connector.</div>
+  <div class="tof-opts"><button class="tof-btn" onclick="_q.tof(this,34,'T')">True</button><button class="tof-btn" onclick="_q.tof(this,34,'F')">False</button></div>
+</div>
+
+<!-- T5 -->
+<div class="q-card">
+  <div class="q-meta"><span class="q-num">35</span><span class="q-type-badge qt-tof">T/F</span></div>
+  <div class="q-stem">In Claude Design, the Tweaks panel auto-generates controls specifically tailored to the design that was just generated — they are not generic sliders that apply to all designs equally.</div>
+  <div class="tof-opts"><button class="tof-btn" onclick="_q.tof(this,35,'T')">True</button><button class="tof-btn" onclick="_q.tof(this,35,'F')">False</button></div>
+</div>
+
+<!-- T6 -->
+<div class="q-card">
+  <div class="q-meta"><span class="q-num">36</span><span class="q-type-badge qt-tof">T/F</span></div>
+  <div class="q-stem">Claude 4.5's Extended Thinking feature is now available across all three models — Sonnet, Opus, and Haiku — whereas in previous versions it was limited to select higher-tier models.</div>
+  <div class="tof-opts"><button class="tof-btn" onclick="_q.tof(this,36,'T')">True</button><button class="tof-btn" onclick="_q.tof(this,36,'F')">False</button></div>
+</div>
+
+<!-- T7 -->
+<div class="q-card">
+  <div class="q-meta"><span class="q-num">37</span><span class="q-type-badge qt-tof">T/F</span></div>
+  <div class="q-stem">Gemini 3 Pro outperforms Claude 4.5 on SWE-Bench Verified (real-world software engineering tasks), making it the preferred choice for production code generation workflows.</div>
+  <div class="tof-opts"><button class="tof-btn" onclick="_q.tof(this,37,'T')">True</button><button class="tof-btn" onclick="_q.tof(this,37,'F')">False</button></div>
+</div>
+
+<!-- T8 -->
+<div class="q-card">
+  <div class="q-meta"><span class="q-num">38</span><span class="q-type-badge qt-tof">T/F</span></div>
+  <div class="q-stem">Claude Routines can include a mid-run human approval step — you can configure Claude to pause, post a summary to Slack, and wait for a thumbs-up reaction before continuing.</div>
+  <div class="tof-opts"><button class="tof-btn" onclick="_q.tof(this,38,'T')">True</button><button class="tof-btn" onclick="_q.tof(this,38,'F')">False</button></div>
+</div>
+
+<!-- T9 -->
+<div class="q-card">
+  <div class="q-meta"><span class="q-num">39</span><span class="q-type-badge qt-tof">T/F</span></div>
+  <div class="q-stem">Using one concrete writing example in a prompt is a more effective way to communicate a target writing voice than describing the style with multiple adjectives like "friendly but professional."</div>
+  <div class="tof-opts"><button class="tof-btn" onclick="_q.tof(this,39,'T')">True</button><button class="tof-btn" onclick="_q.tof(this,39,'F')">False</button></div>
+</div>
+
+<!-- T10 -->
+<div class="q-card">
+  <div class="q-meta"><span class="q-num">40</span><span class="q-type-badge qt-tof">T/F</span></div>
+  <div class="q-stem">The visible "thinking block" produced by Extended Thinking in Claude 4.5 models is Claude's raw, unfiltered internal chain of thought — every step of the model's actual computation made visible.</div>
+  <div class="tof-opts"><button class="tof-btn" onclick="_q.tof(this,40,'T')">True</button><button class="tof-btn" onclick="_q.tof(this,40,'F')">False</button></div>
+</div>
+
+<!-- ════════════════════════════════════════════ -->
+<!-- PART IV — ENUMERATION (5)                  -->
+<!-- ════════════════════════════════════════════ -->
+<div class="qz-section">Part IV — Enumeration (5 items)<div class="qz-section-rule"></div></div>
+
+<!-- E1 -->
+<div class="q-card">
+  <div class="q-meta"><span class="q-num">41</span><span class="q-type-badge qt-enum">Enum</span></div>
+  <div class="q-stem">Enumerate the four blocks of the four-block formula in order, with a one-phrase description of what each block contributes.</div>
+  <div class="enum-list">
+    <input class="enum-input" id="e41a" placeholder="Block 1 — name and purpose">
+    <input class="enum-input" id="e41b" placeholder="Block 2 — name and purpose">
+    <input class="enum-input" id="e41c" placeholder="Block 3 — name and purpose">
+    <input class="enum-input" id="e41d" placeholder="Block 4 — name and purpose">
+  </div>
+</div>
+
+<!-- E2 -->
+<div class="q-card">
+  <div class="q-meta"><span class="q-num">42</span><span class="q-type-badge qt-enum">Enum</span></div>
+  <div class="q-stem">Enumerate the four architectural changes Anthropic introduced in Claude 4.5. For each, state the change and what problem it solves.</div>
+  <div class="enum-list">
+    <input class="enum-input" id="e42a" placeholder="Change 1 — what changed and what it solves">
+    <input class="enum-input" id="e42b" placeholder="Change 2 — what changed and what it solves">
+    <input class="enum-input" id="e42c" placeholder="Change 3 — what changed and what it solves">
+    <input class="enum-input" id="e42d" placeholder="Change 4 — what changed and what it solves">
+  </div>
+</div>
+
+<!-- E3 -->
+<div class="q-card">
+  <div class="q-meta"><span class="q-num">43</span><span class="q-type-badge qt-enum">Enum</span></div>
+  <div class="q-stem">Enumerate the four steps of the prompt debug protocol in order. For each step, state what it targets.</div>
+  <div class="enum-list">
+    <input class="enum-input" id="e43a" placeholder="Step 1 — action and what it targets">
+    <input class="enum-input" id="e43b" placeholder="Step 2 — action and what it targets">
+    <input class="enum-input" id="e43c" placeholder="Step 3 — action and what it targets">
+    <input class="enum-input" id="e43d" placeholder="Step 4 — action and what it targets">
+  </div>
+</div>
+
+<!-- E4 -->
+<div class="q-card">
+  <div class="q-meta"><span class="q-num">44</span><span class="q-type-badge qt-enum">Enum</span></div>
+  <div class="q-stem">Enumerate the three token economy rules in Claude Design. For each, state what behavior it prevents and what it recommends instead.</div>
+  <div class="enum-list">
+    <input class="enum-input" id="e44a" placeholder="Rule 1 — behavior prevented and recommendation">
+    <input class="enum-input" id="e44b" placeholder="Rule 2 — behavior prevented and recommendation">
+    <input class="enum-input" id="e44c" placeholder="Rule 3 — behavior prevented and recommendation">
+  </div>
+</div>
+
+<!-- E5 -->
+<div class="q-card">
+  <div class="q-meta"><span class="q-num">45</span><span class="q-type-badge qt-enum">Enum</span></div>
+  <div class="q-stem">Enumerate the three trigger types available for remote Claude Routines, and state the single most important constraint or gotcha for each.</div>
+  <div class="enum-list">
+    <input class="enum-input" id="e45a" placeholder="Trigger 1 — name and critical constraint">
+    <input class="enum-input" id="e45b" placeholder="Trigger 2 — name and critical constraint">
+    <input class="enum-input" id="e45c" placeholder="Trigger 3 — name and critical constraint">
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════ -->
+<!-- PART V — CONNECT / MATCHING (5)            -->
+<!-- ════════════════════════════════════════════ -->
+<div class="qz-section">Part V — Connect / Matching (5 items)<div class="qz-section-rule"></div></div>
+
+<!-- C1 -->
+<div class="q-card">
+  <div class="q-meta"><span class="q-num">46</span><span class="q-type-badge qt-conn">Connect</span></div>
+  <div class="q-stem">Match each prompt technique to its primary mechanism of action.</div>
+  <div class="connect-wrap">
+    <div>
+      <div class="connect-col-label">Technique</div>
+      <div class="connect-item"><strong>A.</strong> XML Tags</div>
+      <div class="connect-item" style="margin-top:6px"><strong>B.</strong> Prefill</div>
+      <div class="connect-item" style="margin-top:6px"><strong>C.</strong> Motivated Instructions</div>
+      <div class="connect-item" style="margin-top:6px"><strong>D.</strong> Constraint Stacking</div>
+    </div>
+    <div>
+      <div class="connect-col-label">Mechanism</div>
+      <select class="connect-select" id="c46a"><option value="">— Match A —</option><option>1. Forces originality by ruling out every generic default — specificity as a creativity driver</option><option>2. Seeds the output's opening so Claude continues from the exact point without preamble</option><option>3. Enables edge-case compliance by giving Claude the spirit of a rule, not just its letter</option><option>4. Separates prompt sections so Claude never mistakes context for an instruction to respond to</option></select>
+      <select class="connect-select" id="c46b" style="margin-top:6px"><option value="">— Match B —</option><option>1. Forces originality by ruling out every generic default — specificity as a creativity driver</option><option>2. Seeds the output's opening so Claude continues from the exact point without preamble</option><option>3. Enables edge-case compliance by giving Claude the spirit of a rule, not just its letter</option><option>4. Separates prompt sections so Claude never mistakes context for an instruction to respond to</option></select>
+      <select class="connect-select" id="c46c" style="margin-top:6px"><option value="">— Match C —</option><option>1. Forces originality by ruling out every generic default — specificity as a creativity driver</option><option>2. Seeds the output's opening so Claude continues from the exact point without preamble</option><option>3. Enables edge-case compliance by giving Claude the spirit of a rule, not just its letter</option><option>4. Separates prompt sections so Claude never mistakes context for an instruction to respond to</option></select>
+      <select class="connect-select" id="c46d" style="margin-top:6px"><option value="">— Match D —</option><option>1. Forces originality by ruling out every generic default — specificity as a creativity driver</option><option>2. Seeds the output's opening so Claude continues from the exact point without preamble</option><option>3. Enables edge-case compliance by giving Claude the spirit of a rule, not just its letter</option><option>4. Separates prompt sections so Claude never mistakes context for an instruction to respond to</option></select>
+    </div>
+  </div>
+</div>
+
+<!-- C2 -->
+<div class="q-card">
+  <div class="q-meta"><span class="q-num">47</span><span class="q-type-badge qt-conn">Connect</span></div>
+  <div class="q-stem">Match each Claude 4.5 model to its defining characteristic.</div>
+  <div class="connect-wrap">
+    <div>
+      <div class="connect-col-label">Model</div>
+      <div class="connect-item"><strong>A.</strong> Sonnet 4.5</div>
+      <div class="connect-item" style="margin-top:6px"><strong>B.</strong> Opus 4.5</div>
+      <div class="connect-item" style="margin-top:6px"><strong>C.</strong> Haiku 4.5</div>
+      <div class="connect-item" style="margin-top:6px"><strong>D.</strong> All three</div>
+    </div>
+    <div>
+      <div class="connect-col-label">Defining Characteristic</div>
+      <select class="connect-select" id="c47a"><option value="">— Match A —</option><option>1. Exclusive effort parameter; first to break 80% on SWE-Bench; flagship reviewer</option><option>2. 200K context + Extended Thinking + context awareness + memory tool — all shared</option><option>3. 4–5× speed of Sonnet; preferred for sub-agent parallel execution; loses context in long sessions</option><option>4. Best model for agents and everyday power tasks; $3/M input; Opus→Sonnet handoff build phase</option></select>
+      <select class="connect-select" id="c47b" style="margin-top:6px"><option value="">— Match B —</option><option>1. Exclusive effort parameter; first to break 80% on SWE-Bench; flagship reviewer</option><option>2. 200K context + Extended Thinking + context awareness + memory tool — all shared</option><option>3. 4–5× speed of Sonnet; preferred for sub-agent parallel execution; loses context in long sessions</option><option>4. Best model for agents and everyday power tasks; $3/M input; Opus→Sonnet handoff build phase</option></select>
+      <select class="connect-select" id="c47c" style="margin-top:6px"><option value="">— Match C —</option><option>1. Exclusive effort parameter; first to break 80% on SWE-Bench; flagship reviewer</option><option>2. 200K context + Extended Thinking + context awareness + memory tool — all shared</option><option>3. 4–5× speed of Sonnet; preferred for sub-agent parallel execution; loses context in long sessions</option><option>4. Best model for agents and everyday power tasks; $3/M input; Opus→Sonnet handoff build phase</option></select>
+      <select class="connect-select" id="c47d" style="margin-top:6px"><option value="">— Match D —</option><option>1. Exclusive effort parameter; first to break 80% on SWE-Bench; flagship reviewer</option><option>2. 200K context + Extended Thinking + context awareness + memory tool — all shared</option><option>3. 4–5× speed of Sonnet; preferred for sub-agent parallel execution; loses context in long sessions</option><option>4. Best model for agents and everyday power tasks; $3/M input; Opus→Sonnet handoff build phase</option></select>
+    </div>
+  </div>
+</div>
+
+<!-- C3 -->
+<div class="q-card">
+  <div class="q-meta"><span class="q-num">48</span><span class="q-type-badge qt-conn">Connect</span></div>
+  <div class="q-stem">Match each Routine gotcha to its correct description.</div>
+  <div class="connect-wrap">
+    <div>
+      <div class="connect-col-label">Gotcha</div>
+      <div class="connect-item"><strong>A.</strong> Gotcha 1 — Env Trap</div>
+      <div class="connect-item" style="margin-top:6px"><strong>B.</strong> Gotcha 4 — Statelessness</div>
+      <div class="connect-item" style="margin-top:6px"><strong>C.</strong> Gotcha 5 — Branch Guard</div>
+      <div class="connect-item" style="margin-top:6px"><strong>D.</strong> Gotcha 7 — No Mid-Run Approval</div>
+    </div>
+    <div>
+      <div class="connect-col-label">Description</div>
+      <select class="connect-select" id="c48a"><option value="">— Match A —</option><option>1. Claude runs start to finish without pausing; approval gates require two-routine architecture</option><option>2. Every remote run starts from zero — files, cookies, sessions are all wiped between runs</option><option>3. .env is gitignored and never reaches the cloud; secrets must go in Environment Variables panel</option><option>4. Claude can only push to branches prefixed "claude/" by default — cannot touch main</option></select>
+      <select class="connect-select" id="c48b" style="margin-top:6px"><option value="">— Match B —</option><option>1. Claude runs start to finish without pausing; approval gates require two-routine architecture</option><option>2. Every remote run starts from zero — files, cookies, sessions are all wiped between runs</option><option>3. .env is gitignored and never reaches the cloud; secrets must go in Environment Variables panel</option><option>4. Claude can only push to branches prefixed "claude/" by default — cannot touch main</option></select>
+      <select class="connect-select" id="c48c" style="margin-top:6px"><option value="">— Match C —</option><option>1. Claude runs start to finish without pausing; approval gates require two-routine architecture</option><option>2. Every remote run starts from zero — files, cookies, sessions are all wiped between runs</option><option>3. .env is gitignored and never reaches the cloud; secrets must go in Environment Variables panel</option><option>4. Claude can only push to branches prefixed "claude/" by default — cannot touch main</option></select>
+      <select class="connect-select" id="c48d" style="margin-top:6px"><option value="">— Match D —</option><option>1. Claude runs start to finish without pausing; approval gates require two-routine architecture</option><option>2. Every remote run starts from zero — files, cookies, sessions are all wiped between runs</option><option>3. .env is gitignored and never reaches the cloud; secrets must go in Environment Variables panel</option><option>4. Claude can only push to branches prefixed "claude/" by default — cannot touch main</option></select>
+    </div>
+  </div>
+</div>
+
+<!-- C4 -->
+<div class="q-card">
+  <div class="q-meta"><span class="q-num">49</span><span class="q-type-badge qt-conn">Connect</span></div>
+  <div class="q-stem">Match each Claude Design refinement mode to its correct description and token cost.</div>
+  <div class="connect-wrap">
+    <div>
+      <div class="connect-col-label">Mode</div>
+      <div class="connect-item"><strong>A.</strong> Tweaks</div>
+      <div class="connect-item" style="margin-top:6px"><strong>B.</strong> Markup</div>
+      <div class="connect-item" style="margin-top:6px"><strong>C.</strong> Edit</div>
+      <div class="connect-item" style="margin-top:6px"><strong>D.</strong> Main Prompt</div>
+    </div>
+    <div>
+      <div class="connect-col-label">Description &amp; Token Cost</div>
+      <select class="connect-select" id="c49a"><option value="">— Match A —</option><option>1. Direct property panel (color, font, size) with no Claude involvement — zero tokens</option><option>2. Auto-generated design controls specific to the current design — zero tokens, free preview gallery</option><option>3. Full regeneration based on updated instructions — highest token cost; use last</option><option>4. Click any element or draw around a section to give targeted feedback — minimal cost, most precise</option></select>
+      <select class="connect-select" id="c49b" style="margin-top:6px"><option value="">— Match B —</option><option>1. Direct property panel (color, font, size) with no Claude involvement — zero tokens</option><option>2. Auto-generated design controls specific to the current design — zero tokens, free preview gallery</option><option>3. Full regeneration based on updated instructions — highest token cost; use last</option><option>4. Click any element or draw around a section to give targeted feedback — minimal cost, most precise</option></select>
+      <select class="connect-select" id="c49c" style="margin-top:6px"><option value="">— Match C —</option><option>1. Direct property panel (color, font, size) with no Claude involvement — zero tokens</option><option>2. Auto-generated design controls specific to the current design — zero tokens, free preview gallery</option><option>3. Full regeneration based on updated instructions — highest token cost; use last</option><option>4. Click any element or draw around a section to give targeted feedback — minimal cost, most precise</option></select>
+      <select class="connect-select" id="c49d" style="margin-top:6px"><option value="">— Match D —</option><option>1. Direct property panel (color, font, size) with no Claude involvement — zero tokens</option><option>2. Auto-generated design controls specific to the current design — zero tokens, free preview gallery</option><option>3. Full regeneration based on updated instructions — highest token cost; use last</option><option>4. Click any element or draw around a section to give targeted feedback — minimal cost, most precise</option></select>
+    </div>
+  </div>
+</div>
+
+<!-- C5 -->
+<div class="q-card">
+  <div class="q-meta"><span class="q-num">50</span><span class="q-type-badge qt-conn">Connect</span></div>
+  <div class="q-stem">Match each benchmark to its score pairing for Claude vs. Gemini.</div>
+  <div class="connect-wrap">
+    <div>
+      <div class="connect-col-label">Benchmark</div>
+      <div class="connect-item"><strong>A.</strong> GPQA Diamond</div>
+      <div class="connect-item" style="margin-top:6px"><strong>B.</strong> SWE-Bench Verified (Sonnet)</div>
+      <div class="connect-item" style="margin-top:6px"><strong>C.</strong> SWE-Bench Verified (Opus)</div>
+      <div class="connect-item" style="margin-top:6px"><strong>D.</strong> Video-MMU</div>
+    </div>
+    <div>
+      <div class="connect-col-label">Score Pairing (Claude vs Gemini)</div>
+      <select class="connect-select" id="c50a"><option value="">— Match A —</option><option>1. Claude: 80.9% vs Gemini: 76.2% — Claude wins, first to break 80%</option><option>2. Claude: ~87% vs Gemini: 91.9% — Gemini wins on general reasoning</option><option>3. Claude: 77.2% vs Gemini: 76.2% — Claude edges Gemini on real GitHub issues</option><option>4. Claude: does not compete vs Gemini: 87.6% — Gemini wins multimodal/video</option></select>
+      <select class="connect-select" id="c50b" style="margin-top:6px"><option value="">— Match B —</option><option>1. Claude: 80.9% vs Gemini: 76.2% — Claude wins, first to break 80%</option><option>2. Claude: ~87% vs Gemini: 91.9% — Gemini wins on general reasoning</option><option>3. Claude: 77.2% vs Gemini: 76.2% — Claude edges Gemini on real GitHub issues</option><option>4. Claude: does not compete vs Gemini: 87.6% — Gemini wins multimodal/video</option></select>
+      <select class="connect-select" id="c50c" style="margin-top:6px"><option value="">— Match C —</option><option>1. Claude: 80.9% vs Gemini: 76.2% — Claude wins, first to break 80%</option><option>2. Claude: ~87% vs Gemini: 91.9% — Gemini wins on general reasoning</option><option>3. Claude: 77.2% vs Gemini: 76.2% — Claude edges Gemini on real GitHub issues</option><option>4. Claude: does not compete vs Gemini: 87.6% — Gemini wins multimodal/video</option></select>
+      <select class="connect-select" id="c50d" style="margin-top:6px"><option value="">— Match D —</option><option>1. Claude: 80.9% vs Gemini: 76.2% — Claude wins, first to break 80%</option><option>2. Claude: ~87% vs Gemini: 91.9% — Gemini wins on general reasoning</option><option>3. Claude: 77.2% vs Gemini: 76.2% — Claude edges Gemini on real GitHub issues</option><option>4. Claude: does not compete vs Gemini: 87.6% — Gemini wins multimodal/video</option></select>
+    </div>
+  </div>
+</div>
+
+<!-- SUBMIT -->
+<div class="qz-submit-wrap">
+  <button class="qz-submit" onclick="_q.submit()">Submit Quiz</button>
+</div>
+
+<!-- RESULTS -->
+<div class="qz-results" id="qz-results">
+  <div class="qz-score-row">
+    <div><div class="qz-score-big" id="res-pct">—%</div><div class="qz-score-sub" id="res-sub">— / 50 items · hard</div></div>
+  </div>
+  <div class="sec-breakdown" id="res-breakdown"></div>
+  <div class="eval-panel">
+    <div class="eval-label">Supreme Allied Headquarters — Campaign Evaluation</div>
+    <div class="eval-body" id="eval-body">Awaiting score data...</div>
+  </div>
+</div>
+
+<!-- ANSWER KEY -->
+<div class="key-section">
+  <div class="key-hdr">Answer Key — visible after submission</div>
+  <div class="key-body" id="answer-key" style="display:none">
+
+    <div style="font-family:var(--mono);font-size:10px;font-weight:600;color:var(--orange);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px;">Part I — Multiple Choice</div>
+    <div class="key-item"><span class="key-num">1</span><span class="key-ans">C</span><span class="key-topic">Technique 6 failure — contradictory adjectives average into bland mush. Fix: one concrete example paragraph in the target voice.</span></div>
+    <div class="key-item"><span class="key-num">2</span><span class="key-ans">B</span><span class="key-topic">Multiple Task asks → Claude prioritizes and diminishes quality on subsequent deliverables. Task block = one deliverable only.</span></div>
+    <div class="key-item"><span class="key-num">3</span><span class="key-ans">B</span><span class="key-topic">Prefill — begin the response with the opening JSON character. Claude continues without any preamble from word one.</span></div>
+    <div class="key-item"><span class="key-num">4</span><span class="key-ans">B</span><span class="key-topic">200K context window — full chain in one conversation; step-one instructions carry full weight at step five.</span></div>
+    <div class="key-item"><span class="key-num">5</span><span class="key-ans">B</span><span class="key-topic">Motivated instructions — the rationale enables Claude to apply the spirit of the rule, catching hedged claims the command-only version missed.</span></div>
+    <div class="key-item"><span class="key-num">6</span><span class="key-ans">B</span><span class="key-topic">"Critically analyze your response. Find weak spots, redundancies, gaps, contradictions" — assigns editor role explicitly, forcing systematic problem identification before rewriting.</span></div>
+    <div class="key-item"><span class="key-num">7</span><span class="key-ans">B</span><span class="key-topic">Env trap — .env is gitignored, never reaches cloud. Fix: Environment Variables panel + "do not look for a .env file" in prompt.</span></div>
+    <div class="key-item"><span class="key-num">8</span><span class="key-ans">B</span><span class="key-topic">Gotcha 6 (identity scope) — auto-replies send from the vacationing member's account. Should use two-routine draft → approve → send architecture.</span></div>
+    <div class="key-item"><span class="key-num">9</span><span class="key-ans">C</span><span class="key-topic">API trigger — schedule minimum is 1 hour. Use API trigger + N8N/Zapier for 20-minute debounce before posting to the HTTPS endpoint.</span></div>
+    <div class="key-item"><span class="key-num">10</span><span class="key-ans">B</span><span class="key-topic">No design system defined → Claude defaulted to generic aesthetic. Fix: 200-word+ brand paragraph → approve → publish as default.</span></div>
+    <div class="key-item"><span class="key-num">11</span><span class="key-ans">B</span><span class="key-topic">Markup for headline (targeted, minimal cost) + Edit property panel for button color (zero tokens). Never full-page regenerate for two property changes.</span></div>
+    <div class="key-item"><span class="key-num">12</span><span class="key-ans">B</span><span class="key-topic">Guardrail limits Claude to claude/ prefix branches. Disabling allows bad runs to push directly to main → unreviewed code in production.</span></div>
+    <div class="key-item"><span class="key-num">13</span><span class="key-ans">B</span><span class="key-topic">Thinking blocks change every run → fewer cache hits → higher token cost for repetitive identical workflows. Toggle off for repeatables.</span></div>
+    <div class="key-item"><span class="key-num">14</span><span class="key-ans">B</span><span class="key-topic">Sonnet 4.5 — Haiku loses track in long sessions, may change identifiers. 200-file cross-codebase consistency requires Sonnet's retention.</span></div>
+    <div class="key-item"><span class="key-num">15</span><span class="key-ans">B</span><span class="key-topic">One model with variable thoroughness — Opus at low effort still brings Opus-level reliability without Haiku's long-session weakness.</span></div>
+    <div class="key-item"><span class="key-num">16</span><span class="key-ans">B</span><span class="key-topic">Addresses hallucination — Claude defaults to fabricating vs. admitting gaps. Phrase: "if data is insufficient, say so, don't guess."</span></div>
+    <div class="key-item"><span class="key-num">17</span><span class="key-ans">B</span><span class="key-topic">Claude 4.5 Opus — regulated industry + costly mistakes + auditable reasoning = Extended Thinking transparency + dependability. Gemini = brilliant but unpredictable.</span></div>
+    <div class="key-item"><span class="key-num">18</span><span class="key-ans">B</span><span class="key-topic">Context awareness — Claude 4.5 actively tracks remaining tokens after every tool call, knowing precisely when to continue vs. stop rather than conservatively estimating.</span></div>
+    <div class="key-item"><span class="key-num">19</span><span class="key-ans">B</span><span class="key-topic">Interleaved thinking: Claude reasons between tool calls — run → see result → think → run next. Powers coherent multi-step agentic loops.</span></div>
+    <div class="key-item"><span class="key-num">20</span><span class="key-ans">B</span><span class="key-topic">Partially correct and overstated — Claude leads on code/agents; Gemini leads on reasoning, multimodal, and cost. Optimal stack uses both.</span></div>
+
+    <div style="font-family:var(--mono);font-size:10px;font-weight:600;color:var(--orange);text-transform:uppercase;letter-spacing:0.08em;margin:14px 0 8px;">Part II — Fill in the Blank</div>
+    <div class="key-item"><span class="key-num">21</span><span class="key-ans">3× / 75%</span><span class="key-topic">Brief-style benchmark: 3× better first drafts, 75% fewer revisions across 50 prompts</span></div>
+    <div class="key-item"><span class="key-num">22</span><span class="key-ans">94 / 61</span><span class="key-topic">XML compliance benchmark: 94% with tags vs. 61% without — 33pp improvement</span></div>
+    <div class="key-item"><span class="key-num">23</span><span class="key-ans">Prefill</span><span class="key-topic">Also accepted: response seeding</span></div>
+    <div class="key-item"><span class="key-num">24</span><span class="key-ans">April 14, 2026 / claude.ai/code/routines</span><span class="key-topic">Release date and access URL for Claude Routines</span></div>
+    <div class="key-item"><span class="key-num">25</span><span class="key-ans">anthropic-beta: experimental-cc-routine-20260401</span><span class="key-topic">Required beta header for API trigger POST requests</span></div>
+    <div class="key-item"><span class="key-num">26</span><span class="key-ans">claude.ai/design / getdesign.md</span><span class="key-topic">Claude Design URL and brand system file library</span></div>
+    <div class="key-item"><span class="key-num">27</span><span class="key-ans">4–5× / 1/3</span><span class="key-topic">Haiku: 4–5× faster than Sonnet; costs 1/3 of Sonnet ($1/M vs $3/M input)</span></div>
+    <div class="key-item"><span class="key-num">28</span><span class="key-ans">80.9% / first model</span><span class="key-topic">Opus 4.5: 80.9% SWE-Bench Verified — first model to break 80% barrier</span></div>
+    <div class="key-item"><span class="key-num">29</span><span class="key-ans">10 / section</span><span class="key-topic">Full page ≈ 10× section cost. Always iterate at section level.</span></div>
+    <div class="key-item"><span class="key-num">30</span><span class="key-ans">91.9% / 87%</span><span class="key-topic">GPQA Diamond: Gemini 91.9% vs. Claude Opus ~87% — Gemini leads on general reasoning</span></div>
+
+    <div style="font-family:var(--mono);font-size:10px;font-weight:600;color:var(--orange);text-transform:uppercase;letter-spacing:0.08em;margin:14px 0 8px;">Part III — True or False</div>
+    <div class="key-item"><span class="key-num">31</span><span class="key-ans">F</span><span class="key-topic">Constraints free Claude from generic defaults and force originality — more constraints = better, not worse. 3× engagement benchmark.</span></div>
+    <div class="key-item"><span class="key-num">32</span><span class="key-ans">F</span><span class="key-topic">Anthropic docs explicitly state iteration is part of the process, not a sign of failure. Draft → critique → revise is the intended workflow.</span></div>
+    <div class="key-item"><span class="key-num">33</span><span class="key-ans">F</span><span class="key-topic">Local MCP servers are not reachable from cloud remote routines. Must host externally or use built-in cloud connector directory.</span></div>
+    <div class="key-item"><span class="key-num">34</span><span class="key-ans">T</span><span class="key-topic">Gotcha 4 — statelessness. Every remote run starts from zero. Persist state via GitHub push, database API, or connector.</span></div>
+    <div class="key-item"><span class="key-num">35</span><span class="key-ans">T</span><span class="key-topic">Tweaks auto-generates controls specific to the design just created — not generic sliders that apply universally.</span></div>
+    <div class="key-item"><span class="key-num">36</span><span class="key-ans">T</span><span class="key-topic">One of the four Claude 4.5 architecture changes: Extended Thinking now available on Sonnet, Opus, and Haiku (previously limited).</span></div>
+    <div class="key-item"><span class="key-num">37</span><span class="key-ans">F</span><span class="key-topic">False — Claude leads on SWE-Bench Verified: Sonnet 77.2% / Opus 80.9% vs. Gemini 76.2%. Claude edges Gemini on code tasks.</span></div>
+    <div class="key-item"><span class="key-num">38</span><span class="key-ans">F</span><span class="key-topic">Gotcha 7 — no mid-run approval. Claude runs start to finish. Approval gates require two separate routines with human step between.</span></div>
+    <div class="key-item"><span class="key-num">39</span><span class="key-ans">T</span><span class="key-topic">Technique 6 — one concrete example consistently outperforms style adjectives. Tested across 30 styles. Show, don't describe.</span></div>
+    <div class="key-item"><span class="key-num">40</span><span class="key-ans">F</span><span class="key-topic">The thinking block is a summarized reasoning trace — not the raw internal chain of thought. Still useful, but not unfiltered computation.</span></div>
+
+    <div style="font-family:var(--mono);font-size:10px;font-weight:600;color:var(--orange);text-transform:uppercase;letter-spacing:0.08em;margin:14px 0 8px;">Part IV — Enumeration</div>
+    <div class="key-item"><span class="key-num">41</span><span class="key-ans">—</span><span class="key-topic">1. Instructions (what to do and how) · 2. Context (background, docs, constraints) · 3. Task (one specific deliverable) · 4. Output Format (exact structure)</span></div>
+    <div class="key-item"><span class="key-num">42</span><span class="key-ans">—</span><span class="key-topic">1. 200K context (fits entire codebases) · 2. Extended Thinking on all three models · 3. Context awareness (prevents mid-task abandonment) · 4. Memory tool (external storage for long-running projects)</span></div>
+    <div class="key-item"><span class="key-num">43</span><span class="key-ans">—</span><span class="key-topic">1. Reread as a stranger (targets ambiguous instructions) · 2. Add explicit don't-do constraints block (targets missed avoidance rules) · 3. Add "if insufficient, say so" (targets hallucination) · 4. Show output schema not describe it (targets format errors)</span></div>
+    <div class="key-item"><span class="key-num">44</span><span class="key-ans">—</span><span class="key-topic">1. Never full-page regeneration (prevents 10× token cost) · 2. Batch related work in one session (prevents per-switch token burn) · 3. Tight design system = short prompts (prevents bloated input tokens per generation)</span></div>
+    <div class="key-item"><span class="key-num">45</span><span class="key-ans">—</span><span class="key-topic">1. Schedule — minimum 1 hour interval (no sub-hourly) · 2. API trigger — no built-in deduplication, retrying senders cause duplicate runs · 3. GitHub Events — events past hourly cap are silently dropped (not failed, not logged)</span></div>
+
+    <div style="font-family:var(--mono);font-size:10px;font-weight:600;color:var(--orange);text-transform:uppercase;letter-spacing:0.08em;margin:14px 0 8px;">Part V — Connect / Matching</div>
+    <div class="key-item"><span class="key-num">46</span><span class="key-ans">A→4 B→2 C→3 D→1</span><span class="key-topic">XML→section separation · Prefill→seeds output start · Motivated→spirit/edge cases · Constraints→forces originality</span></div>
+    <div class="key-item"><span class="key-num">47</span><span class="key-ans">A→4 B→1 C→3 D→2</span><span class="key-topic">Sonnet→daily driver/agents · Opus→effort parameter/80.9% · Haiku→speed/sub-agents · All three→shared architecture changes</span></div>
+    <div class="key-item"><span class="key-num">48</span><span class="key-ans">A→3 B→2 C→4 D→1</span><span class="key-topic">Env Trap→.env gitignored · Statelessness→zero state per run · Branch Guard→claude/ prefix only · No Approval→two-routine architecture</span></div>
+    <div class="key-item"><span class="key-num">49</span><span class="key-ans">A→2 B→4 C→1 D→3</span><span class="key-topic">Tweaks→auto controls/zero tokens · Markup→click element/minimal cost · Edit→property panel/zero tokens · Main Prompt→full regen/highest cost</span></div>
+    <div class="key-item"><span class="key-num">50</span><span class="key-ans">A→2 B→3 C→1 D→4</span><span class="key-topic">GPQA→Gemini 91.9% wins · SWE-Bench Sonnet→Claude 77.2% edges · SWE-Bench Opus→Claude 80.9% first to break 80% · Video-MMU→Gemini 87.6% Claude N/A</span></div>
+
+  </div>
+</div>
+
+</div><!-- /doc-body -->
+
+
+</div>
+
+
+<footer class="snx-footer">
+
+  <!-- Meta bar -->
+  <div class="snx-footer-meta">
+    <span class="snx-footer-course">Claude MasterClass</span>
+    <span class="snx-footer-divider">·</span>
+    <span class="snx-footer-module">Module 02 · Advanced Prompting, Routines, Design &amp; Model Mastery</span>
+  </div>
+
+  <!-- Nav row -->
+  <nav class="snx-footer-nav" aria-label="Artifact navigation">
+
+    <!-- Left: Previous -->
+    <a class="snx-nav-prev" href="#">
+      <span class="snx-nav-chevron">‹</span>
+      Previous
+    </a>
+
+    <!-- Center: Hub -->
+    <div class="snx-nav-hub">
+      <a class="snx-hub-btn snx-hub-btn-recall"  href="../recalls/02_claude-masterclass-recall.html">Recall</a>
+      <a class="snx-hub-btn snx-hub-btn-tree"    href="../trees/02_claude-masterclass-tree.html">Tree</a>
+      <a class="snx-hub-btn snx-hub-btn-compact" href="../compact/02_claude-masterclass-compact.html">Compact</a>
+      <a class="snx-hub-btn snx-hub-btn-quiz"    href="#" aria-current="page">Quiz</a>
+      <a class="snx-hub-btn snx-hub-btn-module"  href="../modules/02_claude-masterclass-reviewer.html">Module</a>
+    </div>
+
+    <!-- Right: Next -->
+    <a class="snx-nav-next" href="#">
+      Next
+      <span class="snx-nav-chevron">›</span>
+    </a>
+
+  </nav>
+
+</footer>
+
+<script>
+function sendPrompt(t){if(window.parent&&window.parent.postMessage){window.parent.postMessage({type:'user_message',message:t},'*');}}
+function recallQuick(){sendPrompt('/recall mixed(20) hard');}
+function exportMd(){sendPrompt('/export -md');}
+
+var _q={
+  mc:{1:'C',2:'B',3:'B',4:'B',5:'B',6:'B',7:'B',8:'B',9:'C',10:'B',11:'B',12:'B',13:'B',14:'B',15:'B',16:'B',17:'B',18:'B',19:'B',20:'B'},
+  tof:{31:'F',32:'F',33:'F',34:'T',35:'T',36:'T',37:'F',38:'F',39:'T',40:'F'},
+  conn:{
+    46:{a:'4',b:'2',c:'3',d:'1'},
+    47:{a:'4',b:'1',c:'3',d:'2'},
+    48:{a:'3',b:'2',c:'4',d:'1'},
+    49:{a:'2',b:'4',c:'1',d:'3'},
+    50:{a:'2',b:'3',c:'1',d:'4'}
+  },
+  answers:{},
+
+  select:function(el,n,letter){
+    el.closest('.q-options').querySelectorAll('.q-opt').forEach(function(o){o.classList.remove('selected');});
+    el.classList.add('selected');
+    this.answers['mc'+n]=letter;
+    this.updateProgress();
+  },
+  tof:function(el,n,val){
+    el.parentNode.querySelectorAll('.tof-btn').forEach(function(b){b.className='tof-btn';});
+    el.classList.add(val==='T'?'sel-true':'sel-false');
+    this.answers['tof'+n]=val;
+    this.updateProgress();
+  },
+  updateProgress:function(){
+    var done=Object.keys(this.answers).length;
+    document.getElementById('qz-prog-bar').style.width=Math.min(100,Math.round(done/50*100*0.5))+'%';
+  },
+  submit:function(){
+    var correct=0;
+    var secScore={A:0,B:0,C:0,D:0,E:0,F:0};
+    var secTotal={A:0,B:0,C:0,D:0,E:0,F:0};
+    var mcSec={1:'A',2:'B',3:'B',4:'B',5:'B',6:'B',7:'C',8:'C',9:'C',10:'D',11:'D',12:'C',13:'E',14:'E',15:'E',16:'B',17:'F',18:'E',19:'E',20:'F'};
+    for(var i=1;i<=20;i++){
+      secTotal[mcSec[i]]++;
+      if(this.answers['mc'+i]===this.mc[i]){correct++;secScore[mcSec[i]]++;}
+    }
+    var fillAnswers={21:'3',22:'94',23:'prefill',24:'april',25:'anthropic-beta',26:'claude.ai/design',27:'4',28:'80',29:'10',30:'91'};
+    var fillSec={21:'A',22:'B',23:'B',24:'C',25:'C',26:'D',27:'E',28:'E',29:'D',30:'F'};
+    for(var j=21;j<=30;j++){
+      secTotal[fillSec[j]]++;
+      var fval=(document.getElementById('f'+j)||{value:''}).value.toLowerCase().trim();
+      var fkey=fillAnswers[j].toLowerCase();
+      if(fval&&(fval.indexOf(fkey)>=0||fkey.indexOf(fval)>=0)){correct++;secScore[fillSec[j]]++;}
+    }
+    var tofSec={31:'B',32:'A',33:'C',34:'C',35:'D',36:'E',37:'F',38:'C',39:'A',40:'E'};
+    for(var k=31;k<=40;k++){
+      secTotal[tofSec[k]]++;
+      if(this.answers['tof'+k]===this.tof[k]){correct++;secScore[tofSec[k]]++;}
+    }
+    var enumSec={41:'B',42:'E',43:'B',44:'D',45:'C'};
+    for(var m=41;m<=45;m++){secTotal[enumSec[m]]+=1;}
+    var connSec={46:'B',47:'E',48:'C',49:'D',50:'F'};
+    for(var c=46;c<=50;c++){
+      secTotal[connSec[c]]++;
+      var ckey=this.conn[c];
+      var selA=(document.getElementById('c'+c+'a')||{value:''}).value.charAt(0);
+      var selB=(document.getElementById('c'+c+'b')||{value:''}).value.charAt(0);
+      var selC=(document.getElementById('c'+c+'c')||{value:''}).value.charAt(0);
+      var selD=(document.getElementById('c'+c+'d')||{value:''}).value.charAt(0);
+      if(selA===ckey.a&&selB===ckey.b&&selC===ckey.c&&selD===ckey.d){correct++;secScore[connSec[c]]++;}
+    }
+    var total=50,pct=Math.round(correct/total*100);
+    document.getElementById('qz-results').style.display='block';
+    document.getElementById('res-pct').textContent=pct+'%';
+    document.getElementById('res-sub').textContent=correct+' / '+total+' auto-graded · enum self-graded · hard';
+    document.getElementById('answer-key').style.display='block';
+    document.getElementById('qz-prog-bar').style.width='100%';
+    var secs=['A','B','C','D','E','F'];
+    var secNames={A:'Five Mistakes',B:'8 Techniques',C:'Routines',D:'Design',E:'Models',F:'Claude vs Gemini'};
+    var bd='';
+    for(var s=0;s<secs.length;s++){
+      var sv=secs[s];
+      var sp=secTotal[sv]>0?Math.round(secScore[sv]/secTotal[sv]*100):0;
+      var col=sp>=85?'var(--green)':sp>=70?'var(--amber)':'var(--red)';
+      bd+='<div class="sec-item"><div class="sec-label">'+sv+' · '+secNames[sv]+'</div><div class="sec-pct" style="color:'+col+'">'+sp+'%</div></div>';
+    }
+    document.getElementById('res-breakdown').innerHTML=bd;
+    var weak=[],strong=[];
+    for(var es=0;es<secs.length;es++){
+      var ev=secs[es];
+      var ep=secTotal[ev]>0?Math.round(secScore[ev]/secTotal[ev]*100):0;
+      if(ep<70)weak.push(ev+' ('+secNames[ev]+')');
+      if(ep>=85)strong.push(ev+' ('+secNames[ev]+')');
+    }
+    document.getElementById('eval-body').innerHTML=_q.imperial(pct,correct,total,weak,strong,secNames);
+    document.getElementById('qz-results').scrollIntoView({behavior:'smooth',block:'start'});
+  },
+  imperial:function(pct,correct,total,weak,strong,secNames){
+    if(pct>=90){
+      return '<h1>🏆 CAMPAIGN CHRONICLE</h1>'+
+        '<p>The advanced theater has fallen entirely under the dominion of Lord High Commander Denard. '+pct+'% — not merely adequate; historically convincing. Prompt engineering, Routines, Design, and Model Mastery — every frontier secured. Supreme Allied Headquarters has entered this campaign into the permanent chronicles.</p>'+
+        '<p>Anthropic\'s advanced doctrines were not merely understood. They were demonstrated under examination conditions. The War Council convenes not to evaluate, but to celebrate.</p>'+
+        '<h1>🗺️ ALLIED INTELLIGENCE REPORT</h1>'+
+        '<p><strong>Secured Territories (85%+):</strong> '+(strong.length?strong.join(', '):'All fronts at or above threshold')+'</p>'+
+        '<p><strong>Contested Territories (&lt;70%):</strong> '+(weak.length?weak.join(', '):'None — total operational superiority')+'</p>'+
+        '<h1>⚔️ RECOMMENDED OPERATIONS</h1>'+
+        '<p>Advance to applied scenario work. The frontier of application awaits. The /scenario command stands ready.</p>'+
+        '<h1>📜 WAR COUNCIL DECREE</h1>'+
+        '<p>By unanimous decree: Lord High Commander Denard is hereby elevated to <strong>Supreme Architect of Logic and Master of Computational Warfare</strong>. Both titles. Simultaneously. The Empire has not conferred two titles in the same session since the age of the great campaigns. Today that record falls.</p>';
+    } else if(pct>=75){
+      return '<h1>🏆 CAMPAIGN CHRONICLE</h1>'+
+        '<p>The advanced theater has been taken. '+pct+'% — the enemy was defeated. Headquarters had forecasted a more decisive margin. The forecast was not met. Victory without distinction is still victory. Barely.</p>'+
+        '<p>The War Council notes that Volume 2\'s doctrines are more nuanced than Volume 1\'s. The nuance, it appears, was noticed. The Council would prefer it had been mastered.</p>'+
+        '<h1>🗺️ ALLIED INTELLIGENCE REPORT</h1>'+
+        '<p><strong>Secured Territories (85%+):</strong> '+(strong.length?strong.join(', '):'None at excellence threshold')+'</p>'+
+        '<p><strong>Contested Territories (&lt;70%):</strong> '+(weak.length?weak.join(', '):'Borders remain porous in these areas')+'</p>'+
+        '<h1>⚔️ RECOMMENDED OPERATIONS</h1>'+
+        '<p>Operation Technique Drill: return to Section B (Eight Power Techniques) with specific attention to the nuances between techniques. Operation Benchmark Lock: ensure all numerical benchmarks — 94% vs 61%, 3×, 75%, the API header — are committed to memory before the next campaign.</p>'+
+        '<h1>📜 WAR COUNCIL DECREE</h1>'+
+        '<p>Promotion is <strong>under review</strong>. The advanced campaign demanded advanced mastery. What was delivered was competent passage. The War Council expects the gap between competence and mastery to close before the next examination. The chronicles will note this result with a footnote.</p>';
+    } else {
+      return '<h1>🏆 CAMPAIGN CHRONICLE</h1>'+
+        '<p>The advanced theater has not fallen. '+pct+'% — the enemy holds significant ground. Lord High Commander Denard arrived with Volume 2\'s doctrines and departed without having demonstrated command of them. Supreme Allied Headquarters is composing a formal inquiry.</p>'+
+        '<p>Volume 2 demanded understanding of nuance: the difference between a command and a motivated instruction, between statelessness and session persistence, between a thinking block and raw internal computation. These distinctions were examined. The examination revealed gaps.</p>'+
+        '<h1>🗺️ ALLIED INTELLIGENCE REPORT</h1>'+
+        '<p><strong>Secured Territories (85%+):</strong> '+(strong.length?strong.join(', '):'None confirmed above threshold')+'</p>'+
+        '<p><strong>Enemy-Controlled Territories (&lt;70%):</strong> '+(weak.length?weak.join(', '):'Multiple sectors in collapse')+'</p>'+
+        '<h1>⚔️ RECOMMENDED OPERATIONS</h1>'+
+        '<p>Operation Comprehensive Return: reread the Volume 2 comprehensive reviewer in full before reattempting. Operation Recall Pressure: complete two full 20-card recall sessions until all benchmarks and mechanisms are internalized. Do not attempt Quiz B again until both operations are complete.</p>'+
+        '<h1>📜 WAR COUNCIL DECREE</h1>'+
+        '<p>All promotions are <strong>suspended indefinitely</strong>. The Court-Martial Board has been convened. The advanced materials were provided. The reviewers were generated in three formats. The recall cards were deployed. The resulting '+pct+'% constitutes a failure of preparation that Headquarters finds difficult to explain.</p>'+
+        '<p>Lord High Commander Denard\'s title is temporarily reclassified as <strong>Probationary Officer of Remedial Prompt Engineering</strong>, pending satisfactory re-examination. The enemy is not impressed. They are taking notes.</p>';
+    }
+  }
+};
+</script>
+</body>
+</html>
